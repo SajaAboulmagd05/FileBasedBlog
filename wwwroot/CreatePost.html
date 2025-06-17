@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Creating post</title>
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <link href="css/style.css" rel="stylesheet">
+</head>
+<body>
+    <div class="top-bar">
+        <h1>My Blog</h1>
+           <button class="logout-btn">
+            <i class='bx bx-log-out'></i> Logout
+        </button>
+    </div>
+    
+    <div class="container">
+        <div class="side-nav">
+            <ul>
+                <li><a href="#">Nav Item 1</a></li>
+                <li><a href="#">Nav Item 2</a></li>
+                <li><a href="#">Nav Item 3</a></li>
+                <li><a href="#">Nav Item 4</a></li>
+            </ul>
+        </div>
+        
+        <div class="content">
+    <h2>Create New Post</h2>
+    <form id="post-form" enctype="multipart/form-data">
+        <!-- Title Section -->
+        <div class="form-group">
+            <label for="post-title">Post Title</label>
+            <input type="text" id="post-title" name="title" required placeholder="Enter post title">
+        </div>
+
+        <div class="form-group">
+            <label for="post-body">Post Description</label>
+            <textarea id="post-description" name="description" rows="4" required placeholder="Write your post description here..."></textarea>
+        </div>
+
+        <!-- Body Section -->
+        <div class="form-group">
+            <label for="post-body">Post Content</label>
+            <textarea id="post-body" name="body" rows="10" required placeholder="Write your post content here..."></textarea>
+        </div>
+
+        <!-- Media Upload and resize-->
+         <div class="upload-box">
+        <input type="file" accept="image/*" hidden>
+        <img src="css/icons/download.png" alt="">
+        <p>Browse File to Upload</p>
+      </div>
+      <div class="content">
+        <div class="row sizes">
+          <div class="column width">
+            <label>Width</label>
+            <input type="number">
+          </div>
+          <div class="column height">
+            <label>Height</label>
+            <input type="number">
+          </div>
+           <div class="column">
+            <label>
+                <input type="checkbox" id="aspect-ratio-checkbox" checked>
+                Maintain Aspect Ratio
+            </label>
+        </div>
+        </div>
+      </div>
+
+        <div class="form-group">
+            <label for="post-files">Attachments</label>
+            <input type="file" id="post-files" name="files" multiple>
+              <!-- multiple keyword allows the user to select many at once but can upload multiple times -->
+        </div>
+
+        <!-- Publishing Options -->
+        <div class="form-group">
+    <div class="publish-options-container">
+        <span class="publish-options-label">Publishing Options</span>
+        <div class="publish-options">
+            <label class="radio-option">
+                <input type="radio" name="publish-option" value="immediate" checked>
+                Publish Immediately
+            </label>
+            <label class="radio-option">
+                <input type="radio" name="publish-option" value="schedule">
+                Schedule Publication
+            </label>
+        </div>
+    </div>
+    
+    <div id="schedule-container" style="display: none;">
+        <div class="datetime-fields">
+            <input type="date" id="publish-date" name="publish-date" class="datetime-input">
+            <input type="time" id="publish-time" name="publish-time" value="12:00" class="datetime-input">
+        </div>
+    </div>
+</div>
+        <!-- Tags -->
+      <div class="form-group">
+            <label>Tags</label>
+            <select id="post-tags" name="tags" multiple size="4">
+                <option value="development">Development</option>
+                <option value="design">Design</option>
+                <option value="business">Business</option>
+                <option value="tutorials">Tutorials</option>
+                <option value="news">News</option>
+            </select>
+            <small>Hold Ctrl/Cmd to select multiple</small>
+        </div>
+    
+
+
+        <!-- Categories -->
+        <div class="form-group">
+            <label>Categories</label>
+            <select id="post-categories" name="categories" multiple size="4">
+                <option value="development">Development</option>
+                <option value="design">Design</option>
+                <option value="business">Business</option>
+                <option value="tutorials">Tutorials</option>
+                <option value="news">News</option>
+            </select>
+            <small>Hold Ctrl/Cmd to select multiple</small>
+        </div>
+
+        <!-- Custom URL -->
+        <div class="form-group">
+            <label for="post-slug">Custom URL Slug</label>
+            <input type="text" id="post-slug" name="slug" placeholder="custom-url-slug, leave blank to auto-generate from title">
+        </div>
+
+        <!-- Form Actions -->
+        <div class="form-actions">
+            <button type="button" id="save-draft" class="secondary">Save Draft</button>
+            <button type="submit" id="publish-post">Publish Post</button>
+        </div>
+      </form>
+    </div>
+    </div>
+   
+<script src="js/postCreation.js"></script>
+</body>
+</html>

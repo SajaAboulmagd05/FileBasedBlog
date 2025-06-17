@@ -1,0 +1,251 @@
+@font-face {
+    font-family: homefont;
+    src: url('fonts/Poppins-Regular.ttf') format('truetype');
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    
+}
+
+body {
+    font-family: homefont;
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+}
+
+.top-bar {
+    background-color: rgb(0, 109, 119);
+    color: white;
+    padding: 15px 20px;
+    text-align: center;
+    justify-content: space-between; 
+    align-items: center;
+    display: flex;
+    flex-direction: row;
+}
+
+.container {
+    display: flex;
+    flex: 1;
+}
+
+.side-nav {
+    width: 200px;
+    background-color: rgb(131, 197, 190);
+    padding: 10px 14px;
+}
+
+.side-nav ul {
+    list-style-type: none;
+}
+
+.side-nav li {
+    padding: 8px 0;
+}
+
+.side-nav a {
+    text-decoration: none;
+    color: #333;
+    display: inline-block;
+    padding: 6px 12px;
+    border-radius: 20px; 
+    transition: all 0.3s ease; 
+}
+
+.side-nav a:hover {
+    color: white;
+    background-color: rgb(0, 77, 84);
+}
+
+.content {
+    flex: 1;
+    padding: 20px;
+    text-align: center;
+    background-color: rgb(255 221 210);
+}
+/* Logout button styles to match nav hover */
+.logout-btn {
+    background-color: transparent;
+    color: white;
+    border: none;
+    padding: 6px 12px;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-family: homefont;
+    font-size: larger;
+}
+
+.logout-btn:hover {
+    color: #333;
+    background-color: rgb(131, 197, 190);
+}
+
+.logout-btn i {
+    font-size: 1.2rem;
+}
+
+/* content part */
+
+/* Form Container */
+.content {
+    padding: 25px 30px;
+    margin: 0 auto;
+    text-align: left;
+}
+
+.content h2 {
+    font-size: 25px;
+    font-weight: 600;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #e6e6e6;
+    text-align: center;
+    margin-bottom: 20px;
+    color: #333;
+}
+
+/* Form Fields */
+.form-group {
+    margin-bottom: 15px;
+    position: relative;
+    
+}
+
+
+.form-group label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: 500;
+}
+
+.form-group input[type="text"],
+.form-group input[type="datetime-local"],
+.form-group textarea,
+.form-group select {
+    width: 80%;
+    height: 40px;
+    padding: 0 10px;
+    font-size: 16px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    outline: none;
+    font-family: headfont;
+}
+
+.form-group textarea {
+    height: 200px;
+    padding: 10px;
+    resize: vertical;
+}
+
+.form-group select[multiple] {
+    height: auto;
+    padding: 5px;
+}
+
+/* File Inputs */
+.form-group input[type="file"] {
+    width: 80%;
+    padding: 8px;
+    background: #fff;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+}
+
+/* Radio Buttons */
+.publish-options {
+    margin: 10px 0;
+}
+
+.publish-options label {
+    display: inline-flex;
+    align-items: center;
+    margin-right: 20px;
+    cursor: pointer;
+}
+
+.publish-options input[type="radio"] {
+    margin-right: 5px;
+}
+
+
+
+
+/* Buttons */
+.form-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.form-actions button {
+    height: 45px;
+    padding: 0 20px;
+    border: none;
+    color: #fff;
+    font-size: 17px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-family: headfont;
+}
+
+#save-draft {
+    background: #6c757d;
+}
+
+#publish-post {
+    background: rgb(244 172 183);
+}
+
+/* Responsive Adjustments */
+@media (max-width: 600px) {
+    .content {
+        padding: 15px;
+    }
+    
+    .form-actions {
+        flex-direction: column;
+    }
+    
+    .form-actions button {
+        width: 100%;
+    }
+}
+
+/* Date/Time Input Styling */
+.datetime-fields {
+    display: flex;
+    gap: 15px;
+    margin-top: 15px;
+    align-items: center;
+}
+
+.datetime-input {
+    padding: 8px 12px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background: white;
+    color: #333;
+    font-family: homefont;
+    font-size: 14px;
+    height: 40px;
+    min-width: 160px;
+}
+
+
+#schedule-container {
+    margin-left: 120px; /* Align with radio buttons */
+    padding: 10px 0;
+}
+
+/* Fix for date/time input appearance */
+input[type="date"]::-webkit-calendar-picker-indicator,
+input[type="time"]::-webkit-calendar-picker-indicator {
+    opacity: 1;
+    cursor: pointer;
+}
