@@ -1,0 +1,1 @@
+A file-based system is a method of organizing and storing data in a computer by using separate files for each application, rather than relying on a database management system. I

@@ -9,6 +9,7 @@
   <ItemGroup>
     <PackageReference Include="Markdig" Version="0.41.2" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="9.0.6" />
+    <PackageReference Include="System.Text.Json" Version="9.0.6" />
   </ItemGroup>
 
 </Project>

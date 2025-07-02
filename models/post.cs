@@ -1,7 +1,8 @@
 public enum PostStatus
 {
     Draft,
-    Published
+    Published,
+    Scheduled
 }
 
 public class Post

@@ -9,7 +9,8 @@
       "FileBasedBlog/1.0.0": {
         "dependencies": {
           "Markdig": "0.41.2",
-          "Microsoft.AspNetCore.Mvc.NewtonsoftJson": "9.0.6"
+          "Microsoft.AspNetCore.Mvc.NewtonsoftJson": "9.0.6",
+          "System.Text.Json": "9.0.6"
         },
         "runtime": {
           "FileBasedBlog.dll": {}
@@ -65,7 +66,8 @@
             "fileVersion": "1.0.2.22727"
           }
         }
-      }
+      },
+      "System.Text.Json/9.0.6": {}
     }
   },
   "libraries": {
@@ -108,6 +110,13 @@
       "sha512": "sha512-QYFyxhaABwmq3p/21VrZNYvCg3DaEoN/wUuw5nmfAf0X3HLjgupwhkEWdgfb9nvGAUIv3osmZoD3kKl4jxEmYQ==",
       "path": "newtonsoft.json.bson/1.0.2",
       "hashPath": "newtonsoft.json.bson.1.0.2.nupkg.sha512"
+    },
+    "System.Text.Json/9.0.6": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-h+ZtYTyTnTh5Ju6mHCKb3FPGx4ylJZgm9W7Y2psUnkhQRPMOIxX+TCN0ZgaR/+Yea+93XHWAaMzYTar1/EHIPg==",
+      "path": "system.text.json/9.0.6",
+      "hashPath": "system.text.json.9.0.6.nupkg.sha512"
     }
   }
 }
