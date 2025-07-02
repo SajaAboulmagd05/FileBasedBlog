@@ -2,35 +2,45 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compitable" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>My Blog</title>
-  <link rel="stylesheet" href="css/index.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+  <link rel="stylesheet" href="css/index2.css" />
 </head>
-<body>
-  <header>
-    <h1>My Blog</h1>
-    <input type="search" id="search-input" placeholder="Search posts..." />
-  </header>
+   <body>
+        <header class="header">
+            <h1>My Blog</h1>
+            
+            <form action="" class="search-form">
+                <input type="search" placeholder="search here...." class="search-box">
+                <label for="search-box" class="fas fa-search"></label>
+            </form>
 
-  <nav id="filters">
-    <div id="categories"></div>
-    <div id="tags"></div>
-  </nav>
+        </header>
+         
+        <section class="banner">
+            <div class="content">
+                <h3>Welcome to the world of software tutorials</h3>
+                <p>"Unlock the power of coding and software mastery! 🚀 Whether you're a beginner or an experienced developer, our step-by-step tutorials simplify complex concepts into actionable learning. Dive into hands-on guides, expert tips, and the latest tech trends—all designed to sharpen your skills and boost your projects. Start building, start creating, start succeeding!"</p>
+                <a href="#" class="btn">my blogs</a>
+            </div>
+        </section>
 
-  <main id="post-list">
-    <!-- Posts will be injected here -->
-  </main>
+        <section class="container" id="posts">
 
-  <div id="pagination-controls">
-    <button id="prev-page">Previous</button>
-    <span id="page-info">Page 1</span>
-    <button id="next-page">Next</button>
-  </div>
+            <div class="posts-container" id="posts-container">
+              
+            </div>
 
-  <footer>
-    <p>&copy; 2025 My Blog</p>
-  </footer>
+            <div class="sidebar">
 
-  <script src="js/index.js"></script>
-</body>
+
+            </div>
+
+
+        </section>
+
+    <script src="js/index2.js"></script>
+  </body>
 </html>
