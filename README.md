@@ -1,15 +1,10 @@
 # File-Based Blog System
 
 
- ![UI1](https://github.com/user-attachments/assets/345b0b16-44c4-472e-b526-5ef454c474b2)
-current status:
-post creation process:
-can select multiple tags and select multiple categories 
-multiple files can be selected but must be selected at once can't upload several times or removes previous uploads 
-image can be uploaded and resized (automatic resizing not complete?) what is implemented now is locked aspect ratio and if image exceeds a certain value I will resize it to fit in my screen properly 
-can choose either publish now or select schedule and select a time and day from the calendar (but still needs validation that time is not past)
-other fields are also added title, description, content 
+![Screenshot 2025-07-02 163647](https://github.com/user-attachments/assets/8148d7ec-8c1c-40fd-8d4d-0e86502e38cc)
+image of the home page
+![Screenshot 2025-07-02 170511](https://github.com/user-attachments/assets/5b60c7e4-cc29-4b31-bce1-2b81b8f8758e)
+![Screenshot 2025-07-02 170537](https://github.com/user-attachments/assets/7fe35e27-398b-4b67-803d-388245dda82f)
 
-backend is not complete so I didn't upload it for now when there is some progress I will do 
 
-photos of the UI exist in UIImages folder
+
