@@ -1,5 +1,7 @@
-# FileBasedBlog
+# File-Based Blog System
 
+
+ ![UI1](https://github.com/user-attachments/assets/345b0b16-44c4-472e-b526-5ef454c474b2)
 current status:
 post creation process:
 can select multiple tags and select multiple categories 
