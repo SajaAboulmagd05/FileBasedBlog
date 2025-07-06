@@ -1,0 +1,1 @@
+first thing we need is to check we have the required packages 

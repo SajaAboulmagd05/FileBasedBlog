@@ -53,6 +53,10 @@ D:\internship\FileBasedBlog\obj\Debug\net10.0\compressed\7hprkxaj3w-{0}-h7eca116
 D:\internship\FileBasedBlog\obj\Debug\net10.0\compressed\wytv4xj9it-{0}-51o9brt1oe-51o9brt1oe.gz
 D:\internship\FileBasedBlog\obj\Debug\net10.0\compressed\rozwmh3dd4-{0}-cwxel2kz9m-cwxel2kz9m.gz
 D:\internship\FileBasedBlog\obj\Debug\net10.0\compressed\ytsfictb6a-{0}-k3gmpakw9a-k3gmpakw9a.gz
-D:\internship\FileBasedBlog\obj\Debug\net10.0\compressed\diw3r8a6qo-{0}-s4uzja6ws5-s4uzja6ws5.gz
 D:\internship\FileBasedBlog\obj\Debug\net10.0\compressed\u1px9nsevi-{0}-o5zzi6gv4u-o5zzi6gv4u.gz
-D:\internship\FileBasedBlog\obj\Debug\net10.0\compressed\w8y0kio0nk-{0}-d1hjssxgwa-d1hjssxgwa.gz
+D:\internship\FileBasedBlog\bin\Debug\net10.0\content\posts\2025-07-06-how-to-debug-in-a-project\meta.json
+D:\internship\FileBasedBlog\bin\Debug\net10.0\content\posts\2025-07-06-can-we-try-something-different-\meta.json
+D:\internship\FileBasedBlog\bin\Debug\net10.0\content\posts\2025-07-06-if-youre-lost-were-all-a-little-lost-and-its-alright-\meta.json
+D:\internship\FileBasedBlog\bin\Debug\net10.0\content\posts\2025-07-06-a-new-trial-to-see-if-tags-work\meta.json
+D:\internship\FileBasedBlog\obj\Debug\net10.0\compressed\diw3r8a6qo-{0}-81n32pjtmd-81n32pjtmd.gz
+D:\internship\FileBasedBlog\obj\Debug\net10.0\compressed\w8y0kio0nk-{0}-fjbebdzps1-fjbebdzps1.gz

@@ -206,7 +206,52 @@ app.MapPost("/api/posts/publish", async (HttpRequest request) =>
         }
     }
 
+    //update categories associated posts 
+    var categoryFilePath = "content/categories/category-name.json";
+    if (File.Exists(categoryFilePath))
+    {
+        var categoryJson = File.ReadAllText(categoryFilePath);
+        var categoryList = JsonSerializer.Deserialize<List<Category>>(categoryJson) ?? new();
 
+        foreach (var cat in categories)
+        {
+            var category = categoryList.FirstOrDefault(c => c.Name.Equals(cat, StringComparison.OrdinalIgnoreCase));
+            if (category != null && !category.AssociatedPosts.Contains(slug))
+            {
+                category.AssociatedPosts.Add(slug);
+            }
+        }
+
+        File.WriteAllText(categoryFilePath, JsonSerializer.Serialize(categoryList, new JsonSerializerOptions { WriteIndented = true }));
+    }
+
+    //update tags associated posts 
+    var tagFilePath = "content/tags/tag-name.json";
+    if (File.Exists(tagFilePath))
+    {
+        var tagJson = File.ReadAllText(tagFilePath);
+        var tagList = JsonSerializer.Deserialize<List<Tag>>(tagJson) ?? new();
+
+        foreach (var tag in tags)
+        {
+            var tagEntry = tagList.FirstOrDefault(t => t.Name.Equals(tag, StringComparison.OrdinalIgnoreCase));
+            if (tagEntry != null)
+            {
+                if (!tagEntry.AssociatedPosts.Contains(slug))
+                    tagEntry.AssociatedPosts.Add(slug);
+            }
+            else
+            {
+                tagList.Add(new Tag
+                {
+                    Name = tag,
+                    AssociatedPosts = new List<string> { slug }
+                });
+            }
+        }
+
+        File.WriteAllText(tagFilePath, JsonSerializer.Serialize(tagList, new JsonSerializerOptions { WriteIndented = true }));
+    }
 
     return Results.Ok(new { Message = $"{status} post saved successfully!" });
 });
@@ -241,15 +286,24 @@ app.MapGet("/api/posts", () =>
         if (Directory.Exists(assetsFolder))
         {
             var files = Directory.GetFiles(assetsFolder);
-            imageFiles = files.Where(f => f.EndsWith(".jpg") || f.EndsWith(".png") || f.EndsWith(".jpeg")).ToList();
+
+            var supportedImageExtensions = new[] { ".jpg", ".jpeg", ".png", ".gif", ".webp", ".bmp", ".svg", ".jfif" };
+
+            imageFiles = files
+              .Where(f => supportedImageExtensions.Contains(Path.GetExtension(f).ToLower()))
+              .ToList();
+
             attachmentFiles = files.Except(imageFiles).ToList();
         }
+
 
         publishedPosts.Add(new
         {
             Title = metadata["Title"],
             Description = metadata["Description"],
             CreatedAt = metadata["CreatedAt"],
+            Tags = metadata["Tags"],
+            Categories = metadata["Categories"],
             Slug = slug,
             Image = imageFiles.FirstOrDefault() != null
               ? "/content/posts/" + Path.GetFileName(folder) + "/assets/" + Path.GetFileName(imageFiles.First())
@@ -272,6 +326,122 @@ app.UseStaticFiles(new StaticFileOptions
     FileProvider = new PhysicalFileProvider(
         Path.Combine(Directory.GetCurrentDirectory(), "content")),
     RequestPath = "/content"
+});
+
+// api to get posts by category
+app.MapGet("/api/posts/by-category", (string category) =>
+{
+    var categoryFilePath = "content/categories/category-name.json";
+    if (!File.Exists(categoryFilePath)) return Results.NotFound("Category file not found.");
+
+    var categoryJson = File.ReadAllText(categoryFilePath);
+    var categoryList = JsonSerializer.Deserialize<List<Category>>(categoryJson);
+    var selected = categoryList?.FirstOrDefault(c => c.Name.Equals(category, StringComparison.OrdinalIgnoreCase));
+
+    if (selected == null || selected.AssociatedPosts.Count == 0)
+        return Results.Json(new { posts = new List<object>() });
+
+    var postsPath = Path.Combine(Directory.GetCurrentDirectory(), "content/posts");
+    var posts = new List<object>();
+
+    foreach (var slug in selected.AssociatedPosts)
+    {
+        var folder = Directory.GetDirectories(postsPath).FirstOrDefault(f => f.Contains(slug));
+        if (folder == null) continue;
+
+        var metaPath = Path.Combine(folder, "meta.json");
+        if (!File.Exists(metaPath)) continue;
+
+        var metadata = JsonSerializer.Deserialize<Dictionary<string, object>>(File.ReadAllText(metaPath));
+        if (metadata == null || metadata["Status"]?.ToString() != "Published") continue;
+
+        var assetsFolder = Path.Combine(folder, "assets");
+        var imageFiles = Directory.Exists(assetsFolder)
+            ? Directory.GetFiles(assetsFolder)
+                .Where(f => new[] { ".jpg", ".jpeg", ".png", ".gif", ".webp", ".bmp", ".svg", ".jfif" }
+                .Contains(Path.GetExtension(f).ToLower()))
+                .ToList()
+            : new List<string>();
+
+        var attachmentFiles = Directory.Exists(assetsFolder)
+            ? Directory.GetFiles(assetsFolder).Except(imageFiles).ToList()
+            : new List<string>();
+
+        posts.Add(new
+        {
+            Title = metadata["Title"],
+            Description = metadata["Description"],
+            CreatedAt = metadata["CreatedAt"],
+            Slug = metadata["CustomUrl"],
+            Image = imageFiles.FirstOrDefault() != null
+                ? "/content/posts/" + Path.GetFileName(folder) + "/assets/" + Path.GetFileName(imageFiles.First())
+                : null,
+            AttachmentCount = attachmentFiles.Count
+        });
+    }
+
+    return Results.Json(new { posts });
+});
+
+//api to get posts by tags 
+app.MapGet("/api/posts/by-tags", (string tags) =>
+{
+    var tagList = tags.Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
+    if (tagList.Length == 0)
+        return Results.Json(new { posts = new List<object>() });
+
+    var tagFilePath = "content/tags/tag-name.json";
+    if (!File.Exists(tagFilePath)) return Results.NotFound("Tag file not found.");
+
+    var tagJson = File.ReadAllText(tagFilePath);
+    var tagData = JsonSerializer.Deserialize<List<Tag>>(tagJson);
+
+    var matchingSlugs = tagData
+        .Where(t => tagList.Contains(t.Name, StringComparer.OrdinalIgnoreCase))
+        .SelectMany(t => t.AssociatedPosts)
+        .Distinct()
+        .ToList();
+
+    var postsPath = Path.Combine(Directory.GetCurrentDirectory(), "content/posts");
+    var posts = new List<object>();
+
+    foreach (var slug in matchingSlugs)
+    {
+        var folder = Directory.GetDirectories(postsPath).FirstOrDefault(f => f.Contains(slug));
+        if (folder == null) continue;
+
+        var metaPath = Path.Combine(folder, "meta.json");
+        if (!File.Exists(metaPath)) continue;
+
+        var metadata = JsonSerializer.Deserialize<Dictionary<string, object>>(File.ReadAllText(metaPath));
+        if (metadata == null || metadata["Status"]?.ToString() != "Published") continue;
+
+        var assetsFolder = Path.Combine(folder, "assets");
+        var imageFiles = Directory.Exists(assetsFolder)
+            ? Directory.GetFiles(assetsFolder)
+                .Where(f => new[] { ".jpg", ".jpeg", ".png", ".gif", ".webp", ".bmp", ".svg", ".jfif" }
+                .Contains(Path.GetExtension(f).ToLower()))
+                .ToList()
+            : new List<string>();
+
+        var attachmentFiles = Directory.Exists(assetsFolder)
+            ? Directory.GetFiles(assetsFolder).Except(imageFiles).ToList()
+            : new List<string>();
+
+        posts.Add(new
+        {
+            Title = metadata["Title"],
+            Description = metadata["Description"],
+            CreatedAt = metadata["CreatedAt"],
+            Slug = metadata["CustomUrl"],
+            Image = imageFiles.FirstOrDefault() != null
+                ? "/content/posts/" + Path.GetFileName(folder) + "/assets/" + Path.GetFileName(imageFiles.First())
+                : null,
+            AttachmentCount = attachmentFiles.Count
+        });
+    }
+
+    return Results.Json(new { posts });
 });
 
 app.Run();

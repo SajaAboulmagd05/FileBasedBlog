@@ -5,15 +5,21 @@
   },
   {
     "Name": "minimal-api",
-    "AssociatedPosts": []
+    "AssociatedPosts": [
+      "a-new-trial-to-see-if-tags-work"
+    ]
   },
   {
     "Name": "web-development",
-    "AssociatedPosts": []
+    "AssociatedPosts": [
+      "a-new-trial-to-see-if-tags-work"
+    ]
   },
   {
     "Name": "dotnet-core",
-    "AssociatedPosts": []
+    "AssociatedPosts": [
+      "a-new-trial-to-see-if-tags-work"
+    ]
   },
   {
     "Name": "file-based-storage",

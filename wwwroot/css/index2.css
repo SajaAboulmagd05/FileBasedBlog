@@ -259,7 +259,7 @@ html {
   padding-top: 0.5rem;
 }
 
-.category-btn {
+.category-btn ,.apply-tag-filter {
   background: #fff;
   border: var(--border);
   padding: 0.6rem 1.2rem;
@@ -296,3 +296,4 @@ html {
     background:var(--black);
     color:#fff;
 }
+

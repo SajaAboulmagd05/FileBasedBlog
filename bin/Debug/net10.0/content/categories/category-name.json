@@ -2,17 +2,24 @@
   {
     "Name": "Development",
     "Description": "Articles covering web, mobile, and software development topics.",
-    "AssociatedPosts": []
+    "AssociatedPosts": [
+      "if-youre-lost-were-all-a-little-lost-and-its-alright-"
+    ]
   },
   {
     "Name": "Design",
     "Description": "Insights into UI/UX design, visual aesthetics, and prototyping.",
-    "AssociatedPosts": []
+    "AssociatedPosts": [
+      "if-youre-lost-were-all-a-little-lost-and-its-alright-",
+      "a-new-trial-to-see-if-tags-work"
+    ]
   },
   {
     "Name": "Tutorials",
     "Description": "Step-by-step guides for learning specific tools and technologies.",
-    "AssociatedPosts": []
+    "AssociatedPosts": [
+      "a-new-trial-to-see-if-tags-work"
+    ]
   },
   {
     "Name": "Business",
