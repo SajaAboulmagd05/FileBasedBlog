@@ -169,8 +169,34 @@ async function loadTags() {
   }
 }
 
+function handleSearch(event) {
+  event.preventDefault(); // Prevent form from reloading the page
+
+  const input = document.querySelector(".search-box");
+  const query = input.value.trim();
+
+  if (!query) return;
+  document.getElementById("search-heading").textContent = `Search results for: "${query}"`;
+
+  fetch(`/api/posts/search?query=${encodeURIComponent(query)}`)
+    .then(res => res.json())
+    .then(data => {
+      allPosts = data.posts || [];
+      currentCategory = null;
+      selectedTags = [];
+      currentPage = 1;
+      renderPosts(currentPage);
+    })
+    .catch(err => {
+      console.error("Search failed:", err);
+      document.getElementById("posts-container").innerHTML = "<p>Search failed.</p>";
+    });
+}
+
+
 document.addEventListener("DOMContentLoaded", () => {
   loadCategories();
   loadTags();
   loadPosts();
+  document.querySelector(".search-form").addEventListener("submit", handleSearch);
 });

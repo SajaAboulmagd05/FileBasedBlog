@@ -447,4 +447,67 @@ app.MapGet("/api/posts/by-tags", (string tags) =>
     return Results.Json(new { posts });
 });
 
+//search across post title, descritpion, content for the search content
+app.MapGet("/api/posts/search", (string query) =>
+{
+    if (string.IsNullOrWhiteSpace(query))
+        return Results.Json(new { posts = new List<object>() });
+
+    var postsPath = Path.Combine(Directory.GetCurrentDirectory(), "content/posts");
+    var allPostFolders = Directory.GetDirectories(postsPath);
+    var matchingPosts = new List<object>();
+
+    foreach (var folder in allPostFolders)
+    {
+        var metaPath = Path.Combine(folder, "meta.json");
+        if (!File.Exists(metaPath)) continue;
+
+
+
+        var metadata = JsonSerializer.Deserialize<Dictionary<string, object>>(File.ReadAllText(metaPath));
+        if (metadata == null || !metadata.ContainsKey("Status"))
+        {
+            Console.WriteLine($"Skipping post in folder: {folder} — missing 'Status'");
+            continue;
+        }
+        if (metadata == null || metadata["Status"]?.ToString() != "Published") continue;
+
+        var title = metadata["Title"]?.ToString() ?? "";
+        var description = metadata["Description"]?.ToString() ?? "";
+
+        // Optional: search in content.md
+        var contentPath = Path.Combine(folder, "content.md");
+        var body = File.Exists(contentPath) ? File.ReadAllText(contentPath) : "";
+
+        var combined = $"{title} {description} {body}".ToLower();
+        if (!combined.Contains(query.ToLower())) continue;
+
+        var assetsFolder = Path.Combine(folder, "assets");
+        var imageFiles = Directory.Exists(assetsFolder)
+            ? Directory.GetFiles(assetsFolder)
+                .Where(f => new[] { ".jpg", ".jpeg", ".png", ".gif", ".webp", ".bmp", ".svg", ".jfif" }
+                .Contains(Path.GetExtension(f).ToLower()))
+                .ToList()
+            : new List<string>();
+
+        var attachmentFiles = Directory.Exists(assetsFolder)
+            ? Directory.GetFiles(assetsFolder).Except(imageFiles).ToList()
+            : new List<string>();
+
+        matchingPosts.Add(new
+        {
+            Title = title,
+            Description = description,
+            CreatedAt = metadata["CreatedAt"],
+            Slug = metadata["CustomUrl"],
+            Image = imageFiles.FirstOrDefault() != null
+                ? "/content/posts/" + Path.GetFileName(folder) + "/assets/" + Path.GetFileName(imageFiles.First())
+                : null,
+            AttachmentCount = attachmentFiles.Count
+        });
+    }
+
+    return Results.Json(new { posts = matchingPosts });
+});
+
 app.Run();
