@@ -206,51 +206,54 @@ app.MapPost("/api/posts/publish", async (HttpRequest request) =>
         }
     }
 
-    //update categories associated posts 
-    var categoryFilePath = "content/categories/category-name.json";
-    if (File.Exists(categoryFilePath))
+    if (status == "Published")
     {
-        var categoryJson = File.ReadAllText(categoryFilePath);
-        var categoryList = JsonSerializer.Deserialize<List<Category>>(categoryJson) ?? new();
-
-        foreach (var cat in categories)
+        //update categories associated posts 
+        var categoryFilePath = "content/categories/category-name.json";
+        if (File.Exists(categoryFilePath))
         {
-            var category = categoryList.FirstOrDefault(c => c.Name.Equals(cat, StringComparison.OrdinalIgnoreCase));
-            if (category != null && !category.AssociatedPosts.Contains(slug))
-            {
-                category.AssociatedPosts.Add(slug);
-            }
-        }
+            var categoryJson = File.ReadAllText(categoryFilePath);
+            var categoryList = JsonSerializer.Deserialize<List<Category>>(categoryJson) ?? new();
 
-        File.WriteAllText(categoryFilePath, JsonSerializer.Serialize(categoryList, new JsonSerializerOptions { WriteIndented = true }));
-    }
-
-    //update tags associated posts 
-    var tagFilePath = "content/tags/tag-name.json";
-    if (File.Exists(tagFilePath))
-    {
-        var tagJson = File.ReadAllText(tagFilePath);
-        var tagList = JsonSerializer.Deserialize<List<Tag>>(tagJson) ?? new();
-
-        foreach (var tag in tags)
-        {
-            var tagEntry = tagList.FirstOrDefault(t => t.Name.Equals(tag, StringComparison.OrdinalIgnoreCase));
-            if (tagEntry != null)
+            foreach (var cat in categories)
             {
-                if (!tagEntry.AssociatedPosts.Contains(slug))
-                    tagEntry.AssociatedPosts.Add(slug);
-            }
-            else
-            {
-                tagList.Add(new Tag
+                var category = categoryList.FirstOrDefault(c => c.Name.Equals(cat, StringComparison.OrdinalIgnoreCase));
+                if (category != null && !category.AssociatedPosts.Contains(slug))
                 {
-                    Name = tag,
-                    AssociatedPosts = new List<string> { slug }
-                });
+                    category.AssociatedPosts.Add(slug);
+                }
             }
+
+            File.WriteAllText(categoryFilePath, JsonSerializer.Serialize(categoryList, new JsonSerializerOptions { WriteIndented = true }));
         }
 
-        File.WriteAllText(tagFilePath, JsonSerializer.Serialize(tagList, new JsonSerializerOptions { WriteIndented = true }));
+        //update tags associated posts 
+        var tagFilePath = "content/tags/tag-name.json";
+        if (File.Exists(tagFilePath))
+        {
+            var tagJson = File.ReadAllText(tagFilePath);
+            var tagList = JsonSerializer.Deserialize<List<Tag>>(tagJson) ?? new();
+
+            foreach (var tag in tags)
+            {
+                var tagEntry = tagList.FirstOrDefault(t => t.Name.Equals(tag, StringComparison.OrdinalIgnoreCase));
+                if (tagEntry != null)
+                {
+                    if (!tagEntry.AssociatedPosts.Contains(slug))
+                        tagEntry.AssociatedPosts.Add(slug);
+                }
+                else
+                {
+                    tagList.Add(new Tag
+                    {
+                        Name = tag,
+                        AssociatedPosts = new List<string> { slug }
+                    });
+                }
+            }
+
+            File.WriteAllText(tagFilePath, JsonSerializer.Serialize(tagList, new JsonSerializerOptions { WriteIndented = true }));
+        }
     }
 
     return Results.Ok(new { Message = $"{status} post saved successfully!" });
