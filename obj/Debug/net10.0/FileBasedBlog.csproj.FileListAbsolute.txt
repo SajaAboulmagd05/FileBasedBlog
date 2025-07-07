@@ -57,6 +57,9 @@ D:\internship\FileBasedBlog\bin\Debug\net10.0\content\posts\2025-07-06-how-to-de
 D:\internship\FileBasedBlog\bin\Debug\net10.0\content\posts\2025-07-06-can-we-try-something-different-\meta.json
 D:\internship\FileBasedBlog\bin\Debug\net10.0\content\posts\2025-07-06-if-youre-lost-were-all-a-little-lost-and-its-alright-\meta.json
 D:\internship\FileBasedBlog\bin\Debug\net10.0\content\posts\2025-07-06-a-new-trial-to-see-if-tags-work\meta.json
-D:\internship\FileBasedBlog\obj\Debug\net10.0\compressed\1ll6seo6me-{0}-dj663sj66h-dj663sj66h.gz
 D:\internship\FileBasedBlog\obj\Debug\net10.0\compressed\u1px9nsevi-{0}-rqhicths05-rqhicths05.gz
-D:\internship\FileBasedBlog\obj\Debug\net10.0\compressed\w8y0kio0nk-{0}-kastw3i7ut-kastw3i7ut.gz
+D:\internship\FileBasedBlog\obj\Debug\net10.0\compressed\1ll6seo6me-{0}-v32nz1ed65-v32nz1ed65.gz
+D:\internship\FileBasedBlog\obj\Debug\net10.0\compressed\w8y0kio0nk-{0}-p7dok2gsww-p7dok2gsww.gz
+D:\internship\FileBasedBlog\obj\Debug\net10.0\compressed\xcze8nutuf-{0}-xdxuljstag-xdxuljstag.gz
+D:\internship\FileBasedBlog\obj\Debug\net10.0\compressed\9ujy18ld8r-{0}-vxo4kd6cch-vxo4kd6cch.gz
+D:\internship\FileBasedBlog\obj\Debug\net10.0\compressed\w1pe7z9smp-{0}-y4pkxa4q1b-y4pkxa4q1b.gz

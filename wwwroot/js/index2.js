@@ -75,7 +75,7 @@ function renderPosts(page) {
             <span>${formattedDate}</span>
           </div>
           <div class="post-content">
-            <h3 class="title"><a href="/posts/${post.slug}" class="custom-link">${post.title}</a></h3>
+            <h3 class="title"><a href="/post.html?slug=${post.slug}" class="custom-link">${post.title}</a></h3>
             <p class="text">${post.description || 'No description available'}</p>
             <div class="details">
               <span class="author">

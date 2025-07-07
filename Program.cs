@@ -544,4 +544,53 @@ app.MapGet("/api/posts/search", (string query) =>
     return Results.Json(new { posts = matchingPosts });
 });
 
+
+//Api to get a specific post 
+app.MapGet("/api/posts/{slug}", (string slug) =>
+{
+    var postFolder = Directory.GetDirectories("content/posts")
+        .FirstOrDefault(dir => dir.EndsWith(slug));
+
+    if (postFolder == null)
+        return Results.NotFound();
+
+    var metaPath = Path.Combine(postFolder, "meta.json");
+    var contentPath = Path.Combine(postFolder, "content.md");
+
+    if (!File.Exists(metaPath) || !File.Exists(contentPath))
+        return Results.NotFound();
+
+    var metadata = JsonSerializer.Deserialize<Dictionary<string, object>>(File.ReadAllText(metaPath));
+    var content = File.ReadAllText(contentPath);
+
+    if (metadata == null)
+    {
+        return Results.Problem("Post metadata could not be read.");
+    }
+    var readingTime = metadata.ContainsKey("ReadingTime")
+        ? metadata["ReadingTime"]?.ToString() ?? "1 min read"
+        : "1 min read";
+
+    return Results.Json(new
+    {
+        //Id = metadata["Id"],
+        Title = metadata["Title"],
+        Description = metadata["Description"],
+        Slug = metadata["CustomUrl"],
+        CreatedAt = metadata["CreatedAt"],
+        //UpdatedAt = metadata.ContainsKey("UpdatedAt") ? metadata["UpdatedAt"] : null,
+        //ScheduledAt = metadata.ContainsKey("ScheduledAt") ? metadata["ScheduledAt"] : null,
+        ReadingTime = readingTime,
+        //LikeCount = metadata.ContainsKey("LikeCount") ? Convert.ToInt32(metadata["LikeCount"]) : 0,
+        //LikedByUserIds = metadata.ContainsKey("LikedByUserIds") ? ((JsonElement)metadata["LikedByUserIds"]).EnumerateArray().Select(x => x.ToString()).ToList() : new List<string>(),
+        //Comments = metadata.ContainsKey("Comments") ? ((JsonElement)metadata["Comments"]).EnumerateArray().Select(c => JsonSerializer.Deserialize<Comment>(c.GetRawText())).ToList() : new List<Comment>(),
+        //Status = metadata["Status"],
+        Tags = metadata.ContainsKey("Tags") ? ((JsonElement)metadata["Tags"]).EnumerateArray().Select(t => t.ToString()).ToList() : new List<string>(),
+        Categories = metadata.ContainsKey("Categories") ? ((JsonElement)metadata["Categories"]).EnumerateArray().Select(c => c.ToString()).ToList() : new List<string>(),
+        Content = content
+    });
+});
+
+
+
 app.Run();
