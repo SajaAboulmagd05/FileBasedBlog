@@ -47,6 +47,18 @@ function renderPosts(page) {
   const paginatedPosts = allPosts.slice(start, end);
 
   paginatedPosts.forEach(post => {
+    const readingTime = post.readingTime || "2 min read";
+
+    // Generate category buttons
+    const categoriesHTML = post.categories?.map(cat => `
+      <span class="category-btn">${cat}</span>
+   `).join("") || "";
+
+    // Generate tag labels
+    const tagsHTML = post.tags?.map((tag, index, arr) => `
+      <span class="tag-label">${tag}</span>${index < arr.length - 1 ? '<span class="dot-separator">•</span>' : ''}
+   `).join("") || "";
+
     const article = document.createElement("article");
     const formattedDate = new Date(post.createdAt).toLocaleDateString('en-US', {
       year: 'numeric',
@@ -70,10 +82,30 @@ function renderPosts(page) {
                 <i class="far fa-user"></i>
                 <span>by admin</span>
               </span>
+              <span class="likes">
+                <i class="fas fa-thumbs-up"></i>
+                <span>20 likes</span>
+              </span>
+               <span class="comments">
+                <i class="fas fa-comment"></i>
+                <span>10 comments</span>
+              </span>
               <span class="attachments">
                 <i class="fas fa-paperclip"></i>
                 <span>${post.attachmentCount || 0} file(s)</span>
               </span>
+            </div>
+            <div class="meta">
+              <div class="meta-row">
+                <div class="meta-section categories">
+                  <strong>Categories:</strong>
+                  <div class="category-list">${categoriesHTML}</div>
+                </div>
+                <div class="meta-section tags">
+                  <strong>Tags:</strong>
+                  <div class="tag-list">${tagsHTML}</div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -169,14 +201,22 @@ async function loadTags() {
   }
 }
 
+//function to handel search functionality 
 function handleSearch(event) {
-  event.preventDefault(); // Prevent form from reloading the page
+  event.preventDefault();
 
   const input = document.querySelector(".search-box");
   const query = input.value.trim();
-
   if (!query) return;
-  document.getElementById("search-heading").textContent = `Search results for: "${query}"`;
+
+  const loading = document.getElementById("loading-indicator");
+  const results = document.getElementById("posts-container");
+
+  // Clear everything immediately to simulate a reload
+  results.innerHTML = "";
+  loading.style.display = "block";
+
+  const startTime = Date.now();
 
   fetch(`/api/posts/search?query=${encodeURIComponent(query)}`)
     .then(res => res.json())
@@ -185,13 +225,25 @@ function handleSearch(event) {
       currentCategory = null;
       selectedTags = [];
       currentPage = 1;
+
       renderPosts(currentPage);
+
+      // Scroll to results
+      results.scrollIntoView({ behavior: "smooth" });
     })
     .catch(err => {
-      console.error("Search failed:", err);
-      document.getElementById("posts-container").innerHTML = "<p>Search failed.</p>";
+      results.innerHTML = "<p>Search failed.</p>";
+    })
+    .finally(() => {
+      const elapsed = Date.now() - startTime;
+      const delay = Math.max(400 - elapsed, 0); // ensure at least 400ms
+
+      setTimeout(() => {
+        loading.style.display = "none";
+      }, delay);
     });
 }
+
 
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -199,4 +251,6 @@ document.addEventListener("DOMContentLoaded", () => {
   loadTags();
   loadPosts();
   document.querySelector(".search-form").addEventListener("submit", handleSearch);
+
+  // document.querySelector(".search-form").addEventListener("submit", handleSearch);
 });

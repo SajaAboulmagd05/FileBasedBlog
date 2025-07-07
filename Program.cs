@@ -1,5 +1,6 @@
 using System.Text.Json;
 using Microsoft.Extensions.FileProviders;
+using System.Text.RegularExpressions;
 
 var builder = WebApplication.CreateBuilder(args);
 var app = builder.Build();
@@ -71,6 +72,11 @@ app.MapPost("/api/posts/draft", async (HttpRequest request) =>
     var createdAt = DateTime.UtcNow;
     var status = "Draft";
 
+
+    int wordCount = Regex.Matches(body, @"\b\w+\b").Count;
+    int readingMinutes = Math.Max(1, wordCount / 200);
+    string readingTime = $"{readingMinutes} min read";
+
     var metadata = new
     {
         Title = title,
@@ -79,7 +85,8 @@ app.MapPost("/api/posts/draft", async (HttpRequest request) =>
         Categories = categories,
         CustomUrl = slug,
         CreatedAt = createdAt,
-        Status = status
+        Status = status,
+        ReadingTime = readingTime
     };
 
     var postFolder = $"content/posts/{createdAt:yyyy-MM-dd}-{slug}";
@@ -161,6 +168,10 @@ app.MapPost("/api/posts/publish", async (HttpRequest request) =>
 
     }
 
+    int wordCount = Regex.Matches(body, @"\b\w+\b").Count;
+    int readingMinutes = Math.Max(1, wordCount / 200);
+    string readingTime = $"{readingMinutes} min read";
+
     var metadata = new
     {
         Title = title,
@@ -170,7 +181,8 @@ app.MapPost("/api/posts/publish", async (HttpRequest request) =>
         CustomUrl = slug,
         CreatedAt = DateTime.UtcNow,
         PublishAt = publishAt,
-        Status = status
+        Status = status,
+        ReadingTime = readingTime
     };
 
     var postFolder = $"content/posts/{DateTime.UtcNow:yyyy-MM-dd}-{slug}";
@@ -307,6 +319,9 @@ app.MapGet("/api/posts", () =>
             CreatedAt = metadata["CreatedAt"],
             Tags = metadata["Tags"],
             Categories = metadata["Categories"],
+            ReadingTime = metadata.ContainsKey("ReadingTime")
+            ? metadata["ReadingTime"]?.ToString() ?? "1 min read"
+            : "1 min read",
             Slug = slug,
             Image = imageFiles.FirstOrDefault() != null
               ? "/content/posts/" + Path.GetFileName(folder) + "/assets/" + Path.GetFileName(imageFiles.First())
@@ -375,11 +390,18 @@ app.MapGet("/api/posts/by-category", (string category) =>
             Title = metadata["Title"],
             Description = metadata["Description"],
             CreatedAt = metadata["CreatedAt"],
-            Slug = metadata["CustomUrl"],
+            Tags = metadata["Tags"],
+            Categories = metadata["Categories"],
+            ReadingTime = metadata.ContainsKey("ReadingTime")
+            ? metadata["ReadingTime"]?.ToString() ?? "1 min read"
+            : "1 min read",
+            Slug = slug,
             Image = imageFiles.FirstOrDefault() != null
-                ? "/content/posts/" + Path.GetFileName(folder) + "/assets/" + Path.GetFileName(imageFiles.First())
-                : null,
+              ? "/content/posts/" + Path.GetFileName(folder) + "/assets/" + Path.GetFileName(imageFiles.First())
+            : null,
+
             AttachmentCount = attachmentFiles.Count
+
         });
     }
 
@@ -436,10 +458,16 @@ app.MapGet("/api/posts/by-tags", (string tags) =>
             Title = metadata["Title"],
             Description = metadata["Description"],
             CreatedAt = metadata["CreatedAt"],
-            Slug = metadata["CustomUrl"],
+            Tags = metadata["Tags"],
+            Categories = metadata["Categories"],
+            ReadingTime = metadata.ContainsKey("ReadingTime")
+            ? metadata["ReadingTime"]?.ToString() ?? "1 min read"
+            : "1 min read",
+            Slug = slug,
             Image = imageFiles.FirstOrDefault() != null
-                ? "/content/posts/" + Path.GetFileName(folder) + "/assets/" + Path.GetFileName(imageFiles.First())
-                : null,
+              ? "/content/posts/" + Path.GetFileName(folder) + "/assets/" + Path.GetFileName(imageFiles.First())
+            : null,
+
             AttachmentCount = attachmentFiles.Count
         });
     }
@@ -496,13 +524,19 @@ app.MapGet("/api/posts/search", (string query) =>
 
         matchingPosts.Add(new
         {
-            Title = title,
-            Description = description,
+            Title = metadata["Title"],
+            Description = metadata["Description"],
             CreatedAt = metadata["CreatedAt"],
+            Tags = metadata["Tags"],
+            Categories = metadata["Categories"],
+            ReadingTime = metadata.ContainsKey("ReadingTime")
+            ? metadata["ReadingTime"]?.ToString() ?? "1 min read"
+            : "1 min read",
             Slug = metadata["CustomUrl"],
             Image = imageFiles.FirstOrDefault() != null
-                ? "/content/posts/" + Path.GetFileName(folder) + "/assets/" + Path.GetFileName(imageFiles.First())
-                : null,
+              ? "/content/posts/" + Path.GetFileName(folder) + "/assets/" + Path.GetFileName(imageFiles.First())
+            : null,
+
             AttachmentCount = attachmentFiles.Count
         });
     }
