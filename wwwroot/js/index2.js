@@ -73,6 +73,8 @@ function renderPosts(page) {
           <div class="date">
             <i class="far fa-clock"></i>
             <span>${formattedDate}</span>
+            <span class="dot-separator">•</span>
+            <span>${readingTime}</span>
           </div>
           <div class="post-content">
             <h3 class="title"><a href="/post.html?slug=${post.slug}" class="custom-link">${post.title}</a></h3>
@@ -84,7 +86,7 @@ function renderPosts(page) {
               </span>
               <span class="likes">
                 <i class="fas fa-thumbs-up"></i>
-                <span>20 likes</span>
+                <span>${post.likeCount} Likes</span>
               </span>
                <span class="comments">
                 <i class="fas fa-comment"></i>
@@ -244,6 +246,31 @@ function handleSearch(event) {
     });
 }
 
+
+// // adding a banner to dispaly category name 
+// categoryContainer.addEventListener("click", e => {
+//   if (e.target.tagName === "BUTTON") {
+//     categoryContainer.querySelectorAll(".category-btn").forEach(btn => btn.classList.remove("active"));
+//     e.target.classList.add("active");
+
+//     currentCategory = e.target.dataset.category || null;
+//     selectedTags = [];
+//     document.querySelectorAll(".tag input[type='checkbox']").forEach(cb => cb.checked = false);
+
+//     currentPage = 1;
+
+//     // Update the banner
+//     const banner = document.getElementById("category-banner");
+//     if (currentCategory) {
+//       banner.textContent = `Showing posts in: ${currentCategory}`;
+//       banner.style.display = "block";
+//     } else {
+//       banner.style.display = "none";
+//     }
+
+//     loadPosts();
+//   }
+// });
 
 
 document.addEventListener("DOMContentLoaded", () => {

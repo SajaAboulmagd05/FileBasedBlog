@@ -7,6 +7,25 @@ aspectRatioCheckbox = document.querySelector("#aspect-ratio-checkbox");
 
 const MAX_WIDTH = 800; // Maximum allowed width
 
+//adding easymde for markdown 
+const easyMDE = new EasyMDE({
+    element: document.getElementById("post-body"),
+    spellChecker: false,
+    placeholder: "Write your post content in Markdown...",
+    autosave: {
+        enabled: true,
+        uniqueId: "post-body-autosave",
+        delay: 1000
+    },
+    status: false,
+    imageUpload: true,
+    imageMaxSize: 2 * 1024 * 1024,
+    imageAccept: "image/*",
+    uploadImage: true,
+    imageUploadEndpoint: "/api/uploads/markdown-image",
+    promptURLs: true
+});
+
 const loadFile = (e) => {
     const file = e.target.files[0]; 
     if (!file) return;
@@ -169,9 +188,14 @@ document.getElementById("save-draft").addEventListener("click", async function (
 document.getElementById("post-form").addEventListener("submit", async function (e) {
     e.preventDefault();
 
+    // Create FormData from the form
     const form = new FormData(this);
+    
+    // Add the markdown content
+    form.set("body", easyMDE.value());
+
+    // Handle scheduling
     const publishOption = form.get("publish-option");
-   //this part is related to the scheduling process we must confirm that the time is not past already 
     if (publishOption === "schedule") {
         const dateValue = document.getElementById("publish-date").value;
         const timeValue = document.getElementById("publish-time").value;
@@ -189,8 +213,24 @@ document.getElementById("post-form").addEventListener("submit", async function (
             return;
         }
 
-        form.append("publish-date", dateValue);
-        form.append("publish-time", timeValue);
+        form.set("publish-date", dateValue);
+        form.set("publish-time", timeValue);
+    }
+
+    // Validate required fields
+    const title = form.get("title")?.toString().trim();
+    const description = form.get("description")?.toString().trim();
+    const body = form.get("body")?.toString().trim();
+    const coverImage = form.get("coverImage");
+
+    if (!title || !description || !body) {
+        alert("Title, description, and content are required.");
+        return;
+    }
+
+    if (!coverImage) {
+        alert("Please upload a cover image.");
+        return;
     }
 
     try {
@@ -199,13 +239,23 @@ document.getElementById("post-form").addEventListener("submit", async function (
             body: form
         });
 
+        if (!response.ok) {
+            const error = await response.text();
+            throw new Error(error || "Failed to publish post");
+        }
+
         const result = await response.json();
-        alert(result.Message || "Post submitted successfully!");
+        alert(result.Message || "Post published successfully!");
+        
+        // Optional: Redirect or clear form
+        // window.location.href = "/posts";
     } catch (error) {
         console.error("Submission failed:", error);
-        alert("Something went wrong during publishing.");
+        alert("Error: " + error.message);
     }
 });
+
+
 
 
 

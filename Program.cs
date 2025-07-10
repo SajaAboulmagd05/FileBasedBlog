@@ -1,8 +1,15 @@
 using System.Text.Json;
 using Microsoft.Extensions.FileProviders;
 using System.Text.RegularExpressions;
+using System.Text.Json.Serialization;
+
+
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddSingleton<CategoryTagService>();
+builder.Services.AddSingleton<FileService>();
+builder.Services.AddSingleton<PostService>();
 var app = builder.Build();
 app.UseDefaultFiles(); // Serves index.html by default
 app.UseStaticFiles();
@@ -54,289 +61,71 @@ app.MapGet("/api/categories", () =>
 });
 
 
-app.MapPost("/api/posts/draft", async (HttpRequest request) =>
-{
-    var form = await request.ReadFormAsync();
+// //loading the posts for the frontend display 
+// app.MapGet("/api/posts", () =>
+// {
+//     var postsPath = Path.Combine(Directory.GetCurrentDirectory(), "content/posts");
+//     if (!Directory.Exists(postsPath))
+//         return Results.Json(new { posts = new List<object>() });
 
-    var title = form["title"];
-    var description = form["description"];
-    var body = form["body"];
-    var tags = form["tags"].ToList();
-    var categories = form["categories"].ToList();
-    var slugValue = form["slug"].ToString();
-    //checking if already user provided a slug then use it else create one by replacing the spaces with -
-    var slug = string.IsNullOrWhiteSpace(slugValue)
-     ? title.ToString().ToLower().Replace(' ', '-')
-    : slugValue;
+//     var allPostFolders = Directory.GetDirectories(postsPath);
+//     var publishedPosts = new List<object>();
 
-    var createdAt = DateTime.UtcNow;
-    var status = "Draft";
+//     foreach (var folder in allPostFolders)
+//     {
+//         var metaPath = Path.Combine(folder, "meta.json");
+//         if (!File.Exists(metaPath)) continue;
 
+//         var metadata = JsonSerializer.Deserialize<Dictionary<string, object>>(File.ReadAllText(metaPath));
+//         if (metadata == null || !metadata.ContainsKey("Status")) continue;
 
-    int wordCount = Regex.Matches(body, @"\b\w+\b").Count;
-    int readingMinutes = Math.Max(1, wordCount / 200);
-    string readingTime = $"{readingMinutes} min read";
+//         if (metadata["Status"]?.ToString() != "Published") continue;
 
-    var metadata = new
-    {
-        Title = title,
-        Description = description,
-        Tags = tags,
-        Categories = categories,
-        CustomUrl = slug,
-        CreatedAt = createdAt,
-        Status = status,
-        ReadingTime = readingTime
-    };
+//         var slug = metadata.ContainsKey("CustomUrl") ? metadata["CustomUrl"].ToString() : Path.GetFileName(folder);
+//         var assetsFolder = Path.Combine(folder, "assets");
 
-    var postFolder = $"content/posts/{createdAt:yyyy-MM-dd}-{slug}";
-    Directory.CreateDirectory(postFolder);
-    File.WriteAllText(Path.Combine(postFolder, "meta.json"), JsonSerializer.Serialize(metadata));
-    File.WriteAllText(Path.Combine(postFolder, "content.md"), body);
+//         var imageFiles = new List<string>();
+//         var attachmentFiles = new List<string>();
 
-    //handling files and image 
-    // Create assets folder
-    var assetsFolder = Path.Combine(postFolder, "assets");
-    Directory.CreateDirectory(assetsFolder);
+//         if (Directory.Exists(assetsFolder))
+//         {
+//             var files = Directory.GetFiles(assetsFolder);
 
-    // Save uploaded images
-    foreach (var imgFile in form.Files.GetFiles("images"))
-    {
-        if (imgFile.Length > 0)
-        {
-            var filePath = Path.Combine(assetsFolder, imgFile.FileName);
-            using var stream = new FileStream(filePath, FileMode.Create);
-            await imgFile.CopyToAsync(stream);
-        }
-    }
+//             var supportedImageExtensions = new[] { ".jpg", ".jpeg", ".png", ".gif", ".webp", ".bmp", ".svg", ".jfif" };
 
-    // Save attached files
-    foreach (var docFile in form.Files.GetFiles("files"))
-    {
-        if (docFile.Length > 0)
-        {
-            var filePath = Path.Combine(assetsFolder, docFile.FileName);
-            using var stream = new FileStream(filePath, FileMode.Create);
-            await docFile.CopyToAsync(stream);
-        }
-    }
+//             imageFiles = files
+//               .Where(f => supportedImageExtensions.Contains(Path.GetExtension(f).ToLower()))
+//               .ToList();
+
+//             attachmentFiles = files.Except(imageFiles).ToList();
+//         }
 
 
-    return Results.Ok(new { Message = "Draft saved successfully!" });
-});
+//         publishedPosts.Add(new
+//         {
+//             Title = metadata["Title"],
+//             Description = metadata["Description"],
+//             CreatedAt = metadata["CreatedAt"],
+//             Tags = metadata["Tags"],
+//             Categories = metadata["Categories"],
+//             ReadingTime = metadata.ContainsKey("ReadingTime")
+//             ? metadata["ReadingTime"]?.ToString() ?? "1 min read"
+//             : "1 min read",
+//             Slug = slug,
+//             Image = imageFiles.FirstOrDefault() != null
+//               ? "/content/posts/" + Path.GetFileName(folder) + "/assets/" + Path.GetFileName(imageFiles.First())
+//             : null,
 
-//api to publish the post also checks for publshing options 
-app.MapPost("/api/posts/publish", async (HttpRequest request) =>
-{
-    var form = await request.ReadFormAsync();
+//             AttachmentCount = attachmentFiles.Count
+//         });
+//     }
 
-    var title = form["title"].ToString();
-    var description = form["description"].ToString();
-    var body = form["body"].ToString();
-    var tags = form["tags"].ToList();
-    var categories = form["categories"].ToList();
-    var slugValue = form["slug"].ToString();
-    var slug = string.IsNullOrWhiteSpace(slugValue)
-        ? title.ToLower().Replace(' ', '-')
-        : slugValue;
+//     var sorted = publishedPosts
+//         .OrderByDescending(p => DateTime.Parse(p.GetType().GetProperty("CreatedAt")?.GetValue(p)?.ToString() ?? ""))
+//         .ToList();
 
-    var status = "Published";
-    DateTime? publishAt = null;
-
-    if (form["publish-option"] == "schedule")
-    {
-
-        // var date = form["publish-date"].ToString();
-        // var time = form["publish-time"].ToString();
-
-        var date = form["publish-date"].FirstOrDefault();
-        var time = form["publish-time"].FirstOrDefault();
-
-        Console.WriteLine($"date: {date}, time: {time}");
-
-        if (DateTime.TryParse($"{date}T{time}", out DateTime scheduledTime))
-        {
-
-            publishAt = scheduledTime;
-            status = "Scheduled";
-        }
-        else
-        {
-            Console.WriteLine("is the problem in the parsing ");
-            return Results.BadRequest(new { Message = "Invalid publish date/time." });
-        }
-
-    }
-
-    int wordCount = Regex.Matches(body, @"\b\w+\b").Count;
-    int readingMinutes = Math.Max(1, wordCount / 200);
-    string readingTime = $"{readingMinutes} min read";
-
-    var metadata = new
-    {
-        Title = title,
-        Description = description,
-        Tags = tags,
-        Categories = categories,
-        CustomUrl = slug,
-        CreatedAt = DateTime.UtcNow,
-        PublishAt = publishAt,
-        Status = status,
-        ReadingTime = readingTime
-    };
-
-    var postFolder = $"content/posts/{DateTime.UtcNow:yyyy-MM-dd}-{slug}";
-    Directory.CreateDirectory(postFolder);
-    File.WriteAllText(Path.Combine(postFolder, "meta.json"), JsonSerializer.Serialize(metadata));
-    File.WriteAllText(Path.Combine(postFolder, "content.md"), body);
-    Console.WriteLine("Post folder path: " + Path.GetFullPath(postFolder));
-
-    //handling files and image 
-    // Create assets folder
-    var assetsFolder = Path.Combine(postFolder, "assets");
-    Directory.CreateDirectory(assetsFolder);
-
-    // Save uploaded images
-    foreach (var imgFile in form.Files.GetFiles("images"))
-    {
-        if (imgFile.Length > 0)
-        {
-            var filePath = Path.Combine(assetsFolder, imgFile.FileName);
-            using var stream = new FileStream(filePath, FileMode.Create);
-            await imgFile.CopyToAsync(stream);
-        }
-    }
-
-    // Save attached files
-    foreach (var docFile in form.Files.GetFiles("files"))
-    {
-        if (docFile.Length > 0)
-        {
-            var filePath = Path.Combine(assetsFolder, docFile.FileName);
-            using var stream = new FileStream(filePath, FileMode.Create);
-            await docFile.CopyToAsync(stream);
-        }
-    }
-
-    if (status == "Published")
-    {
-        //update categories associated posts 
-        var categoryFilePath = "content/categories/category-name.json";
-        if (File.Exists(categoryFilePath))
-        {
-            var categoryJson = File.ReadAllText(categoryFilePath);
-            var categoryList = JsonSerializer.Deserialize<List<Category>>(categoryJson) ?? new();
-
-            foreach (var cat in categories)
-            {
-                var category = categoryList.FirstOrDefault(c => c.Name.Equals(cat, StringComparison.OrdinalIgnoreCase));
-                if (category != null && !category.AssociatedPosts.Contains(slug))
-                {
-                    category.AssociatedPosts.Add(slug);
-                }
-            }
-
-            File.WriteAllText(categoryFilePath, JsonSerializer.Serialize(categoryList, new JsonSerializerOptions { WriteIndented = true }));
-        }
-
-        //update tags associated posts 
-        var tagFilePath = "content/tags/tag-name.json";
-        if (File.Exists(tagFilePath))
-        {
-            var tagJson = File.ReadAllText(tagFilePath);
-            var tagList = JsonSerializer.Deserialize<List<Tag>>(tagJson) ?? new();
-
-            foreach (var tag in tags)
-            {
-                var tagEntry = tagList.FirstOrDefault(t => t.Name.Equals(tag, StringComparison.OrdinalIgnoreCase));
-                if (tagEntry != null)
-                {
-                    if (!tagEntry.AssociatedPosts.Contains(slug))
-                        tagEntry.AssociatedPosts.Add(slug);
-                }
-                else
-                {
-                    tagList.Add(new Tag
-                    {
-                        Name = tag,
-                        AssociatedPosts = new List<string> { slug }
-                    });
-                }
-            }
-
-            File.WriteAllText(tagFilePath, JsonSerializer.Serialize(tagList, new JsonSerializerOptions { WriteIndented = true }));
-        }
-    }
-
-    return Results.Ok(new { Message = $"{status} post saved successfully!" });
-});
-
-
-//loading the posts for the frontend display 
-app.MapGet("/api/posts", () =>
-{
-    var postsPath = Path.Combine(Directory.GetCurrentDirectory(), "content/posts");
-    if (!Directory.Exists(postsPath))
-        return Results.Json(new { posts = new List<object>() });
-
-    var allPostFolders = Directory.GetDirectories(postsPath);
-    var publishedPosts = new List<object>();
-
-    foreach (var folder in allPostFolders)
-    {
-        var metaPath = Path.Combine(folder, "meta.json");
-        if (!File.Exists(metaPath)) continue;
-
-        var metadata = JsonSerializer.Deserialize<Dictionary<string, object>>(File.ReadAllText(metaPath));
-        if (metadata == null || !metadata.ContainsKey("Status")) continue;
-
-        if (metadata["Status"]?.ToString() != "Published") continue;
-
-        var slug = metadata.ContainsKey("CustomUrl") ? metadata["CustomUrl"].ToString() : Path.GetFileName(folder);
-        var assetsFolder = Path.Combine(folder, "assets");
-
-        var imageFiles = new List<string>();
-        var attachmentFiles = new List<string>();
-
-        if (Directory.Exists(assetsFolder))
-        {
-            var files = Directory.GetFiles(assetsFolder);
-
-            var supportedImageExtensions = new[] { ".jpg", ".jpeg", ".png", ".gif", ".webp", ".bmp", ".svg", ".jfif" };
-
-            imageFiles = files
-              .Where(f => supportedImageExtensions.Contains(Path.GetExtension(f).ToLower()))
-              .ToList();
-
-            attachmentFiles = files.Except(imageFiles).ToList();
-        }
-
-
-        publishedPosts.Add(new
-        {
-            Title = metadata["Title"],
-            Description = metadata["Description"],
-            CreatedAt = metadata["CreatedAt"],
-            Tags = metadata["Tags"],
-            Categories = metadata["Categories"],
-            ReadingTime = metadata.ContainsKey("ReadingTime")
-            ? metadata["ReadingTime"]?.ToString() ?? "1 min read"
-            : "1 min read",
-            Slug = slug,
-            Image = imageFiles.FirstOrDefault() != null
-              ? "/content/posts/" + Path.GetFileName(folder) + "/assets/" + Path.GetFileName(imageFiles.First())
-            : null,
-
-            AttachmentCount = attachmentFiles.Count
-        });
-    }
-
-    var sorted = publishedPosts
-        .OrderByDescending(p => DateTime.Parse(p.GetType().GetProperty("CreatedAt")?.GetValue(p)?.ToString() ?? ""))
-        .ToList();
-
-    return Results.Json(new { posts = sorted });
-});
+//     return Results.Json(new { posts = sorted });
+// });
 
 
 app.UseStaticFiles(new StaticFileOptions
@@ -571,6 +360,19 @@ app.MapGet("/api/posts/{slug}", (string slug) =>
         ? metadata["ReadingTime"]?.ToString() ?? "1 min read"
         : "1 min read";
 
+
+    var assetsFolder = Path.Combine(postFolder, "assets");
+    var imageFiles = Directory.Exists(assetsFolder)
+            ? Directory.GetFiles(assetsFolder)
+                .Where(f => new[] { ".jpg", ".jpeg", ".png", ".gif", ".webp", ".bmp", ".svg", ".jfif" }
+                .Contains(Path.GetExtension(f).ToLower()))
+                .ToList()
+            : new List<string>();
+
+    var attachmentFiles = Directory.Exists(assetsFolder)
+            ? Directory.GetFiles(assetsFolder).Except(imageFiles).ToList()
+            : new List<string>();
+
     return Results.Json(new
     {
         //Id = metadata["Id"],
@@ -585,12 +387,127 @@ app.MapGet("/api/posts/{slug}", (string slug) =>
         //LikedByUserIds = metadata.ContainsKey("LikedByUserIds") ? ((JsonElement)metadata["LikedByUserIds"]).EnumerateArray().Select(x => x.ToString()).ToList() : new List<string>(),
         //Comments = metadata.ContainsKey("Comments") ? ((JsonElement)metadata["Comments"]).EnumerateArray().Select(c => JsonSerializer.Deserialize<Comment>(c.GetRawText())).ToList() : new List<Comment>(),
         //Status = metadata["Status"],
+        Image = imageFiles.FirstOrDefault() != null
+              ? "/content/posts/" + Path.GetFileName(postFolder) + "/assets/" + Path.GetFileName(imageFiles.First())
+            : null,
         Tags = metadata.ContainsKey("Tags") ? ((JsonElement)metadata["Tags"]).EnumerateArray().Select(t => t.ToString()).ToList() : new List<string>(),
         Categories = metadata.ContainsKey("Categories") ? ((JsonElement)metadata["Categories"]).EnumerateArray().Select(c => c.ToString()).ToList() : new List<string>(),
         Content = content
     });
 });
 
+
+//refactoring 
+
+//to fix the problem of enum values in json format
+var jsonOptions = new JsonSerializerOptions
+{
+    PropertyNameCaseInsensitive = true,
+    Converters = { new JsonStringEnumConverter() } // This handles enum conversion
+};
+
+
+// Helper method to get post assets
+static (string? ImageUrl, int AttachmentCount) GetPostAssets(string assetsFolder)
+{
+    if (!Directory.Exists(assetsFolder))
+        return (null, 0);
+
+    var files = Directory.GetFiles(assetsFolder);
+    var supportedImageExtensions = new[] { ".jpg", ".jpeg", ".png", ".gif", ".webp", ".bmp", ".svg", ".jfif" };
+
+    var imageFiles = files
+        .Where(f => supportedImageExtensions.Contains(Path.GetExtension(f).ToLower()))
+        .ToList();
+
+    var attachmentFiles = files.Except(imageFiles).ToList();
+
+    var imageUrl = imageFiles.FirstOrDefault() != null
+        ? $"/content/posts/{Path.GetFileName(Path.GetDirectoryName(assetsFolder))}/assets/{Path.GetFileName(imageFiles.First())}"
+        : null;
+
+    return (imageUrl, attachmentFiles.Count);
+}
+
+// API Endpoints
+//api to draft the posts
+app.MapPost("/api/posts/draft", async (HttpRequest request, PostService postService) =>
+{
+    var form = await request.ReadFormAsync();
+    var result = await postService.PublishPostAsync(form, isDraft: true);
+    return result.success ? Results.Ok(result.message) : Results.BadRequest(result.message);
+
+});
+
+
+//api to publish post 
+app.MapPost("/api/posts/publish", async (HttpRequest request, PostService postService) =>
+{
+    Console.WriteLine("Publish post API hit.");
+    var form = await request.ReadFormAsync();
+    Console.WriteLine($"Title: {form["title"]}");
+
+    var result = await postService.PublishPostAsync(form);
+    return result.success ? Results.Ok(result.message) : Results.BadRequest(result.message);
+});
+
+
+// loading the posts for the frontend display 
+app.MapGet("/api/posts", () =>
+{
+    var postsPath = Path.Combine(Directory.GetCurrentDirectory(), "content/posts");
+    if (!Directory.Exists(postsPath))
+        return Results.Json(new { posts = new List<object>() });
+
+    var allPostFolders = Directory.GetDirectories(postsPath);
+    var publishedPosts = new List<PostSummary>();
+
+
+    foreach (var folder in allPostFolders)
+    {
+        var metaPath = Path.Combine(folder, "meta.json");
+        if (!File.Exists(metaPath)) continue;
+
+        try
+        {
+            var post = JsonSerializer.Deserialize<Post>(File.ReadAllText(metaPath), jsonOptions);
+            if (post == null || post.Status != PostStatus.Published) continue;
+
+            var slug = !string.IsNullOrWhiteSpace(post.Slug) ? post.Slug : Path.GetFileName(folder);
+            var assetsFolder = Path.Combine(folder, "assets");
+
+            var (imageUrl, attachmentCount) = GetPostAssets(assetsFolder);
+
+            publishedPosts.Add(new PostSummary
+            {
+                Title = post.Title,
+                Description = post.Description,
+                CreatedAt = post.CreatedAt,
+                Tags = post.Tags ?? new List<string>(),
+                Categories = post.Categories ?? new List<string>(),
+                ReadingTime = post.ReadingTime,
+                Slug = slug,
+                Image = imageUrl,
+                AttachmentCount = attachmentCount,
+                LikeCount = post.LikeCount,
+                CommentCount = post.Comments?.Count ?? 0
+            });
+
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Failed to load post from {metaPath}: {ex.Message}");
+            continue;
+        }
+    }
+
+    var sortedPosts = publishedPosts
+    .OrderByDescending(p => p.CreatedAt)
+    .ToList();
+
+
+    return Results.Json(new { posts = sortedPosts });
+});
 
 
 app.Run();

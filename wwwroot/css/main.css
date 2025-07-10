@@ -362,6 +362,20 @@ html {
   margin: 0 0.3rem;
 }
 
+/* .category-banner {
+  display: none;
+  background-color: #f0f4ff;
+  color: #003366;
+  text-align: center;
+  font-size: 1.1rem;
+  font-weight: 600;
+  padding: 0.75rem 1rem;
+  margin-bottom: 1.5rem;
+  border-radius: 6px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+} */
+
+
 @media (max-width: 600px) {
   .meta-row {
     flex-direction: column;

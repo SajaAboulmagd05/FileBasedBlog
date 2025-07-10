@@ -1,0 +1,3 @@
+*i want to erase the previous posts since they are messy *
+**should i be happy right now since things are working alhamduillah**
+![](https://www.google.com/imgres?q=flowers&imgurl=https%253A%252F%252Fimages.contentstack.io%252Fv3%252Fassets%252Fbltcedd8dbd5891265b%252Fblt5f18c2119ce26485%252F6668df65db90945e0caf9be6%252Fbeautiful-flowers-lotus.jpg%253Fq%253D70%2526width%253D3840%2526auto%253Dwebp&imgrefurl=https%253A%252F%252Fwww.1800flowers.com%252Farticles%252Fflower-facts%252Fmost-beautiful-flowers&docid=6UJrXxtg5O58kM&tbnid=aR3OCcVQNbVW8M&vet=12ahUKEwjy8Z-AgbKOAxWNTkEAHe91LkMQM3oECBgQAA..i&w=3840&h=3840&hcb=2&ved=2ahUKEwjy8Z-AgbKOAxWNTkEAHe91LkMQM3oECBgQAA)

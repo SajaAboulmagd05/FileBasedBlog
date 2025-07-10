@@ -1,0 +1,25 @@
+{
+  "Id": "02766f4b-be36-4a69-b7d1-e7e604c1579d",
+  "Title": "hello this is a new trial ",
+  "Description": "this post is about my trials to see all the changes ",
+  "Slug": "hello-this-is-a-new-trial-",
+  "CreatedAt": "2025-07-09T11:26:34.0653392Z",
+  "UpdatedAt": null,
+  "ScheduledAt": null,
+  "ReadingTime": "1 min read",
+  "CoverImage": null,
+  "LikeCount": 0,
+  "LikedByUserIds": [],
+  "Comments": [],
+  "Status": 0,
+  "Tags": [
+    "minimal-api",
+    "web-development",
+    "dotnet-core"
+  ],
+  "Categories": [
+    "Design",
+    "Tutorials"
+  ],
+  "IsPublished": false
+}

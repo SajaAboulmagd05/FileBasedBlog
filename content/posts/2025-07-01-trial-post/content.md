@@ -1,1 +1,0 @@
-Basic authentication is a simple method for websites and APIs to verify a user's identity. It involves sending a username and password, encoded in base64, within the

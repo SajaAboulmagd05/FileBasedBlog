@@ -1,3 +1,12 @@
+@font-face {
+    font-family: homefont;
+    src: url('fonts/Poppins-Regular.ttf') format('truetype');
+}
+
+*{
+    font-family: homefont;
+}
+
 body {
   font-family: 'Segoe UI', sans-serif;
   margin: 0;
@@ -104,4 +113,12 @@ body {
 .comment-text {
   font-size: 1rem;
   color: #333;
+}
+
+.post-image {
+  width: 90%;
+  max-height: 400px; /* Adjust this value as needed */
+  object-fit: contain; /* This preserves aspect ratio */
+  margin-bottom: 1.5rem;
+  border-radius: 4px;
 }

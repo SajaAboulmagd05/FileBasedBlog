@@ -20,24 +20,13 @@ public class Post
     public string Title { get; set; } = string.Empty;
     public string Description { get; set; } = string.Empty;
     public string Slug { get; set; } = string.Empty;
-    public string Content { get; set; } = string.Empty;
+    // public string Content { get; set; } = string.Empty;
     public DateTime CreatedAt { get; set; } = DateTime.Now;
     public DateTime? UpdatedAt { get; set; }
     public DateTime? ScheduledAt { get; set; } // Time for future publishing, if there is a publishing time then status is draft
                                                //  changed to published on time of publishing 
-    public string ReadingTime
-    {
-        get
-        {
-            if (string.IsNullOrWhiteSpace(Content))
-                return "1 min read";
-
-            int wordCount = Regex.Matches(Content, @"\b\w+\b").Count;
-            int minutes = Math.Max(1, wordCount / 200);
-            return $"{minutes} min read";
-        }
-    }
-
+    public string ReadingTime { get; set; } = string.Empty;
+    public string? CoverImage { get; set; }
     public int LikeCount { get; set; } = 0;
     public List<string> LikedByUserIds { get; set; } = new List<string>(); // Track who liked the post
     public List<Comment> Comments { get; set; } = new List<Comment>(); // Store comments

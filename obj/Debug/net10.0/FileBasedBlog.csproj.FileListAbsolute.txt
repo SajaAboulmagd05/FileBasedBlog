@@ -21,7 +21,6 @@ D:\internship\FileBasedBlog\obj\Debug\net10.0\refint\FileBasedBlog.dll
 D:\internship\FileBasedBlog\obj\Debug\net10.0\FileBasedBlog.pdb
 D:\internship\FileBasedBlog\obj\Debug\net10.0\FileBasedBlog.genruntimeconfig.cache
 D:\internship\FileBasedBlog\obj\Debug\net10.0\ref\FileBasedBlog.dll
-D:\internship\FileBasedBlog\bin\Debug\net10.0\content\posts\2025-06-13-\meta.json
 D:\internship\FileBasedBlog\bin\Debug\net10.0\FileBasedBlog.staticwebassets.runtime.json
 D:\internship\FileBasedBlog\bin\Debug\net10.0\Markdig.dll
 D:\internship\FileBasedBlog\bin\Debug\net10.0\Microsoft.AspNetCore.JsonPatch.dll
@@ -39,15 +38,6 @@ D:\internship\FileBasedBlog\bin\Debug\net10.0\content\users\editor_nina\Profile.
 D:\internship\FileBasedBlog\bin\Debug\net10.0\content\users\trial_writer\Profile.json
 D:\internship\FileBasedBlog\obj\Debug\net10.0\FileBasedBlog.sourcelink.json
 D:\internship\FileBasedBlog\obj\Debug\net10.0\compressed\r6tdb52w9e-{0}-4oy8m2jzoz-4oy8m2jzoz.gz
-D:\internship\FileBasedBlog\bin\Debug\net10.0\content\posts\2025-07-01-what-is-a-minimal-api\meta.json
-D:\internship\FileBasedBlog\obj\Debug\net10.0\compressed\pkrx0c6jpk-{0}-amgjh4tlwk-amgjh4tlwk.gz
-D:\internship\FileBasedBlog\obj\Debug\net10.0\compressed\yd9g3j8fut-{0}-vh8fvfzc5c-vh8fvfzc5c.gz
-D:\internship\FileBasedBlog\bin\Debug\net10.0\content\posts\2025-07-01-file-based-systems-\meta.json
-D:\internship\FileBasedBlog\bin\Debug\net10.0\content\posts\2025-07-01-trial-post-without-scheduling-\meta.json
-D:\internship\FileBasedBlog\bin\Debug\net10.0\content\posts\2025-07-01-trial-post\meta.json
-D:\internship\FileBasedBlog\bin\Debug\net10.0\content\posts\2025-07-01-trial-to-schedule-post\meta.json
-D:\internship\FileBasedBlog\bin\Debug\net10.0\content\posts\2025-07-01-what-is-the-problem-with-the-scheduling-\meta.json
-D:\internship\FileBasedBlog\bin\Debug\net10.0\content\posts\2025-07-01-trial-for-scheduling-time-\meta.json
 D:\internship\FileBasedBlog\obj\Debug\net10.0\compressed\6jj32d203q-{0}-mwbnlk8upq-mwbnlk8upq.gz
 D:\internship\FileBasedBlog\obj\Debug\net10.0\compressed\7hprkxaj3w-{0}-h7eca11641-h7eca11641.gz
 D:\internship\FileBasedBlog\obj\Debug\net10.0\compressed\wytv4xj9it-{0}-51o9brt1oe-51o9brt1oe.gz
@@ -56,10 +46,23 @@ D:\internship\FileBasedBlog\obj\Debug\net10.0\compressed\ytsfictb6a-{0}-k3gmpakw
 D:\internship\FileBasedBlog\bin\Debug\net10.0\content\posts\2025-07-06-how-to-debug-in-a-project\meta.json
 D:\internship\FileBasedBlog\bin\Debug\net10.0\content\posts\2025-07-06-can-we-try-something-different-\meta.json
 D:\internship\FileBasedBlog\bin\Debug\net10.0\content\posts\2025-07-06-if-youre-lost-were-all-a-little-lost-and-its-alright-\meta.json
-D:\internship\FileBasedBlog\bin\Debug\net10.0\content\posts\2025-07-06-a-new-trial-to-see-if-tags-work\meta.json
-D:\internship\FileBasedBlog\obj\Debug\net10.0\compressed\u1px9nsevi-{0}-rqhicths05-rqhicths05.gz
-D:\internship\FileBasedBlog\obj\Debug\net10.0\compressed\1ll6seo6me-{0}-v32nz1ed65-v32nz1ed65.gz
-D:\internship\FileBasedBlog\obj\Debug\net10.0\compressed\w8y0kio0nk-{0}-p7dok2gsww-p7dok2gsww.gz
-D:\internship\FileBasedBlog\obj\Debug\net10.0\compressed\xcze8nutuf-{0}-xdxuljstag-xdxuljstag.gz
-D:\internship\FileBasedBlog\obj\Debug\net10.0\compressed\9ujy18ld8r-{0}-vxo4kd6cch-vxo4kd6cch.gz
-D:\internship\FileBasedBlog\obj\Debug\net10.0\compressed\w1pe7z9smp-{0}-y4pkxa4q1b-y4pkxa4q1b.gz
+D:\internship\FileBasedBlog\obj\Debug\net10.0\compressed\1ll6seo6me-{0}-grmau2t7sa-grmau2t7sa.gz
+D:\internship\FileBasedBlog\obj\Debug\net10.0\compressed\xcze8nutuf-{0}-hn30nb6zxy-hn30nb6zxy.gz
+D:\internship\FileBasedBlog\obj\Debug\net10.0\compressed\u1px9nsevi-{0}-c1fvqioqdx-c1fvqioqdx.gz
+D:\internship\FileBasedBlog\obj\Debug\net10.0\compressed\9ujy18ld8r-{0}-nw5t43jxn8-nw5t43jxn8.gz
+D:\internship\FileBasedBlog\obj\Debug\net10.0\compressed\w1pe7z9smp-{0}-xnfa5yt40w-xnfa5yt40w.gz
+D:\internship\FileBasedBlog\bin\Debug\net10.0\content\posts\2025-07-08-what-are-we-trying-to-do-\meta.json
+D:\internship\FileBasedBlog\bin\Debug\net10.0\content\posts\2025-07-08-another--new-thing-but-testing-schedule\meta.json
+D:\internship\FileBasedBlog\bin\Debug\net10.0\content\posts\2025-07-08-i-need-to-try-something-new-\meta.json
+D:\internship\FileBasedBlog\bin\Debug\net10.0\content\posts\2025-07-08-if i wrote anything what will happen\meta.json
+D:\internship\FileBasedBlog\bin\Debug\net10.0\content\posts\2025-07-08-this-trial-after-the-cod-is-refactored\meta.json
+D:\internship\FileBasedBlog\obj\Debug\net10.0\compressed\w8y0kio0nk-{0}-b4md8p1ix6-b4md8p1ix6.gz
+D:\internship\FileBasedBlog\bin\Debug\net10.0\content\posts\2025-07-08-a-new-post-am-happy-now-with-what-is-happening-\meta.json
+D:\internship\FileBasedBlog\bin\Debug\net10.0\content\posts\2025-07-08-if i wrote anything what will happen neww\meta.json
+D:\internship\FileBasedBlog\bin\Debug\net10.0\content\posts\2025-07-09-hello-this-is-a-new-trial-\meta.json
+D:\internship\FileBasedBlog\obj\Debug\net10.0\compressed\yd9g3j8fut-{0}-q3h3cfmsd4-q3h3cfmsd4.gz
+D:\internship\FileBasedBlog\bin\Debug\net10.0\content\posts\2025-07-10-i-want-to-create-this-on-own-bismillah-1\meta.json
+D:\internship\FileBasedBlog\bin\Debug\net10.0\content\posts\2025-07-10-i-want-to-create-this-on-own-bismillah\meta.json
+D:\internship\FileBasedBlog\bin\Debug\net10.0\content\posts\2025-07-10-journey-into-csharp\meta.json
+D:\internship\FileBasedBlog\obj\Debug\net10.0\compressed\pkrx0c6jpk-{0}-cwccojbvpn-cwccojbvpn.gz
+D:\internship\FileBasedBlog\bin\Debug\net10.0\content\posts\2025-07-10-lets-try-something-new-here\meta.json

@@ -53,21 +53,38 @@ function renderPost(post) {
 
     <div class="post-meta">
       <span><i class="far fa-clock"></i> ${formattedDate}</span>
-      <span>• ${post.readingTime} likes and number of comments should come here </span>
+      <span>• ${post.readingTime} </span>
    
     </div>
-
-    <div class="meta-row">
-      <div class="meta-section categories">
-        <strong>Categories:</strong>
-        <div class="category-list">${categories}</div>
-      </div>
-      <div class="meta-section tags">
-        <strong>Tags:</strong>
-        <div class="tag-list">${tags}</div>
-      </div>
+    <div class="details">
+        <span class="author">
+           <i class="far fa-user"></i>
+           <span>by admin</span>
+        </span>
+        <span class="likes">
+            <i class="fas fa-thumbs-up"></i>
+            <span>20 likes</span>
+        </span>
+        <span class="comments">
+            <i class="fas fa-comment"></i>
+            <span>10 comments</span>
+        </span>
+        <span class="attachments">
+            <i class="fas fa-paperclip"></i>
+            <span>${post.attachmentCount || 0} file(s)</span>
+        </span>
     </div>
-
+    <div class="meta-row">
+        <div class="meta-section categories">
+            <strong>Categories:</strong>
+            <div class="category-list">${categories}</div>
+        </div>
+        <div class="meta-section tags">
+            <strong>Tags:</strong>
+            <div class="tag-list">${tags}</div>
+        </div>
+    </div>
+    ${post.image ? `<img src="${post.image}" alt="cover image" class="post-image" />` : ""}
     <div class="post-body">${html}</div>
 
    
