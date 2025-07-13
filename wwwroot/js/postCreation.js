@@ -247,8 +247,6 @@ document.getElementById("post-form").addEventListener("submit", async function (
         const result = await response.json();
         alert(result.Message || "Post published successfully!");
         
-        // Optional: Redirect or clear form
-        // window.location.href = "/posts";
     } catch (error) {
         console.error("Submission failed:", error);
         alert("Error: " + error.message);
