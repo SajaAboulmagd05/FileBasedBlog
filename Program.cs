@@ -12,7 +12,7 @@ builder.Services.AddSingleton<CategoryTagService>();
 builder.Services.AddSingleton<FileService>();
 builder.Services.AddSingleton<PostService>();
 builder.Services.AddSingleton<PostQueryService>();
-
+builder.Services.AddSingleton<PostSchedulerService>();
 var app = builder.Build();
 app.UseDefaultFiles(); // Serves index.html by default
 app.UseStaticFiles();
@@ -70,76 +70,6 @@ app.UseStaticFiles(new StaticFileOptions
         Path.Combine(Directory.GetCurrentDirectory(), "content")),
     RequestPath = "/content"
 });
-
-//search across post title, descritpion, content for the search content
-app.MapGet("/api/posts/search", (string query) =>
-{
-    if (string.IsNullOrWhiteSpace(query))
-        return Results.Json(new { posts = new List<object>() });
-
-    var postsPath = Path.Combine(Directory.GetCurrentDirectory(), "content/posts");
-    var allPostFolders = Directory.GetDirectories(postsPath);
-    var matchingPosts = new List<object>();
-
-    foreach (var folder in allPostFolders)
-    {
-        var metaPath = Path.Combine(folder, "meta.json");
-        if (!File.Exists(metaPath)) continue;
-
-
-
-        var metadata = JsonSerializer.Deserialize<Dictionary<string, object>>(File.ReadAllText(metaPath));
-        if (metadata == null || !metadata.ContainsKey("Status"))
-        {
-            Console.WriteLine($"Skipping post in folder: {folder} — missing 'Status'");
-            continue;
-        }
-        if (metadata == null || metadata["Status"]?.ToString() != "Published") continue;
-
-        var title = metadata["Title"]?.ToString() ?? "";
-        var description = metadata["Description"]?.ToString() ?? "";
-
-        // Optional: search in content.md
-        var contentPath = Path.Combine(folder, "content.md");
-        var body = File.Exists(contentPath) ? File.ReadAllText(contentPath) : "";
-
-        var combined = $"{title} {description} {body}".ToLower();
-        if (!combined.Contains(query.ToLower())) continue;
-
-        var assetsFolder = Path.Combine(folder, "assets");
-        var imageFiles = Directory.Exists(assetsFolder)
-            ? Directory.GetFiles(assetsFolder)
-                .Where(f => new[] { ".jpg", ".jpeg", ".png", ".gif", ".webp", ".bmp", ".svg", ".jfif" }
-                .Contains(Path.GetExtension(f).ToLower()))
-                .ToList()
-            : new List<string>();
-
-        var attachmentFiles = Directory.Exists(assetsFolder)
-            ? Directory.GetFiles(assetsFolder).Except(imageFiles).ToList()
-            : new List<string>();
-
-        matchingPosts.Add(new
-        {
-            Title = metadata["Title"],
-            Description = metadata["Description"],
-            CreatedAt = metadata["CreatedAt"],
-            Tags = metadata["Tags"],
-            Categories = metadata["Categories"],
-            ReadingTime = metadata.ContainsKey("ReadingTime")
-            ? metadata["ReadingTime"]?.ToString() ?? "1 min read"
-            : "1 min read",
-            Slug = metadata["CustomUrl"],
-            Image = imageFiles.FirstOrDefault() != null
-              ? "/content/posts/" + Path.GetFileName(folder) + "/assets/" + Path.GetFileName(imageFiles.First())
-            : null,
-
-            AttachmentCount = attachmentFiles.Count
-        });
-    }
-
-    return Results.Json(new { posts = matchingPosts });
-});
-
 
 //Api to get a specific post 
 app.MapGet("/api/posts/{slug}", (string slug) =>
@@ -237,11 +167,13 @@ app.MapPost("/api/posts/publish", async (HttpRequest request, PostService postSe
 
 
 // loading the posts for the frontend display 
-app.MapGet("/api/posts", (PostQueryService postQueryService) =>
+app.MapGet("/api/posts", ([FromServices] PostQueryService queryService, [FromServices] PostSchedulerService schedulerService) =>
 {
-    var summaries = postQueryService.GetPublishedPostSummaries();
-    return Results.Json(new { posts = summaries });
+    schedulerService.ActivateScheduledPosts(); // Check & promote scheduled posts
+    var posts = queryService.GetPublishedPostSummaries(); // Then return published ones
+    return Results.Json(new { posts });
 });
+
 
 // api to get posts by category
 app.MapGet("/api/posts/by-category", ([FromServices] PostQueryService queryService, [FromQuery] string category) =>
@@ -255,6 +187,13 @@ app.MapGet("/api/posts/by-tags", ([FromServices] PostQueryService queryService, 
 {
     var tagList = tags.Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
     var posts = queryService.GetPublishedPostsForTags(tagList);
+    return Results.Json(new { posts });
+});
+
+//search across post title, descritpion, content for the search content
+app.MapGet("/api/posts/search", ([FromServices] PostQueryService queryService, [FromQuery] string query) =>
+{
+    var posts = queryService.SearchPublishedPosts(query);
     return Results.Json(new { posts });
 });
 

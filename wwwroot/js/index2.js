@@ -126,6 +126,7 @@ function renderPosts(page) {
   `;
 
   postList.appendChild(pagination);
+  postList.scrollIntoView({ behavior: "smooth", block: "start" });
 }
 
 async function loadCategories() {

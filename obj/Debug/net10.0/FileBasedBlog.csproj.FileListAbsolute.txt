@@ -52,7 +52,6 @@ D:\internship\FileBasedBlog\bin\Debug\net10.0\content\posts\2025-07-08-another--
 D:\internship\FileBasedBlog\bin\Debug\net10.0\content\posts\2025-07-08-i-need-to-try-something-new-\meta.json
 D:\internship\FileBasedBlog\bin\Debug\net10.0\content\posts\2025-07-08-if i wrote anything what will happen\meta.json
 D:\internship\FileBasedBlog\bin\Debug\net10.0\content\posts\2025-07-08-this-trial-after-the-cod-is-refactored\meta.json
-D:\internship\FileBasedBlog\obj\Debug\net10.0\compressed\w8y0kio0nk-{0}-b4md8p1ix6-b4md8p1ix6.gz
 D:\internship\FileBasedBlog\bin\Debug\net10.0\content\posts\2025-07-08-a-new-post-am-happy-now-with-what-is-happening-\meta.json
 D:\internship\FileBasedBlog\bin\Debug\net10.0\content\posts\2025-07-08-if i wrote anything what will happen neww\meta.json
 D:\internship\FileBasedBlog\bin\Debug\net10.0\content\posts\2025-07-09-hello-this-is-a-new-trial-\meta.json
@@ -64,3 +63,4 @@ D:\internship\FileBasedBlog\bin\Debug\net10.0\content\posts\2025-07-10-lets-try-
 D:\internship\FileBasedBlog\bin\Debug\net10.0\content\posts\2025-07-10-maleeka-is-my-little-sister-1\meta.json
 D:\internship\FileBasedBlog\bin\Debug\net10.0\content\posts\2025-07-10-maleeka-is-my-little-sister\meta.json
 D:\internship\FileBasedBlog\obj\Debug\net10.0\compressed\pkrx0c6jpk-{0}-1p4h3oc7zb-1p4h3oc7zb.gz
+D:\internship\FileBasedBlog\obj\Debug\net10.0\compressed\w8y0kio0nk-{0}-1lqxnxamym-1lqxnxamym.gz

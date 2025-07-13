@@ -200,5 +200,59 @@ public class PostQueryService
         return summaries.OrderByDescending(p => p.CreatedAt).ToList();
     }
 
+    public List<PostSummary> SearchPublishedPosts(string query)
+    {
+        if (string.IsNullOrWhiteSpace(query)) return new();
+
+        var postsPath = Path.Combine(Directory.GetCurrentDirectory(), "content/posts");
+        if (!Directory.Exists(postsPath)) return new();
+
+        var folders = Directory.GetDirectories(postsPath);
+        var jsonOptions = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
+        var results = new List<PostSummary>();
+
+        foreach (var folder in folders)
+        {
+            var metaPath = Path.Combine(folder, "meta.json");
+            var contentPath = Path.Combine(folder, "content.md");
+
+            if (!File.Exists(metaPath)) continue;
+
+            var post = JsonSerializer.Deserialize<Post>(File.ReadAllText(metaPath), jsonOptions);
+            if (post?.Status != PostStatus.Published) continue;
+
+            var content = File.Exists(contentPath) ? File.ReadAllText(contentPath) : string.Empty;
+
+            var combined = $"{post.Title} {post.Description} {content}".ToLower();
+            if (!combined.Contains(query.ToLower())) continue;
+
+            var assetsFolder = Path.Combine(folder, "assets");
+            var allFiles = Directory.Exists(assetsFolder) ? Directory.GetFiles(assetsFolder) : Array.Empty<string>();
+            var attachmentCount = allFiles.Count(f => !Path.GetFileName(f).ToLower().StartsWith("cover"));
+            var imageFile = allFiles.FirstOrDefault(f => Path.GetFileName(f).ToLower().StartsWith("cover"));
+
+            var dateSlug = $"{post.CreatedAt:yyyy-MM-dd}-{post.Slug}";
+            var imageUrl = imageFile != null
+                ? $"/content/posts/{dateSlug}/assets/{Path.GetFileName(imageFile)}"
+                : null;
+
+            results.Add(new PostSummary
+            {
+                Title = post.Title,
+                Description = post.Description,
+                CreatedAt = post.CreatedAt,
+                Tags = post.Tags ?? new(),
+                Categories = post.Categories ?? new(),
+                ReadingTime = post.ReadingTime,
+                Slug = post.Slug,
+                Image = imageUrl,
+                AttachmentCount = attachmentCount,
+                LikeCount = post.LikeCount,
+                CommentCount = post.Comments?.Count ?? 0
+            });
+        }
+
+        return results.OrderByDescending(p => p.CreatedAt).ToList();
+    }
 
 }
