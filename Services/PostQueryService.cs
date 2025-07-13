@@ -255,4 +255,53 @@ public class PostQueryService
         return results.OrderByDescending(p => p.CreatedAt).ToList();
     }
 
+
+    public FullPostModel? GetPostBySlug(string slug)
+    {
+        var postsPath = Path.Combine("content", "posts");
+        var postFolder = Directory.GetDirectories(postsPath)
+            .FirstOrDefault(dir => dir.EndsWith(slug));
+        if (postFolder == null) return null;
+
+        var metaPath = Path.Combine(postFolder, "meta.json");
+        var contentPath = Path.Combine(postFolder, "content.md");
+
+        if (!File.Exists(metaPath) || !File.Exists(contentPath)) return null;
+
+        var jsonOptions = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
+        var post = JsonSerializer.Deserialize<Post>(File.ReadAllText(metaPath), jsonOptions);
+        var content = File.ReadAllText(contentPath);
+        if (post == null) return null;
+
+        var assetsFolder = Path.Combine(postFolder, "assets");
+        var allFiles = Directory.Exists(assetsFolder) ? Directory.GetFiles(assetsFolder) : Array.Empty<string>();
+        var imageFile = allFiles.FirstOrDefault(f => Path.GetFileName(f).ToLower().StartsWith("cover"));
+        var attachmentCount = allFiles.Count(f => !Path.GetFileName(f).ToLower().StartsWith("cover"));
+        var attachmentFiles = allFiles
+            .Where(f => !Path.GetFileName(f).ToLower().StartsWith("cover"))
+            .Select(f => $"/content/posts/{post.CreatedAt:yyyy-MM-dd}-{post.Slug}/assets/{Path.GetFileName(f)}")
+            .ToList();
+
+        var imageUrl = imageFile != null
+            ? $"/content/posts/{post.CreatedAt:yyyy-MM-dd}-{post.Slug}/assets/{Path.GetFileName(imageFile)}"
+            : null;
+
+        return new FullPostModel
+        {
+            Title = post.Title,
+            Description = post.Description,
+            Slug = post.Slug,
+            CreatedAt = post.CreatedAt,
+            ReadingTime = post.ReadingTime ?? "1 min read",
+            Image = imageUrl,
+            Tags = post.Tags ?? new(),
+            Categories = post.Categories ?? new(),
+            Content = content,
+            AttachmentCount = attachmentCount,
+            LikeCount = post.LikeCount,
+            Attachments = attachmentFiles,
+            Comments = post.Comments ?? new()
+        };
+    }
+
 }

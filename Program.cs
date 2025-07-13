@@ -64,75 +64,6 @@ app.MapGet("/api/categories", () =>
 });
 
 
-app.UseStaticFiles(new StaticFileOptions
-{
-    FileProvider = new PhysicalFileProvider(
-        Path.Combine(Directory.GetCurrentDirectory(), "content")),
-    RequestPath = "/content"
-});
-
-//Api to get a specific post 
-app.MapGet("/api/posts/{slug}", (string slug) =>
-{
-    var postFolder = Directory.GetDirectories("content/posts")
-        .FirstOrDefault(dir => dir.EndsWith(slug));
-
-    if (postFolder == null)
-        return Results.NotFound();
-
-    var metaPath = Path.Combine(postFolder, "meta.json");
-    var contentPath = Path.Combine(postFolder, "content.md");
-
-    if (!File.Exists(metaPath) || !File.Exists(contentPath))
-        return Results.NotFound();
-
-    var metadata = JsonSerializer.Deserialize<Dictionary<string, object>>(File.ReadAllText(metaPath));
-    var content = File.ReadAllText(contentPath);
-
-    if (metadata == null)
-    {
-        return Results.Problem("Post metadata could not be read.");
-    }
-    var readingTime = metadata.ContainsKey("ReadingTime")
-        ? metadata["ReadingTime"]?.ToString() ?? "1 min read"
-        : "1 min read";
-
-
-    var assetsFolder = Path.Combine(postFolder, "assets");
-    var imageFiles = Directory.Exists(assetsFolder)
-            ? Directory.GetFiles(assetsFolder)
-                .Where(f => new[] { ".jpg", ".jpeg", ".png", ".gif", ".webp", ".bmp", ".svg", ".jfif" }
-                .Contains(Path.GetExtension(f).ToLower()))
-                .ToList()
-            : new List<string>();
-
-    var attachmentFiles = Directory.Exists(assetsFolder)
-            ? Directory.GetFiles(assetsFolder).Except(imageFiles).ToList()
-            : new List<string>();
-
-    return Results.Json(new
-    {
-        //Id = metadata["Id"],
-        Title = metadata["Title"],
-        Description = metadata["Description"],
-        Slug = metadata["CustomUrl"],
-        CreatedAt = metadata["CreatedAt"],
-        //UpdatedAt = metadata.ContainsKey("UpdatedAt") ? metadata["UpdatedAt"] : null,
-        //ScheduledAt = metadata.ContainsKey("ScheduledAt") ? metadata["ScheduledAt"] : null,
-        ReadingTime = readingTime,
-        //LikeCount = metadata.ContainsKey("LikeCount") ? Convert.ToInt32(metadata["LikeCount"]) : 0,
-        //LikedByUserIds = metadata.ContainsKey("LikedByUserIds") ? ((JsonElement)metadata["LikedByUserIds"]).EnumerateArray().Select(x => x.ToString()).ToList() : new List<string>(),
-        //Comments = metadata.ContainsKey("Comments") ? ((JsonElement)metadata["Comments"]).EnumerateArray().Select(c => JsonSerializer.Deserialize<Comment>(c.GetRawText())).ToList() : new List<Comment>(),
-        //Status = metadata["Status"],
-        Image = imageFiles.FirstOrDefault() != null
-              ? "/content/posts/" + Path.GetFileName(postFolder) + "/assets/" + Path.GetFileName(imageFiles.First())
-            : null,
-        Tags = metadata.ContainsKey("Tags") ? ((JsonElement)metadata["Tags"]).EnumerateArray().Select(t => t.ToString()).ToList() : new List<string>(),
-        Categories = metadata.ContainsKey("Categories") ? ((JsonElement)metadata["Categories"]).EnumerateArray().Select(c => c.ToString()).ToList() : new List<string>(),
-        Content = content
-    });
-});
-
 
 //refactoring 
 //to fix the problem of enum values in json format
@@ -142,6 +73,13 @@ var jsonOptions = new JsonSerializerOptions
     Converters = { new JsonStringEnumConverter() } // This handles enum conversion
 };
 
+//server can serve files inside content/posts/.../assets
+app.UseStaticFiles(new StaticFileOptions
+{
+    FileProvider = new PhysicalFileProvider(
+        Path.Combine(Directory.GetCurrentDirectory(), "content")),
+    RequestPath = "/content"
+});
 
 // API Endpoints
 //api to draft the posts
@@ -195,6 +133,14 @@ app.MapGet("/api/posts/search", ([FromServices] PostQueryService queryService, [
 {
     var posts = queryService.SearchPublishedPosts(query);
     return Results.Json(new { posts });
+});
+
+
+//Api to get a specific post 
+app.MapGet("/api/posts/{slug}", ([FromServices] PostQueryService queryService, string slug) =>
+{
+    var post = queryService.GetPostBySlug(slug);
+    return post != null ? Results.Json(post) : Results.NotFound("Post not found.");
 });
 
 app.Run();

@@ -44,9 +44,7 @@ D:\internship\FileBasedBlog\obj\Debug\net10.0\compressed\wytv4xj9it-{0}-51o9brt1
 D:\internship\FileBasedBlog\obj\Debug\net10.0\compressed\rozwmh3dd4-{0}-cwxel2kz9m-cwxel2kz9m.gz
 D:\internship\FileBasedBlog\obj\Debug\net10.0\compressed\ytsfictb6a-{0}-k3gmpakw9a-k3gmpakw9a.gz
 D:\internship\FileBasedBlog\obj\Debug\net10.0\compressed\1ll6seo6me-{0}-grmau2t7sa-grmau2t7sa.gz
-D:\internship\FileBasedBlog\obj\Debug\net10.0\compressed\xcze8nutuf-{0}-hn30nb6zxy-hn30nb6zxy.gz
 D:\internship\FileBasedBlog\obj\Debug\net10.0\compressed\u1px9nsevi-{0}-c1fvqioqdx-c1fvqioqdx.gz
-D:\internship\FileBasedBlog\obj\Debug\net10.0\compressed\9ujy18ld8r-{0}-nw5t43jxn8-nw5t43jxn8.gz
 D:\internship\FileBasedBlog\obj\Debug\net10.0\compressed\w1pe7z9smp-{0}-xnfa5yt40w-xnfa5yt40w.gz
 D:\internship\FileBasedBlog\bin\Debug\net10.0\content\posts\2025-07-08-another--new-thing-but-testing-schedule\meta.json
 D:\internship\FileBasedBlog\bin\Debug\net10.0\content\posts\2025-07-08-i-need-to-try-something-new-\meta.json
@@ -64,3 +62,5 @@ D:\internship\FileBasedBlog\bin\Debug\net10.0\content\posts\2025-07-10-maleeka-i
 D:\internship\FileBasedBlog\bin\Debug\net10.0\content\posts\2025-07-10-maleeka-is-my-little-sister\meta.json
 D:\internship\FileBasedBlog\obj\Debug\net10.0\compressed\pkrx0c6jpk-{0}-1p4h3oc7zb-1p4h3oc7zb.gz
 D:\internship\FileBasedBlog\obj\Debug\net10.0\compressed\w8y0kio0nk-{0}-1lqxnxamym-1lqxnxamym.gz
+D:\internship\FileBasedBlog\obj\Debug\net10.0\compressed\xcze8nutuf-{0}-b39p7f2phq-b39p7f2phq.gz
+D:\internship\FileBasedBlog\obj\Debug\net10.0\compressed\9ujy18ld8r-{0}-whxoxejwl5-whxoxejwl5.gz
