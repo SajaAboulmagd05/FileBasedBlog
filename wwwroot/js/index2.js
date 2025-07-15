@@ -77,7 +77,7 @@ function renderPosts(page) {
             <span>${readingTime}</span>
           </div>
           <div class="post-content">
-            <h3 class="title"><a href="/post.html?slug=${post.slug}" class="custom-link">${post.title}</a></h3>
+            <h3 class="title"><a href="/${post.slug}" class="custom-link">${post.title}</a></h3>
             <p class="text">${post.description || 'No description available'}</p>
             <div class="details">
               <span class="author">
@@ -204,7 +204,7 @@ async function loadTags() {
   }
 }
 
-//function to handel search functionality 
+//function to handle search functionality 
 function handleSearch(event) {
   event.preventDefault();
 

@@ -71,7 +71,18 @@ builder.Services.AddSingleton<PostQueryService>();
 builder.Services.AddSingleton<PostSchedulerService>();
 builder.Services.AddSingleton<UserAuthService>();
 
+
 var app = builder.Build();
+
+//to change the slug 
+// Rewrite pretty URLs (e.g., "/my-awesome-post") to "/post.html?slug=..."
+app.MapGet("/{slug:regex(^[a-z0-9-]+$)}", async (HttpContext context, string slug) =>
+{
+    // Serve post.html with the slug (URL bar stays clean)
+    context.Request.QueryString = new QueryString($"?slug={slug}");
+    await context.Response.SendFileAsync("wwwroot/post.html");
+});
+
 app.UseDefaultFiles(); // Serves index.html by default
 app.UseStaticFiles();
 app.UseAuthentication();
@@ -232,6 +243,12 @@ app.MapPost("/api/auth/login", async (UserLoginRequest request, UserAuthService 
 
     return Results.Ok(new { token = jwt, role = user.Role, username = user.Username });
 });
+
+
+
+
+
+
 
 
 app.Run();

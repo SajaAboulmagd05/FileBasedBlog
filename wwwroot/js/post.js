@@ -1,7 +1,9 @@
 document.addEventListener("DOMContentLoaded", async () => {
-  const params = new URLSearchParams(window.location.search);
-  const slug = params.get("slug");
-
+  let slug = window.location.pathname.split('/').pop();
+  if (!slug || slug === "post.html") {
+    const params = new URLSearchParams(window.location.search);
+    slug = params.get("slug");
+  }
   try {
     const res = await fetch(`/api/posts/${slug}`);
     if (!res.ok) {

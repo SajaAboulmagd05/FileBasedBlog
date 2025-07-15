@@ -73,8 +73,8 @@ D:\internship\FileBasedBlog\bin\Debug\net10.0\System.IdentityModel.Tokens.Jwt.dl
 D:\internship\FileBasedBlog\obj\Debug\net10.0\FileBasedBlog.MvcApplicationPartsAssemblyInfo.cs
 D:\internship\FileBasedBlog\obj\Debug\net10.0\compressed\xcze8nutuf-{0}-pll00irybg-pll00irybg.gz
 D:\internship\FileBasedBlog\obj\Debug\net10.0\compressed\6jj32d203q-{0}-76bj1k7xdb-76bj1k7xdb.gz
-D:\internship\FileBasedBlog\obj\Debug\net10.0\compressed\9ujy18ld8r-{0}-tulq1ydqht-tulq1ydqht.gz
 D:\internship\FileBasedBlog\obj\Debug\net10.0\compressed\7hprkxaj3w-{0}-ghtstxx7lr-ghtstxx7lr.gz
 D:\internship\FileBasedBlog\bin\Debug\net10.0\content\posts\2025-07-14-generate-my-own-slug\meta.json
-D:\internship\FileBasedBlog\obj\Debug\net10.0\compressed\1ll6seo6me-{0}-zhgb6kjnmp-zhgb6kjnmp.gz
-D:\internship\FileBasedBlog\obj\Debug\net10.0\compressed\w8y0kio0nk-{0}-4rzl34hp70-4rzl34hp70.gz
+D:\internship\FileBasedBlog\obj\Debug\net10.0\compressed\1ll6seo6me-{0}-elkc054lnc-elkc054lnc.gz
+D:\internship\FileBasedBlog\obj\Debug\net10.0\compressed\w8y0kio0nk-{0}-4lhqpipc82-4lhqpipc82.gz
+D:\internship\FileBasedBlog\obj\Debug\net10.0\compressed\9ujy18ld8r-{0}-1xrp6uw45m-1xrp6uw45m.gz

@@ -130,7 +130,6 @@ body {
   line-height: 1.7;
   margin-bottom: 2rem;
   color: #333;
-  margin-left: 1.2rem;
 }
 
 .comments-section {
@@ -190,8 +189,8 @@ body {
 }
 
 .attachments-section {
-  margin-top: 2rem;
-  margin-left: 1.2rem;
+  margin-left: 0;
+  list-style-position: inside; 
 }
 
 .attachments-section h4 {
