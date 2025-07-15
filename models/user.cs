@@ -5,5 +5,5 @@ public class UserProfile
     public string Email { get; set; } = string.Empty;
     public string Role { get; set; } = string.Empty; // Admin, Author, Editor
     public DateTime CreatedDate { get; set; } = DateTime.Now;
-    //why didn't you add a password :")
+    public string PasswordHash { get; set; } = string.Empty; // Securely store hashed password
 }

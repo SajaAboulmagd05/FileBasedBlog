@@ -136,7 +136,7 @@ async function loadCategories() {
 
     const categories = await res.json();
     const categoryContainer = document.querySelector(".category");
-
+    categories.sort((a, b) => a.Name.localeCompare(b.Name));
     categoryContainer.innerHTML = `<button class="category-btn" data-category="">All</button>`;
 
     categories.forEach(cat => {
@@ -146,7 +146,7 @@ async function loadCategories() {
       btn.dataset.category = cat.Name;
       categoryContainer.appendChild(btn);
     });
-
+   
     categoryContainer.addEventListener("click", e => {
       if (e.target.tagName === "BUTTON") {
         categoryContainer.querySelectorAll(".category-btn").forEach(btn => btn.classList.remove("active"));
@@ -174,7 +174,7 @@ async function loadTags() {
     const tags = await res.json();
     const tagContainer = document.querySelector(".tag");
     tagContainer.innerHTML = "";
-
+    tags.sort((a, b) => a.Name.localeCompare(b.Name));
     tags.forEach(tag => {
       const label = document.createElement("label");
       label.className = "tag-label";
@@ -247,31 +247,6 @@ function handleSearch(event) {
     });
 }
 
-
-// // adding a banner to dispaly category name 
-// categoryContainer.addEventListener("click", e => {
-//   if (e.target.tagName === "BUTTON") {
-//     categoryContainer.querySelectorAll(".category-btn").forEach(btn => btn.classList.remove("active"));
-//     e.target.classList.add("active");
-
-//     currentCategory = e.target.dataset.category || null;
-//     selectedTags = [];
-//     document.querySelectorAll(".tag input[type='checkbox']").forEach(cb => cb.checked = false);
-
-//     currentPage = 1;
-
-//     // Update the banner
-//     const banner = document.getElementById("category-banner");
-//     if (currentCategory) {
-//       banner.textContent = `Showing posts in: ${currentCategory}`;
-//       banner.style.display = "block";
-//     } else {
-//       banner.style.display = "none";
-//     }
-
-//     loadPosts();
-//   }
-// });
 
 
 document.addEventListener("DOMContentLoaded", () => {

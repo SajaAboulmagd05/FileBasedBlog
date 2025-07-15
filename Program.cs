@@ -3,20 +3,81 @@ using Microsoft.Extensions.FileProviders;
 using System.Text.RegularExpressions;
 using System.Text.Json.Serialization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
+using Microsoft.OpenApi.Models;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
 
 
 
 var builder = WebApplication.CreateBuilder(args);
+
+
+builder.Services.AddAuthentication(options =>
+{
+    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+})
+.AddJwtBearer(options =>
+{
+    options.TokenValidationParameters = new TokenValidationParameters
+    {
+        ValidateIssuer = false,
+        ValidateAudience = false,
+        ValidateLifetime = true,
+        ValidateIssuerSigningKey = true,
+        IssuerSigningKey = new SymmetricSecurityKey(
+            Encoding.UTF8.GetBytes("Your_Secret_Key_That_Is_Very_Long")
+        )
+    };
+});
+
+builder.Services.AddAuthorization();
+
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen(options =>
+{
+    options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+    {
+        Name = "Authorization",
+        Type = SecuritySchemeType.Http,
+        Scheme = "Bearer",
+        BearerFormat = "JWT",
+        In = ParameterLocation.Header,
+        Description = "Enter 'Bearer {token}'"
+    });
+
+    options.AddSecurityRequirement(new OpenApiSecurityRequirement
+    {
+        {
+            new OpenApiSecurityScheme {
+                Reference = new OpenApiReference {
+                    Type = ReferenceType.SecurityScheme,
+                    Id = "Bearer"
+                }
+            },
+            Array.Empty<string>()
+        }
+    });
+});
+
 
 builder.Services.AddSingleton<CategoryTagService>();
 builder.Services.AddSingleton<FileService>();
 builder.Services.AddSingleton<PostService>();
 builder.Services.AddSingleton<PostQueryService>();
 builder.Services.AddSingleton<PostSchedulerService>();
+builder.Services.AddSingleton<UserAuthService>();
+
 var app = builder.Build();
 app.UseDefaultFiles(); // Serves index.html by default
 app.UseStaticFiles();
-
+app.UseAuthentication();
+app.UseAuthorization();
+app.UseSwagger();
+app.UseSwaggerUI();
 
 // Ensure file-based storage directories exist before running the API
 EnsureDirectoriesExist();
@@ -142,5 +203,35 @@ app.MapGet("/api/posts/{slug}", ([FromServices] PostQueryService queryService, s
     var post = queryService.GetPostBySlug(slug);
     return post != null ? Results.Json(post) : Results.NotFound("Post not found.");
 });
+
+
+//API for user login 
+app.MapPost("/api/auth/login", async (UserLoginRequest request, UserAuthService auth) =>
+{
+    var user = auth.Authenticate(request.Username, request.Password);
+    if (user == null)
+        return Results.Unauthorized();
+
+    // Build JWT Token
+    var claims = new[]
+    {
+        new Claim(ClaimTypes.Name, user.Username),
+        new Claim(ClaimTypes.Role, user.Role)
+    };
+
+    var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("YourSuperSecretKeyHere"));
+    var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+
+    var token = new JwtSecurityToken(
+        claims: claims,
+        expires: DateTime.UtcNow.AddHours(1),
+        signingCredentials: creds
+    );
+
+    var jwt = new JwtSecurityTokenHandler().WriteToken(token);
+
+    return Results.Ok(new { token = jwt, role = user.Role, username = user.Username });
+});
+
 
 app.Run();
