@@ -70,8 +70,8 @@ builder.Services.AddSingleton<PostService>();
 builder.Services.AddSingleton<PostQueryService>();
 builder.Services.AddSingleton<PostSchedulerService>();
 builder.Services.AddSingleton<UserAuthService>();
-
-
+builder.Services.AddSingleton<SubscriberService>();
+builder.Services.AddSingleton<UserService>();
 var app = builder.Build();
 
 //to change the slug 
@@ -217,35 +217,60 @@ app.MapGet("/api/posts/{slug}", ([FromServices] PostQueryService queryService, s
 
 
 //API for user login 
-app.MapPost("/api/auth/login", async (UserLoginRequest request, UserAuthService auth) =>
-{
-    var user = auth.Authenticate(request.Username, request.Password);
-    if (user == null)
-        return Results.Unauthorized();
+// app.MapPost("/api/auth/login", async (UserLoginRequest request, UserAuthService auth) =>
+// {
+//     var user = auth.Authenticate(request.Username, request.Password);
+//     if (user == null)
+//         return Results.Unauthorized();
 
-    // Build JWT Token
-    var claims = new[]
-    {
-        new Claim(ClaimTypes.Name, user.Username),
-        new Claim(ClaimTypes.Role, user.Role)
-    };
+//     // Build JWT Token
+//     var claims = new[]
+//     {
+//         new Claim(ClaimTypes.Name, user.Username),
+//         new Claim(ClaimTypes.Role, user.Role)
+//     };
 
-    var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("YourSuperSecretKeyHere"));
-    var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+//     var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("YourSuperSecretKeyHere"));
+//     var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
-    var token = new JwtSecurityToken(
-        claims: claims,
-        expires: DateTime.UtcNow.AddHours(1),
-        signingCredentials: creds
-    );
+//     var token = new JwtSecurityToken(
+//         claims: claims,
+//         expires: DateTime.UtcNow.AddHours(1),
+//         signingCredentials: creds
+//     );
 
-    var jwt = new JwtSecurityTokenHandler().WriteToken(token);
+//     var jwt = new JwtSecurityTokenHandler().WriteToken(token);
 
-    return Results.Ok(new { token = jwt, role = user.Role, username = user.Username });
-});
+//     return Results.Ok(new { token = jwt, role = user.Role, username = user.Username });
+// });
+
+// app.MapPost("/api/subscribe", async (HttpRequest request, SubscriberService subscriberService) =>
+// {
+//     var form = await request.ReadFormAsync();
+//     var email = form["email"].ToString();
+//     Console.WriteLine($"Email received: '{email}'");
+
+//     return await subscriberService.HandleSubscription(email);
+// });
 
 
 
+//api to unsubscribe 
+// app.MapGet("/api/unsubscribe", (HttpRequest request, SubscriberService subscriberService) =>
+// {
+//     var email = request.Query["email"].ToString();
+
+//     if (string.IsNullOrWhiteSpace(email))
+//         return Results.BadRequest("Missing email.");
+
+//     var success = subscriberService.Remove(email);
+//     return success ? Results.Ok("Unsubscribed.") : Results.NotFound("Subscriber not found.");
+// });
+
+
+
+app.MapPost("/api/register", async (HttpRequest request, UserService service) =>
+    await service.RegisterUser(request));
 
 
 

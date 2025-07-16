@@ -247,13 +247,152 @@ function handleSearch(event) {
     });
 }
 
+// document.addEventListener("DOMContentLoaded", () => {
+//   const form = document.getElementById("subscribe-form");
+//   const toggle = document.getElementById("toggle");
 
+//   if (!form) return;
+
+//   form.addEventListener("submit", async (event) => {
+//     event.preventDefault();
+//     const formData = new FormData(form);
+
+//     try {
+//       const res = await fetch("/api/subscribe", {
+//         method: "POST",
+//         body: formData
+//       });
+
+//       if (res.ok) {
+//         const toast = document.getElementById("success-toast");
+
+//       toast.classList.remove("hidden");
+//       toast.classList.add("visible");
+
+//       setTimeout(() => {
+//         toast.classList.remove("visible");
+//         toast.classList.add("hidden");
+//       }, 4000); // stays visible for 4 seconds
+
+//         form.reset();
+//         if (toggle) toggle.checked = false; // hide modal
+//       } else {
+//         const errorText = await res.text();
+//         const errorToast = document.getElementById("error-toast");
+//   errorToast.querySelector(".message").textContent = errorText.includes("already") 
+//     ? "This email is already subscribed." 
+//     : "Subscription failed.";
+
+//   errorToast.classList.remove("hidden");
+//   errorToast.classList.add("visible");
+
+//   setTimeout(() => {
+//     errorToast.classList.remove("visible");
+//     errorToast.classList.add("hidden");
+//   }, 4000);
+//       }
+//     } catch (err) {
+//       alert("Something went wrong. Please try again.");
+//       console.error(err);
+//     }
+//   });
+// });
+
+
+//toggling on showing passwords for login and signup 
+document.addEventListener("DOMContentLoaded", () => {
+const passwordInput = document.querySelector('input[name="password"]');
+const confirmInput = document.getElementById("confirm-password");
+const toggle = document.getElementById("show-password");
+
+if (toggle) {
+    toggle.addEventListener("change", () => {
+        const type = toggle.checked ? "text" : "password";
+        passwordInput.type = type;
+        confirmInput.type = type;
+    });
+}
+});
+
+document.addEventListener("DOMContentLoaded", () => {
+    const loginPasswordInput = document.getElementById("login-password");
+    const showLoginPassword = document.getElementById("show-login-password");
+    
+    if (showLoginPassword) {
+        showLoginPassword.addEventListener("change", () => {
+            loginPasswordInput.type = showLoginPassword.checked ? "text" : "password";
+        });
+    }
+});
+
+//switching between register and login form 
+document.addEventListener("DOMContentLoaded", () => {
+  const registerSection = document.getElementById("register-section");
+  const loginSection = document.getElementById("login-section");
+  const switchToLogin = document.getElementById("switch-to-login");
+  const switchToRegister = document.getElementById("switch-to-register");
+
+  switchToLogin?.addEventListener("click", () => {
+    registerSection.classList.add("hidden");
+    loginSection.classList.remove("hidden");
+  });
+
+  switchToRegister?.addEventListener("click", () => {
+    loginSection.classList.add("hidden");
+    registerSection.classList.remove("hidden");
+  });
+});
+
+
+//register handler 
+document.addEventListener("DOMContentLoaded", () => {
+  const form = document.getElementById("subscribe-form");
+
+  form?.addEventListener("submit", async (event) => {
+    event.preventDefault();
+    const formData = new FormData(form);
+
+    try {
+      const res = await fetch("/api/register", {
+        method: "POST",
+        body: formData
+      });
+
+      if (res.ok) {
+        const toast = document.getElementById("success-toast");
+        toast.classList.remove("hidden");
+        toast.classList.add("visible");
+
+        setTimeout(() => {
+          toast.classList.remove("visible");
+          toast.classList.add("hidden");
+        }, 4000);
+
+        form.reset();
+        document.getElementById("toggle").checked = false;
+      } else {
+        const errorText = await res.text();
+        const errorToast = document.getElementById("error-toast");
+        errorToast.querySelector(".message").textContent = errorText;
+
+        errorToast.classList.remove("hidden");
+        errorToast.classList.add("visible");
+
+        setTimeout(() => {
+          errorToast.classList.remove("visible");
+          errorToast.classList.add("hidden");
+        }, 4000);
+      }
+    } catch (err) {
+      alert("Something went wrong. Please try again.");
+      console.error(err);
+    }
+  });
+});
 
 document.addEventListener("DOMContentLoaded", () => {
   loadCategories();
   loadTags();
   loadPosts();
   document.querySelector(".search-form").addEventListener("submit", handleSearch);
-
-  // document.querySelector(".search-form").addEventListener("submit", handleSearch);
 });

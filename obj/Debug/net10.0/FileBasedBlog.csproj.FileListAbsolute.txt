@@ -41,7 +41,6 @@ D:\internship\FileBasedBlog\obj\Debug\net10.0\compressed\r6tdb52w9e-{0}-4oy8m2jz
 D:\internship\FileBasedBlog\obj\Debug\net10.0\compressed\wytv4xj9it-{0}-51o9brt1oe-51o9brt1oe.gz
 D:\internship\FileBasedBlog\obj\Debug\net10.0\compressed\rozwmh3dd4-{0}-cwxel2kz9m-cwxel2kz9m.gz
 D:\internship\FileBasedBlog\obj\Debug\net10.0\compressed\ytsfictb6a-{0}-k3gmpakw9a-k3gmpakw9a.gz
-D:\internship\FileBasedBlog\obj\Debug\net10.0\compressed\u1px9nsevi-{0}-c1fvqioqdx-c1fvqioqdx.gz
 D:\internship\FileBasedBlog\obj\Debug\net10.0\compressed\w1pe7z9smp-{0}-xnfa5yt40w-xnfa5yt40w.gz
 D:\internship\FileBasedBlog\bin\Debug\net10.0\content\posts\2025-07-08-another--new-thing-but-testing-schedule\meta.json
 D:\internship\FileBasedBlog\bin\Debug\net10.0\content\posts\2025-07-08-i-need-to-try-something-new-\meta.json
@@ -71,10 +70,13 @@ D:\internship\FileBasedBlog\bin\Debug\net10.0\Swashbuckle.AspNetCore.SwaggerGen.
 D:\internship\FileBasedBlog\bin\Debug\net10.0\Swashbuckle.AspNetCore.SwaggerUI.dll
 D:\internship\FileBasedBlog\bin\Debug\net10.0\System.IdentityModel.Tokens.Jwt.dll
 D:\internship\FileBasedBlog\obj\Debug\net10.0\FileBasedBlog.MvcApplicationPartsAssemblyInfo.cs
-D:\internship\FileBasedBlog\obj\Debug\net10.0\compressed\xcze8nutuf-{0}-pll00irybg-pll00irybg.gz
 D:\internship\FileBasedBlog\obj\Debug\net10.0\compressed\6jj32d203q-{0}-76bj1k7xdb-76bj1k7xdb.gz
 D:\internship\FileBasedBlog\obj\Debug\net10.0\compressed\7hprkxaj3w-{0}-ghtstxx7lr-ghtstxx7lr.gz
 D:\internship\FileBasedBlog\bin\Debug\net10.0\content\posts\2025-07-14-generate-my-own-slug\meta.json
-D:\internship\FileBasedBlog\obj\Debug\net10.0\compressed\1ll6seo6me-{0}-elkc054lnc-elkc054lnc.gz
-D:\internship\FileBasedBlog\obj\Debug\net10.0\compressed\w8y0kio0nk-{0}-4lhqpipc82-4lhqpipc82.gz
 D:\internship\FileBasedBlog\obj\Debug\net10.0\compressed\9ujy18ld8r-{0}-1xrp6uw45m-1xrp6uw45m.gz
+D:\internship\FileBasedBlog\obj\Debug\net10.0\compressed\xcze8nutuf-{0}-d4ovpd6t1x-d4ovpd6t1x.gz
+D:\internship\FileBasedBlog\bin\Debug\net10.0\content\subscribers\subscribers.json
+D:\internship\FileBasedBlog\bin\Debug\net10.0\BCrypt.Net-Next.dll
+D:\internship\FileBasedBlog\obj\Debug\net10.0\compressed\1ll6seo6me-{0}-vvnp55wfgq-vvnp55wfgq.gz
+D:\internship\FileBasedBlog\obj\Debug\net10.0\compressed\u1px9nsevi-{0}-pw924vrn17-pw924vrn17.gz
+D:\internship\FileBasedBlog\obj\Debug\net10.0\compressed\w8y0kio0nk-{0}-sb6t0niv6c-sb6t0niv6c.gz

@@ -10,16 +10,65 @@
 </head>
    <body>
         <header class="header">
-            <h1>My Blog</h1>
+              <h1>My Blog</h1>
+       
+            <div class="branding">
+              <label for="toggle" class="subscribe-btn">Register</label>
+             <form action="" class="search-form">
+               <input type="search" placeholder="search here..." class="search-box" />
+               <button type="submit" class="fas fa-search" style="background: none; border: none;"></button>
+             </form>
+            </div>
             
-            <form action="" class="search-form">
-             <input type="search" placeholder="search here..." class="search-box" />
-             <button type="submit" class="fas fa-search" style="background: none; border: none;"></button>
-            </form>
 
 
         </header>
-         
+         <input type="checkbox" id="toggle" />
+         <div class="blur-overlay"></div>
+        <div class="subscription-modal">
+          <label for="toggle" class="close-icon"><i class="fas fa-times"></i></label>
+          <div class="modal-icon"><i class="far fa-envelope"></i></div>
+          <div class="modal-content">
+           <!-- Registration Form -->
+            <div id="register-section" class="auth-section">
+              <h2>Become a member of our blog community</h2>
+              <form id="subscribe-form">
+                <input type="email" name=email placeholder="Email address" required />
+                <input type="text" name="name" placeholder="Name" required />
+                <input type="password" name="password" placeholder="Password" required />
+
+                <input type="password" name="confirmPassword" id="confirm-password" placeholder="Confirm Password" required />
+
+                <label>
+                  <input type="checkbox" id="show-password" /> Show password
+                </label>
+                <label>
+                  <input type="checkbox" name="newsletter" />
+                          Receive updates via email
+                </label>
+          
+                <button type="submit">Register</button>
+                <p class="modal-note">Already have an account? <span class="toggle-auth" id="switch-to-login">Log in</span></p>
+              </form>
+            </div>
+              <!-- Login Form -->
+              <div id="login-section" class="auth-section hidden">
+                <h2>Welcome back!</h2>
+                <form id="login-form">
+                  <input type="email" name="loginEmail" placeholder="Email address" required />
+                  <input type="password" name="loginPassword" id="login-password" placeholder="Password" required />
+                  <label>
+                    <input type="checkbox" id="show-login-password" /> Show password
+                  </label>
+                  <button type="submit">Login</button>
+                  <p class="modal-note">Don’t have an account? <span class="toggle-auth" id="switch-to-register">Sign up</span></p>
+                </form>
+              </div>
+          </div>
+        </div>
+
+       
+
         <section class="banner">
             <div class="content">
                 <h3>Welcome to the world of software tutorials</h3>
@@ -58,6 +107,14 @@
 
 
         </section>
+        <div id="success-toast" class="toast hidden">
+           <i class="fas fa-check-circle"></i>
+           <span class="message">You're subscribed! Check your email 📬</span>
+        </div>
+        <div id="error-toast" class="toast hidden" style="background: #f44336;">
+          <i class="fas fa-exclamation-circle"></i>
+          <span class="message">This email is already subscribed.</span>
+        </div>
 
     <script src="js/index2.js"></script>
   </body>
