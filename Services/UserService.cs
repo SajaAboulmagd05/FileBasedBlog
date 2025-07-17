@@ -136,4 +136,101 @@ public class UserService
         File.WriteAllText(tokenFile, updatedJson);
     }
 
+
+    private readonly string usersPath = Path.Combine("content", "users");
+    private readonly string tokenPath = Path.Combine("content", "verification", "pending.json");
+
+    public bool VerifyUserEmail(string email, string token)
+    {
+        Console.WriteLine($"[VERIFY] Attempt for {email} with token {token}");
+
+        if (!File.Exists(tokenPath))
+        {
+            Console.WriteLine("[VERIFY] Token file missing.");
+            return false;
+        }
+
+        var raw = File.ReadAllText(tokenPath);
+        var tokenMap = JsonSerializer.Deserialize<Dictionary<string, string>>(raw) ?? new();
+
+        if (!tokenMap.TryGetValue(email, out var storedToken))
+        {
+            Console.WriteLine("[VERIFY] Token not found for email.");
+            return false;
+        }
+
+        if (storedToken != token)
+        {
+            Console.WriteLine("[VERIFY] Token mismatch.");
+            return false;
+        }
+
+        var dirName = Regex.Replace(email.ToLower(), @"[@\.]", "_");
+        var profilePath = Path.Combine(usersPath, dirName, "Profile.json");
+
+        if (!File.Exists(profilePath))
+        {
+            Console.WriteLine("[VERIFY] Profile not found.");
+            return false;
+        }
+
+        var userJson = File.ReadAllText(profilePath);
+        var user = JsonSerializer.Deserialize<UserProfile>(userJson);
+        if (user == null)
+        {
+            Console.WriteLine("[VERIFY] Failed to deserialize profile.");
+            return false;
+        }
+
+        user.IsEmailVerified = true;
+        var updatedJson = JsonSerializer.Serialize(user, new JsonSerializerOptions { WriteIndented = true });
+        File.WriteAllText(profilePath, updatedJson);
+
+        tokenMap.Remove(email);
+        var cleanedJson = JsonSerializer.Serialize(tokenMap, new JsonSerializerOptions { WriteIndented = true });
+        File.WriteAllText(tokenPath, cleanedJson);
+
+        Console.WriteLine($"[VERIFY] {email} successfully verified.");
+        return true;
+    }
+
+    public async Task<IResult> LoginUser(HttpRequest request, JwtService jwt)
+    {
+        var form = await request.ReadFormAsync();
+        var email = form["loginEmail"].ToString().Trim();
+        var password = form["loginPassword"].ToString();
+
+        var dirName = Regex.Replace(email.ToLower(), @"[@\.]", "_");
+        var profilePath = Path.Combine("content", "users", dirName, "Profile.json");
+
+        if (!File.Exists(profilePath))
+            return Results.BadRequest("This email is not registered ");
+
+        var json = File.ReadAllText(profilePath);
+        var user = JsonSerializer.Deserialize<UserProfile>(json);
+        if (user == null || !BCrypt.Net.BCrypt.Verify(password, user.PasswordHash))
+            return Results.BadRequest("Invalid password.");
+
+        if (!user.IsEmailVerified)
+            return Results.BadRequest("Please verify your email before logging in.");
+
+        var token = jwt.GenerateToken(user.Email, user.Role, user.Name);
+
+        return Results.Ok(new
+        {
+            token,
+            name = user.Name,
+            role = user.Role,
+            initials = GetInitials(user.Name)
+        });
+    }
+
+    private string GetInitials(string name)
+    {
+        var parts = name.Split(' ', StringSplitOptions.RemoveEmptyEntries);
+        return string.Join("", parts.Select(p => p[0])).ToUpper();
+    }
+
+
+
 }

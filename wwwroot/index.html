@@ -9,20 +9,36 @@
   <link rel="stylesheet" href="css/main.css" />
 </head>
    <body>
-        <header class="header">
-              <h1>My Blog</h1>
-       
+          <header class="header">
+            <h1>My Blog</h1>
+
+            <nav class="main-nav hidden" id="main-nav">
+              <a href="/">Home</a>
+              <a href="/posts" id="postManage-link" class="hidden">Posts Management</a>
+              <a href="/dashboard" id="dashboard-link" class="hidden">Dashboard</a>
+            </nav>
+
             <div class="branding">
-              <label for="toggle" class="subscribe-btn">Register</label>
-             <form action="" class="search-form">
-               <input type="search" placeholder="search here..." class="search-box" />
-               <button type="submit" class="fas fa-search" style="background: none; border: none;"></button>
-             </form>
+              <label for="toggle" class="subscribe-btn" id="register-btn">Register</label>
+
+              <form action="" class="search-form" id="search-form">
+                <input type="search" placeholder="Search here..." class="search-box" />
+                <button type="button" id="search-toggle" class="fas fa-search"></button>
+              </form>
+
+              <div id="user-menu" class="user-menu hidden">
+                <div class="avatar-wrapper">
+                  <div class="avatar" id="user-avatar">SA</div>
+                  <div class="dropdown hidden" id="user-dropdown">
+                    <a href="/edit-profile">Edit Profile</a>
+                    <button id="logout-btn">Logout</button>
+                  </div>
+                </div>
+              </div>
             </div>
-            
+          </header>
 
 
-        </header>
          <input type="checkbox" id="toggle" />
          <div class="blur-overlay"></div>
         <div class="subscription-modal">
@@ -109,7 +125,7 @@
         </section>
         <div id="success-toast" class="toast hidden">
            <i class="fas fa-check-circle"></i>
-           <span class="message">You're subscribed! Check your email 📬</span>
+           <span class="message">You're registered! Check your email 📬 for verification </span>
         </div>
         <div id="error-toast" class="toast hidden" style="background: #f44336;">
           <i class="fas fa-exclamation-circle"></i>

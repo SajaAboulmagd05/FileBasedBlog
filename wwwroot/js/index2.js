@@ -390,6 +390,156 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 });
 
+
+document.addEventListener("DOMContentLoaded", () => {
+  const params = new URLSearchParams(window.location.search);
+
+  if (params.get("verified") === "true") {
+    const toast = document.getElementById("success-toast");
+    toast.querySelector(".message").textContent = "Email verified! You can now log in 🎉";
+    toast.classList.remove("hidden");
+    toast.classList.add("visible");
+
+    setTimeout(() => {
+      toast.classList.remove("visible");
+      toast.classList.add("hidden");
+    }, 4000);
+  }
+
+  if (params.get("showLogin") === "true") {
+    const toggle = document.getElementById("toggle");
+    const registerSection = document.getElementById("register-section");
+    const loginSection = document.getElementById("login-section");
+
+    if (toggle) toggle.checked = true; // open modal
+    if (registerSection && loginSection) {
+      registerSection.classList.add("hidden");
+      loginSection.classList.remove("hidden");
+    }
+  }
+
+  window.history.replaceState({}, document.title, window.location.pathname);
+});
+
+document.getElementById("login-form")?.addEventListener("submit", async (event) => {
+  event.preventDefault();
+  const form = event.target;
+  const formData = new FormData(form);
+
+  try {
+    const res = await fetch("/api/login", {
+      method: "POST",
+      body: formData
+    });
+
+    if (res.ok) {
+      const user = await res.json();
+
+      // Store token
+      localStorage.setItem("authToken", user.token);
+      localStorage.setItem("userName", user.name);
+      localStorage.setItem("userRole", user.role);
+      localStorage.setItem("userInitials", user.initials);
+
+      // Show welcome toast
+      const toast = document.getElementById("success-toast");
+      toast.querySelector(".message").textContent = `Welcome, ${user.name}! 🎉`;
+      toast.classList.remove("hidden");
+      toast.classList.add("visible");
+
+      setTimeout(() => {
+        toast.classList.remove("visible");
+        toast.classList.add("hidden");
+      }, 4000);
+
+      // Show avatar + menu
+      showUserMenu(user);
+      form.reset();
+      document.getElementById("toggle").checked = false;
+    } else {
+      const errorText = await res.text();
+      const errorToast = document.getElementById("error-toast");
+      errorToast.querySelector(".message").textContent = errorText;
+
+      errorToast.classList.remove("hidden");
+      errorToast.classList.add("visible");
+
+      setTimeout(() => {
+        errorToast.classList.remove("visible");
+        errorToast.classList.add("hidden");
+      }, 4000);
+    }
+  } catch (err) {
+    alert("Login failed. Try again.");
+    console.error(err);
+  }
+});
+
+function showUserMenu(user) {
+  const avatar = document.getElementById("user-avatar");
+  const menu = document.getElementById("user-menu");
+  const dropdown = document.getElementById("user-dropdown");
+  const dashboardLink = document.getElementById("dashboard-link");
+  const PostManagmentLink= document.getElementById("postManage-link");
+  const RegisterButton = document.getElementById("register-btn");
+  const NavMenu = document.getElementById("main-nav");
+
+  avatar.textContent = user.initials;
+  menu.classList.remove("hidden");
+  RegisterButton.classList.add("hidden");
+  NavMenu.classList.remove("hidden");
+
+  if (["Admin"].includes(user.role)) {
+    dashboardLink.classList.remove("hidden");
+  }
+
+  if (["Admin", "Editor", "Author"].includes(user.role)) {
+    PostManagmentLink.classList.remove("hidden");
+
+  }
+
+  avatar.addEventListener("click", () => {
+    dropdown.classList.toggle("hidden");
+  });
+
+  document.getElementById("logout-btn").addEventListener("click", () => {
+    localStorage.clear();
+    menu.classList.add("hidden");
+    dropdown.classList.add("hidden");
+    NavMenu.classList.add("hidden");
+    RegisterButton.classList.remove("hidden");
+    location.reload(); // or reset UI manually
+  });
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+  const searchForm = document.getElementById("search-form");
+  const searchToggle = document.getElementById("search-toggle");
+
+  searchToggle.addEventListener("click", () => {
+    searchForm.classList.toggle("active");
+
+    if (searchForm.classList.contains("active")) {
+      searchToggle.classList.replace("fa-search", "fa-times");
+    } else {
+      searchToggle.classList.replace("fa-times", "fa-search");
+    }
+  });
+});
+
+document.addEventListener("DOMContentLoaded", () => {
+  const token = localStorage.getItem("authToken");
+  const name = localStorage.getItem("userName");
+  const role = localStorage.getItem("userRole");
+  const initials = localStorage.getItem("userInitials");
+
+  if (token && name && role && initials) {
+    showUserMenu({ name, role, initials });
+  }
+});
+
+
+
 document.addEventListener("DOMContentLoaded", () => {
   loadCategories();
   loadTags();

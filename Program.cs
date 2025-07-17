@@ -69,9 +69,9 @@ builder.Services.AddSingleton<FileService>();
 builder.Services.AddSingleton<PostService>();
 builder.Services.AddSingleton<PostQueryService>();
 builder.Services.AddSingleton<PostSchedulerService>();
-builder.Services.AddSingleton<UserAuthService>();
 builder.Services.AddSingleton<SubscriberService>();
 builder.Services.AddSingleton<UserService>();
+builder.Services.AddSingleton<JwtService>();
 var app = builder.Build();
 
 //to change the slug 
@@ -216,33 +216,6 @@ app.MapGet("/api/posts/{slug}", ([FromServices] PostQueryService queryService, s
 });
 
 
-//API for user login 
-// app.MapPost("/api/auth/login", async (UserLoginRequest request, UserAuthService auth) =>
-// {
-//     var user = auth.Authenticate(request.Username, request.Password);
-//     if (user == null)
-//         return Results.Unauthorized();
-
-//     // Build JWT Token
-//     var claims = new[]
-//     {
-//         new Claim(ClaimTypes.Name, user.Username),
-//         new Claim(ClaimTypes.Role, user.Role)
-//     };
-
-//     var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("YourSuperSecretKeyHere"));
-//     var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
-
-//     var token = new JwtSecurityToken(
-//         claims: claims,
-//         expires: DateTime.UtcNow.AddHours(1),
-//         signingCredentials: creds
-//     );
-
-//     var jwt = new JwtSecurityTokenHandler().WriteToken(token);
-
-//     return Results.Ok(new { token = jwt, role = user.Role, username = user.Username });
-// });
 
 // app.MapPost("/api/subscribe", async (HttpRequest request, SubscriberService subscriberService) =>
 // {
@@ -273,6 +246,25 @@ app.MapPost("/api/register", async (HttpRequest request, UserService service) =>
     await service.RegisterUser(request));
 
 
+app.MapGet("/api/verify", (HttpRequest request, UserService service) =>
+{
+    var email = request.Query["email"].ToString();
+    var token = request.Query["token"].ToString();
+
+    if (string.IsNullOrWhiteSpace(email) || string.IsNullOrWhiteSpace(token))
+        return Results.BadRequest("Missing email or token.");
+
+    var success = service.VerifyUserEmail(email, token);
+    if (!success)
+        return Results.BadRequest("Invalid or expired token.");
+    return Results.Redirect("/?verified=true&showLogin=true");
+
+
+});
+
+//login api
+app.MapPost("/api/login", async (HttpRequest request, UserService userService, JwtService jwt) =>
+    await userService.LoginUser(request, jwt));
 
 
 
