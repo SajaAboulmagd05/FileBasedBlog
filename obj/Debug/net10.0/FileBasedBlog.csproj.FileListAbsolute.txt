@@ -41,7 +41,6 @@ D:\internship\FileBasedBlog\obj\Debug\net10.0\compressed\r6tdb52w9e-{0}-4oy8m2jz
 D:\internship\FileBasedBlog\obj\Debug\net10.0\compressed\wytv4xj9it-{0}-51o9brt1oe-51o9brt1oe.gz
 D:\internship\FileBasedBlog\obj\Debug\net10.0\compressed\rozwmh3dd4-{0}-cwxel2kz9m-cwxel2kz9m.gz
 D:\internship\FileBasedBlog\obj\Debug\net10.0\compressed\ytsfictb6a-{0}-k3gmpakw9a-k3gmpakw9a.gz
-D:\internship\FileBasedBlog\obj\Debug\net10.0\compressed\w1pe7z9smp-{0}-xnfa5yt40w-xnfa5yt40w.gz
 D:\internship\FileBasedBlog\bin\Debug\net10.0\content\posts\2025-07-08-another--new-thing-but-testing-schedule\meta.json
 D:\internship\FileBasedBlog\bin\Debug\net10.0\content\posts\2025-07-08-i-need-to-try-something-new-\meta.json
 D:\internship\FileBasedBlog\bin\Debug\net10.0\content\posts\2025-07-08-if i wrote anything what will happen\meta.json
@@ -73,14 +72,15 @@ D:\internship\FileBasedBlog\obj\Debug\net10.0\FileBasedBlog.MvcApplicationPartsA
 D:\internship\FileBasedBlog\obj\Debug\net10.0\compressed\6jj32d203q-{0}-76bj1k7xdb-76bj1k7xdb.gz
 D:\internship\FileBasedBlog\obj\Debug\net10.0\compressed\7hprkxaj3w-{0}-ghtstxx7lr-ghtstxx7lr.gz
 D:\internship\FileBasedBlog\bin\Debug\net10.0\content\posts\2025-07-14-generate-my-own-slug\meta.json
-D:\internship\FileBasedBlog\obj\Debug\net10.0\compressed\9ujy18ld8r-{0}-1xrp6uw45m-1xrp6uw45m.gz
-D:\internship\FileBasedBlog\obj\Debug\net10.0\compressed\xcze8nutuf-{0}-d4ovpd6t1x-d4ovpd6t1x.gz
 D:\internship\FileBasedBlog\bin\Debug\net10.0\content\subscribers\subscribers.json
 D:\internship\FileBasedBlog\bin\Debug\net10.0\BCrypt.Net-Next.dll
 D:\internship\FileBasedBlog\bin\Debug\net10.0\content\users\sajanabil74_gmail_com\Profile.json
 D:\internship\FileBasedBlog\bin\Debug\net10.0\content\verification\pending.json
 D:\internship\FileBasedBlog\bin\Debug\net10.0\content\users\saja_aboulmagd05_eng-st_cu_edu_eg\Profile.json
 D:\internship\FileBasedBlog\bin\Debug\net10.0\content\users\badreldeen240_gmail_com\Profile.json
-D:\internship\FileBasedBlog\obj\Debug\net10.0\compressed\1ll6seo6me-{0}-tvwghrll6o-tvwghrll6o.gz
 D:\internship\FileBasedBlog\obj\Debug\net10.0\compressed\u1px9nsevi-{0}-s2y6wxmjt2-s2y6wxmjt2.gz
 D:\internship\FileBasedBlog\obj\Debug\net10.0\compressed\w8y0kio0nk-{0}-8t6fsixvp2-8t6fsixvp2.gz
+D:\internship\FileBasedBlog\obj\Debug\net10.0\compressed\w1pe7z9smp-{0}-w7smwzkgpr-w7smwzkgpr.gz
+D:\internship\FileBasedBlog\obj\Debug\net10.0\compressed\1ll6seo6me-{0}-7ux523no9n-7ux523no9n.gz
+D:\internship\FileBasedBlog\obj\Debug\net10.0\compressed\xcze8nutuf-{0}-nq5vb634fa-nq5vb634fa.gz
+D:\internship\FileBasedBlog\obj\Debug\net10.0\compressed\9ujy18ld8r-{0}-612sug2zmh-612sug2zmh.gz

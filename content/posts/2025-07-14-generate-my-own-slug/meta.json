@@ -1,1 +1,46 @@
-{"Id":"7445a991-0349-433b-9bbc-c368ed4cf145","Title":"file based Systems","Description":"This post is about file based systems and DBMS","Slug":"generate-my-own-slug","CreatedAt":"2025-07-14T11:18:53.7463363+03:00","UpdatedAt":null,"ScheduledAt":null,"ReadingTime":"1 min read","CoverImage":"assets/cover.jpg","LikeCount":0,"LikedByUserIds":[],"Comments":[],"Status":1,"Tags":["web-development","dotnet-core"],"Categories":["Development","Tutorials"],"IsPublished":true}
+{
+  "Id": "7445a991-0349-433b-9bbc-c368ed4cf145",
+  "Title": "file based Systems",
+  "Description": "This post is about file based systems and DBMS",
+  "Slug": "generate-my-own-slug",
+  "CreatedAt": "2025-07-14T11:18:53.7463363+03:00",
+  "UpdatedAt": null,
+  "ScheduledAt": null,
+  "ReadingTime": "1 min read",
+  "CoverImage": "assets/cover.jpg",
+  "LikeCount": 2,
+  "LikedByUserIds": [
+    "saja.aboulmagd05@eng-st.cu.edu.eg",
+    "sajanabil74@gmail.com"
+  ],
+  "Comments": [
+    {
+      "Id": "7c85127a-421e-416c-884b-8ccd7fa6f8cf",
+      "SubscriberID": "saja.aboulmagd05@eng-st.cu.edu.eg",
+      "Content": "bismillah , this is my first comment",
+      "CreatedAt": "2025-07-20T15:43:51.6970798+03:00"
+    },
+    {
+      "Id": "881a60c0-d752-41da-804e-5010b3b7c010",
+      "SubscriberID": "saja.aboulmagd05@eng-st.cu.edu.eg",
+      "Content": "if i added another one what will happen",
+      "CreatedAt": "2025-07-20T15:44:16.0768521+03:00"
+    },
+    {
+      "Id": "9e177f92-16dc-4f14-b8db-4d26f917c4cb",
+      "SubscriberID": "sajanabil74@gmail.com",
+      "Content": "this is something really nice !",
+      "CreatedAt": "2025-07-20T15:51:22.9364382+03:00"
+    }
+  ],
+  "Status": 1,
+  "Tags": [
+    "web-development",
+    "dotnet-core"
+  ],
+  "Categories": [
+    "Development",
+    "Tutorials"
+  ],
+  "IsPublished": true
+}

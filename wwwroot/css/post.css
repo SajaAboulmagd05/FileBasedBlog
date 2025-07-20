@@ -21,7 +21,6 @@
 body {
   background-color: #f9f9f9;
   color: #333;
-  padding-top: 70px;
 }
 
 .post-container {
@@ -101,14 +100,13 @@ body {
 .category-btn {
   background: #eef;
   border: 1px solid #ccd;
-  padding: 0.4rem 0.8rem;
   border-radius: 4px;
   font-size: 0.9rem;
   color: var(--dark-blue);
 }
 
 .tag-label {
-  font-size: 0.9rem;
+  font-size: 1.2rem;
   color: var(--dark-blue);
 }
 
@@ -177,15 +175,20 @@ body {
   margin-bottom: 1rem;
 }
 
-.submit-btn {
-  background-color: var(--dark-blue);
-  color: #fff;
+.comment-btn {
+  background-color: white;
+  color: rgb(0, 109, 119);
   padding: 0.6rem 1.2rem;
-  border: none;
+  border: 1px solid #ccd;
   border-radius: 6px;
-  font-size: 1rem;
-  cursor: not-allowed;
-  opacity: 0.6;
+  font-size: 1.2rem;
+  cursor: allowed;
+} 
+
+/* Hover effect  */
+.comment-btn:hover {
+  color: white;
+  background-color: var(--light-blue); /* Optional: Change color on hover */
 }
 
 .attachments-section {
@@ -209,4 +212,25 @@ body {
 .attachment-link:hover {
   color: var(--dark-blue);
   text-decoration: none;
+}
+
+.likes.liked {
+  color: var(--dark-blue);
+}
+
+.comments-section.blurred {
+  opacity: 1;
+  pointer-events: none;
+  position: relative;
+}
+
+.blur-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(255, 255, 255, 0.3); /* semi-transparent light overlay */
+  backdrop-filter: blur(8px);           /* the magic blur */
+  z-index: 998;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
 }

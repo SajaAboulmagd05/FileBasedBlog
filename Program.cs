@@ -29,13 +29,12 @@ builder.Services.AddAuthentication(options =>
         ValidateLifetime = true,
         ValidateIssuerSigningKey = true,
         IssuerSigningKey = new SymmetricSecurityKey(
-            Encoding.UTF8.GetBytes("Your_Secret_Key_That_Is_Very_Long")
+            Encoding.UTF8.GetBytes("this_is_a_very_secure_jwt_secret_key_1234567890!")
         )
     };
 });
 
 builder.Services.AddAuthorization();
-
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(options =>
 {
@@ -72,6 +71,7 @@ builder.Services.AddSingleton<PostSchedulerService>();
 builder.Services.AddSingleton<SubscriberService>();
 builder.Services.AddSingleton<UserService>();
 builder.Services.AddSingleton<JwtService>();
+builder.Services.AddSingleton<LikeCommentService>();
 var app = builder.Build();
 
 //to change the slug 
@@ -265,6 +265,31 @@ app.MapGet("/api/verify", (HttpRequest request, UserService service) =>
 //login api
 app.MapPost("/api/login", async (HttpRequest request, UserService userService, JwtService jwt) =>
     await userService.LoginUser(request, jwt));
+
+
+var postGroup = app.MapGroup("/api/posts").RequireAuthorization();
+
+postGroup.MapPost("/{slug}/like", async (HttpContext context, string slug, LikeCommentService service) =>
+{
+    var userId = context.User.FindFirst(ClaimTypes.Email)?.Value;
+    if (string.IsNullOrWhiteSpace(userId))
+        return Results.Unauthorized();
+
+    return await service.ToggleLike(slug, userId);
+});
+
+
+postGroup.MapPost("/{slug}/comment", async (HttpContext context, HttpRequest req, string slug, LikeCommentService service) =>
+{
+    var subscriberId = context.User.FindFirst(ClaimTypes.Email)?.Value;
+    var form = await req.ReadFormAsync();
+    var content = form["content"].ToString();
+
+    if (string.IsNullOrWhiteSpace(subscriberId) || string.IsNullOrWhiteSpace(content))
+        return Results.BadRequest("Missing comment data.");
+
+    return await service.AddComment(slug, subscriberId, content);
+});
 
 
 
