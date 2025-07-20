@@ -82,5 +82,5 @@ D:\internship\FileBasedBlog\obj\Debug\net10.0\compressed\u1px9nsevi-{0}-s2y6wxmj
 D:\internship\FileBasedBlog\obj\Debug\net10.0\compressed\w8y0kio0nk-{0}-8t6fsixvp2-8t6fsixvp2.gz
 D:\internship\FileBasedBlog\obj\Debug\net10.0\compressed\w1pe7z9smp-{0}-w7smwzkgpr-w7smwzkgpr.gz
 D:\internship\FileBasedBlog\obj\Debug\net10.0\compressed\1ll6seo6me-{0}-7ux523no9n-7ux523no9n.gz
-D:\internship\FileBasedBlog\obj\Debug\net10.0\compressed\xcze8nutuf-{0}-nq5vb634fa-nq5vb634fa.gz
-D:\internship\FileBasedBlog\obj\Debug\net10.0\compressed\9ujy18ld8r-{0}-612sug2zmh-612sug2zmh.gz
+D:\internship\FileBasedBlog\obj\Debug\net10.0\compressed\xcze8nutuf-{0}-fpu8iz6k6w-fpu8iz6k6w.gz
+D:\internship\FileBasedBlog\obj\Debug\net10.0\compressed\9ujy18ld8r-{0}-ndbcxp1ths-ndbcxp1ths.gz

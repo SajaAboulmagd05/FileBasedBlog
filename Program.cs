@@ -281,7 +281,7 @@ postGroup.MapPost("/{slug}/like", async (HttpContext context, string slug, LikeC
 
 postGroup.MapPost("/{slug}/comment", async (HttpContext context, HttpRequest req, string slug, LikeCommentService service) =>
 {
-    var subscriberId = context.User.FindFirst(ClaimTypes.Email)?.Value;
+    var subscriberId = context.User.FindFirst("name")?.Value;
     var form = await req.ReadFormAsync();
     var content = form["content"].ToString();
 

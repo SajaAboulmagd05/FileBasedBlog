@@ -1,7 +1,7 @@
 
 const token = localStorage.getItem("authToken");
 const isLoggedIn = !!token;
-const subscriberID = token ? parseToken(token).email : null;
+const subscriberID = token ? parseToken(token).name : null;
 
 function parseToken(token) {
   try {
@@ -51,16 +51,6 @@ function renderPost(post) {
 
   const html = post.content ? marked.parse(post.content) : "<p>No content available.</p>";
 
-  const comments = post.comments?.map(comment => `
-    <div class="comment">
-      <div class="comment-meta">
-        <span class="comment-id">#${comment.subscriberID || "anon"}</span>
-        <span class="comment-date">${new Date(comment.createdAt).toLocaleString()}</span>
-      </div>
-      <p class="comment-text">${comment.content}</p>
-    </div>
-  `).join("") || "<p>No comments yet.</p>";
-
   const attachmentHTML = post.attachments?.map(file =>
     `<li><a href="${file}" download class="attachment-link">${file.split('/').pop()}</a></li>`
   ).join("") || "<p>No attachments available.</p>";
@@ -72,6 +62,45 @@ function renderPost(post) {
     </div>
   `;
 
+  // 🔄 Conditional comment section
+  let commentsSectionHTML = "";
+
+  if (!isLoggedIn) {
+    commentsSectionHTML = `
+      <div class="comments-section locked-section">
+        <h3>Join the conversation</h3>
+        <p class="comment-gate-message">
+          Commenting is reserved for registered members.
+        </p>
+        <label for="toggle" class="subscribe-btn">Register Now</label>
+      </div>
+    `;
+  } else {
+    const comments = post.comments?.map(comment => `
+      <div class="comment">
+        <div class="comment-meta">
+          <span class="comment-id">#${comment.subscriberID || "anon"}</span>
+          <span class="comment-date">${new Date(comment.createdAt).toLocaleString()}</span>
+        </div>
+        <p class="comment-text">${comment.content}</p>
+      </div>
+    `).join("") || "<p>No comments yet.</p>";
+
+    commentsSectionHTML = `
+      <div class="comments-section">
+        <h3>Comments (${post.comments?.length || 0})</h3>
+        <div class="comment-list">${comments}</div>
+
+        <div class="comment-form">
+          <h4>Add a Comment</h4>
+          <textarea id="comment-input" placeholder="Share your thoughts with us."></textarea>
+          <button class="comment-btn">Submit Comment</button>
+        </div>
+      </div>
+    `;
+  }
+
+  // 🧩 Full post markup
   container.innerHTML = `
     <h1 class="post-title">${post.title}</h1>
     <p class="post-description">${post.description}</p>
@@ -105,93 +134,71 @@ function renderPost(post) {
 
     ${attachmentsSection}
 
-    <div class="comments-section">
-      <h3>Comments (${post.comments?.length || 0})</h3>
-      <div class="comment-list">${comments}</div>
-
-      <div class="comment-form">
-        <h4>Add a Comment</h4>
-        <textarea id="comment-input" placeholder="Commenting is limited to subscribers. You’ll be able to post soon."></textarea>
-        <button class="comment-btn">Submit Comment</button>
-      </div>
-    </div>
+    ${commentsSectionHTML}
   `;
 
+  // ❤️ Like button logic
   const likeEl = container.querySelector(".likes");
 
   if (isLoggedIn && post.likedByUserIds?.includes(subscriberID)) {
-  likeEl.classList.add("liked");
-}
-
-likeEl.addEventListener("click", async () => {
-  if (!isLoggedIn) {
-    showToast("Please register to like posts.", "error");
-    return;
+    likeEl.classList.add("liked");
   }
 
-  const res = await fetch(`/api/posts/${post.slug}/like`, {
-  method: "POST",
-  headers: {
-    "Authorization": `Bearer ${localStorage.getItem("authToken")}`
+  likeEl.addEventListener("click", async () => {
+    if (!isLoggedIn) {
+      showToast("Please register to like posts.", "error");
+      return;
+    }
+
+    const res = await fetch(`/api/posts/${post.slug}/like`, {
+      method: "POST",
+      headers: {
+        "Authorization": `Bearer ${localStorage.getItem("authToken")}`
+      }
+    });
+
+    if (!res.ok) {
+      const error = await res.text();
+      showToast(error || "Failed to like post.", "error");
+      return;
+    }
+
+    const result = await res.json();
+    likeEl.classList.toggle("liked", result.liked);
+    likeEl.querySelector("span").textContent = `${result.likes} Likes`;
+  });
+
+  // 💬 Comment submission
+  if (isLoggedIn) {
+    document.querySelector(".comment-btn").addEventListener("click", async () => {
+      const content = document.getElementById("comment-input").value.trim();
+      if (!content) return;
+
+      const formData = new FormData();
+      formData.append("content", content);
+
+      const res = await fetch(`/api/posts/${post.slug}/comment`, {
+        method: "POST",
+        headers: {
+          "Authorization": `Bearer ${localStorage.getItem("authToken")}`
+        },
+        body: formData
+      });
+
+      const comments = await res.json();
+      updateCommentList(comments);
+      document.getElementById("comment-input").value = "";
+    });
   }
-});
 
-if (!res.ok) {
-  const error = await res.text();
-  showToast(error || "Failed to like post.", "error");
-  return;
-}
+  // ⏬ Scroll helpers
+  container.querySelector(".comments").addEventListener("click", () => {
+    document.querySelector(".comments-section")?.scrollIntoView({ behavior: "smooth" });
+  });
 
-const result = await res.json();
-likeEl.classList.toggle("liked", result.liked);
-likeEl.querySelector("span").textContent = `${result.likes} Likes`;
-});
-
-
-document.querySelector(".comment-btn").addEventListener("click", async () => {
-  const content = document.getElementById("comment-input").value.trim();
-  if (!content || !isLoggedIn) return;
-
-  const formData = new FormData();
-formData.append("subscriberID", subscriberID);
-formData.append("content", content);
-
-const res = await fetch(`/api/posts/${post.slug}/comment`, {
-  method: "POST",
-  headers: {
-    "Authorization": `Bearer ${localStorage.getItem("authToken")}`
-  },
-  body: formData
-});
-
-
-  const comments = await res.json();
-  updateCommentList(comments); // re-render list
-  document.getElementById("comment-input").value = "";
-});
-
-const commentSection = document.querySelector(".comments-section");
-
-if (!isLoggedIn) {
-  commentSection.classList.add("blurred");
-
-  const overlay = document.createElement("div");
-  overlay.className = "blur-overlay";
-  overlay.innerHTML = `<label for="toggle" class="subscribe-btn">Register to comment</label>`;
-  commentSection.appendChild(overlay);
-
-  document.getElementById("comment-input").disabled = true;
-  document.querySelector(".comment-btn").disabled = true;
-}
-
-container.querySelector(".comments").addEventListener("click", () => {
-  document.querySelector(".comments-section")?.scrollIntoView({ behavior: "smooth" });
-});
-
-container.querySelector(".attachments").addEventListener("click", () => {
-  document.querySelector(".attachments-section")?.scrollIntoView({ behavior: "smooth" });
-});
-
+  container.querySelector(".attachments").addEventListener("click", () => {
+    document.querySelector(".attachments-section")?.scrollIntoView({ behavior: "smooth" });
+  });
 }
 
 function updateCommentList(comments) {
@@ -202,6 +209,16 @@ function updateCommentList(comments) {
     list.innerHTML = "<p>No comments yet.</p>";
     return;
   }
+
+  const commentTitle = document.querySelector(".comments-section h3");
+  commentTitle.textContent = `Comments (${comments.length})`;
+
+  const metaComments = document.querySelector(".details .comments span");
+  if (metaComments) {
+  metaComments.textContent = `${comments.length} Comments`;
+  }
+
+
 
   list.innerHTML = comments.map(comment => `
     <div class="comment">

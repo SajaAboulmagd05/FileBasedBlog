@@ -218,19 +218,16 @@ body {
   color: var(--dark-blue);
 }
 
-.comments-section.blurred {
-  opacity: 1;
-  pointer-events: none;
-  position: relative;
+.locked-section {
+  background-color: #f4f4f4;
+  padding: 2rem;
+  text-align: center;
+  border-radius: 6px;
+  margin-top: 2rem;
 }
 
-.blur-overlay {
-  position: fixed;
-  inset: 0;
-  background: rgba(255, 255, 255, 0.3); /* semi-transparent light overlay */
-  backdrop-filter: blur(8px);           /* the magic blur */
-  z-index: 998;
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 0.3s ease;
+.comment-gate-message {
+  font-size: 1rem;
+  color: #555;
+  margin-bottom: 1rem;
 }

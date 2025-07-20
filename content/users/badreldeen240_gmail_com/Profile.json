@@ -1,10 +1,10 @@
 {
-  "UserID": "f961f350-45eb-4952-86d7-e11a7127d5e3",
+  "UserID": "202a4b79-d379-4986-a29e-f00fbf4ff438",
   "Email": "badreldeen240@gmail.com",
-  "Name": "badr eldeen",
+  "Name": "debo",
   "Role": "Member",
-  "CreatedDate": "2025-07-17T15:56:37.7249991+03:00",
-  "PasswordHash": "$2a$11$e6T6B2nclkNpu9klKMKfK.7ftrJhg/rI.yAbZmBo4eL0WMgwyTUa6",
+  "CreatedDate": "2025-07-20T22:52:10.3658261+03:00",
+  "PasswordHash": "$2a$11$ltRKyhXmIitLo3UzUuvsOeIRoFrv17kQHiD78a8hd8n6pidEdRGqi",
   "IsSubscribedToNewsletter": true,
   "IsEmailVerified": true
 }
