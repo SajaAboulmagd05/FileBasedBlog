@@ -54,41 +54,8 @@ const loadFile = (e) => {
 fileInput.addEventListener("change", loadFile);
 uploadBox.addEventListener("click", () => fileInput.click());
 
-const resizeImage = () => {
-    if (!previewImg.src) return;
-
-    let newWidth = parseInt(widthInput.value) || previewImg.naturalWidth;
-    let newHeight = parseInt(heightInput.value) || previewImg.naturalHeight;
-    let aspectRatio = previewImg.naturalWidth / previewImg.naturalHeight;
-
-    if (aspectRatioCheckbox.checked) {
-        newHeight = Math.floor(newWidth / aspectRatio); // Maintain aspect ratio
-    }
-
-    // Prevent width exceeding MAX_WIDTH
-    if (newWidth > MAX_WIDTH) {
-        newWidth = MAX_WIDTH;
-        newHeight = aspectRatioCheckbox.checked ? Math.floor(newWidth / aspectRatio) : newHeight;
-    }
-
-    widthInput.value = newWidth;
-    heightInput.value = newHeight;
-    previewImg.style.width = `${newWidth}px`;
-    previewImg.style.height = `${newHeight}px`;
-};
-
-// Apply resizing based on user input
-widthInput.addEventListener("input", resizeImage);
-heightInput.addEventListener("input", () => {
-    if (aspectRatioCheckbox.checked) {
-        let aspectRatio = previewImg.naturalWidth / previewImg.naturalHeight;
-        widthInput.value = Math.floor(heightInput.value * aspectRatio); // Adjust width automatically
-    }
-    resizeImage(); // Apply resizing changes
-});
 
 
-aspectRatioCheckbox.addEventListener("change", () => resizeImage());
 
 
 //the scheduling time and date options 
@@ -117,11 +84,11 @@ async function loadTags() {
 
         const tags = await response.json();
         const tagSelect = document.getElementById('post-tags');
-
+        tags.sort((a, b) => a.Name.localeCompare(b.Name));
         // Clear existing options
         tagSelect.innerHTML = '';
+        
         console.log("Tags received:", tags);
-
         // Populate new options
         tags.forEach(tag => {
             const option = document.createElement('option');
@@ -145,7 +112,7 @@ async function loadCategories() {
 
         const categories = await response.json();
         const categorySelect = document.getElementById('post-categories');
-
+        categories.sort((a, b) => a.Name.localeCompare(b.Name));
         // Clear existing options
         categorySelect.innerHTML = '';
         console.log("Categories received:", categories);

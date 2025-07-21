@@ -1,0 +1,179 @@
+@font-face {
+  font-family: homefont;
+  src: url('fonts/Poppins-Regular.ttf') format('truetype');
+}
+
+:root {
+  --pink: rgb(255, 221, 210);
+  --dark-blue: rgb(0, 109, 119);
+  --light-blue: rgb(131, 197, 190);
+  --border: 0.1rem solid #ccc;
+  --box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.05);
+}
+
+body {
+  margin: 0;
+  font-family: homefont, sans-serif;
+  background-color: #f9f9f9;;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.top-bar {
+  width: 100%;
+  background-color: var(--dark-blue);
+  color: white;
+  padding: 16px;
+  text-align: center;
+  font-size: 22px;
+}
+
+.panel-wrapper {
+  max-width: 1200px;
+  width: 90%;
+  margin: 20px auto;
+  border: var(--border);
+  box-shadow: var(--box-shadow);
+  background-color: white;
+  border-radius: 10px;
+}
+
+.container {
+  padding: 20px;
+}
+
+.top-nav {
+  display: flex;
+  justify-content: center;
+  border-bottom: var(--border);
+  padding: 15px 0;
+  gap: 20px;
+}
+
+.top-nav button ,.add-btn{
+  font-family: homefont;
+  background-color: var(--dark-blue);
+  color: white;
+  border: none;
+  padding: 10px 16px;
+  font-size: 20px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.top-nav button:hover ,.add-btn:hover{
+  background-color: var(--light-blue);
+  
+}
+
+
+.main-content {
+  padding: 30px;
+}
+
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+
+
+.stats {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 25px;
+}
+
+.stat-card {
+  flex: 1;
+  text-align: center;
+  padding: 20px;
+  border-radius: 12px;
+  cursor: pointer;
+  box-shadow: var(--box-shadow);
+  transition: transform 0.2s ease;
+  font-weight: bold;
+}
+
+.stat-card:hover {
+  transform: translateY(-3px);
+}
+
+.stat-card h3 {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 500;
+}
+
+.stat-card p {
+  font-size: 26px;
+  margin: 8px 0 0;
+}
+
+/* Unique colors */
+.stat-card.admin  { background-color: #ffe1e1; color: var(--dark-blue); }
+.stat-card.author { background-color: #dceeff; color: var(--dark-blue); }
+.stat-card.editor { background-color: #ddffe6; color: var(--dark-blue); }
+.stat-card.member { background-color: #fffbd0; color: var(--dark-blue); }
+
+#user-type-label {
+  margin: 20px 0 10px;
+  font-size: 18px;
+  font-weight: bold;
+  color: var(--dark-blue);
+}
+
+.user-table {
+  width: 100%;
+  border-collapse: collapse;
+  box-shadow: var(--box-shadow);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.user-table th,
+.user-table td {
+  padding: 14px;
+  text-align: left;
+  border-bottom: var(--border);
+  font-size: 15px;
+}
+
+.user-table th {
+  background-color: var(--light-blue);
+  color: var(--dark-blue);
+}
+
+.role-btn,
+.delete-btn {
+  padding: 6px 10px;
+  margin-right: 6px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.role-btn {
+  background-color: var(--pink);
+  color: var(--dark-blue);
+}
+
+.delete-btn {
+  background-color: var(--dark-blue);
+  color: white;
+}
+
+@media (max-width: 768px) {
+  .top-nav {
+    flex-direction: column;
+    align-items: center;
+  }
+  .stats {
+    flex-direction: column;
+  }
+}

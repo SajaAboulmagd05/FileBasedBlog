@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin Panel</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+
+  <link rel="stylesheet" href="css/Dashboard.css" />
+  <link rel="stylesheet" href="css/Modal.css" />
+
+</head>
+<body>
+  <div class="top-bar">Admin Panel</div>
+
+<div class="panel-wrapper">
+  <div class="container">
+    
+    <!-- Top Navigation -->
+    <nav class="top-nav">
+      <button onclick="navigate('users')">Manage Users</button>
+      <button onclick="navigate('tags')">Manage Tags</button>
+      <button onclick="navigate('categories')">Manage Categories</button>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-content">
+      <div class="section-header">
+        <h2 id="section-title">Manage Users</h2>
+        <button class="add-btn" id="add-btn">Add User</button>
+      </div>
+
+      <!-- Stat Cards as Filters -->
+      <div class="stats" id="user-stats">
+        <div class="stat-card admin" onclick="filterUsers('Admins')">
+          <h3>Admins</h3><p>4</p>
+        </div>
+        <div class="stat-card author" onclick="filterUsers('Authors')">
+          <h3>Authors</h3><p>12</p>
+        </div>
+        <div class="stat-card editor" onclick="filterUsers('Editors')">
+          <h3>Editors</h3><p>6</p>
+        </div>
+        <div class="stat-card member" onclick="filterUsers('Members')">
+          <h3>Members</h3><p>28</p>
+        </div>
+      </div>
+
+      <!-- User Role Label -->
+      <h3 id="user-type-label">Showing: Admins</h3>
+
+      <!-- User Table -->
+      <table class="user-table">
+        <thead>
+          <tr>
+            <th>Name</th><th>Email</th><th>Joined</th><th>Actions</th>
+          </tr>
+        </thead>
+        <tbody id="user-list">
+          <!-- Populated by JS -->
+        </tbody>
+      </table>
+      <div id="tags-content" style="display:none;">
+  <div class="stats" id="tag-stats">
+    <!-- Will be filled dynamically -->
+  </div>
+  <h3>Tag List</h3>
+  <table class="user-table">
+    <thead>
+      <tr>
+        <th>Tag Name</th>
+        <th>Associated Posts</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody id="tag-list"></tbody>
+  </table>
+</div>
+
+<div id="categories-content" style="display:none;">
+  <div class="stats" id="category-stats">
+    <!-- Will be filled dynamically -->
+  </div>
+  <h3>Category List</h3>
+  <table class="user-table">
+    <thead>
+      <tr>
+        <th>Category Name</th>
+        <th>Associated Posts</th>
+        <th>Description</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody id="category-list"></tbody>
+  </table>
+</div>
+
+    </main>
+  </div>
+</div>
+<!-- Wrap toggle + modal inside a container -->
+<div class="modal-container">
+  <input type="checkbox" id="modal-toggle" />
+  <div class="blur-overlay"></div>
+  <div class="subscription-modal" id="admin-modal">
+    <label for="modal-toggle" class="close-icon"><i class="fas fa-times"></i></label>
+    <div class="modal-icon"><i class="fas fa-plus"></i></div>
+    <div class="modal-content" id="modal-form-content">
+      <!-- Dynamic form gets injected here -->
+    </div>
+  </div>
+</div>
+
+
+<!-- Toasts -->
+<div id="success-toast" class="toast hidden">
+  <i class="fas fa-check-circle"></i>
+  <span class="message">Creation successful! 🎉</span>
+</div>
+<div id="error-toast" class="toast hidden" style="background: #f44336;">
+  <i class="fas fa-exclamation-circle"></i>
+  <span class="message">Something went wrong. Please try again.</span>
+</div>
+
+  <script src="js/Dashboard.js"></script>
+</body>
+</html>

@@ -8,10 +8,9 @@
   "ScheduledAt": null,
   "ReadingTime": "1 min read",
   "CoverImage": "assets/cover.jpg",
-  "LikeCount": 2,
+  "LikeCount": 1,
   "LikedByUserIds": [
-    "saja.aboulmagd05@eng-st.cu.edu.eg",
-    "sajanabil74@gmail.com"
+    "saja.aboulmagd05@eng-st.cu.edu.eg"
   ],
   "Comments": [
     {
@@ -25,12 +24,6 @@
       "SubscriberID": "sajanabil74@gmail.com",
       "Content": "what happens if idid this",
       "CreatedAt": "2025-07-20T23:07:20.2313599+03:00"
-    },
-    {
-      "Id": "422f9704-dc05-44c6-b893-f2e93570e059",
-      "SubscriberID": "badreldeen240@gmail.com",
-      "Content": "i want only his name",
-      "CreatedAt": "2025-07-20T23:09:37.0471358+03:00"
     },
     {
       "Id": "aecb85b6-d13b-4d2f-ab29-8fa6ec1c0975",

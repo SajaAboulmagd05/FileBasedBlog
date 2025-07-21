@@ -1,0 +1,196 @@
+
+/* Modal Toggle */
+#modal-toggle {
+  display: none;
+}
+
+/* Blur Overlay */
+.blur-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(255, 255, 255, 0.3);
+  backdrop-filter: blur(8px);
+  z-index: 998;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+
+.modal-content input,
+.modal-content textarea,
+.modal-content button {
+  font-family: homefont;
+}
+
+/* Modal Window */
+.subscription-modal {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: #fff;
+  padding: 2rem;
+  max-width: 360px;
+  font-family: homefont;
+  width: 90%;
+  text-align: center;
+  border-radius: 0.5rem;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+  z-index: 999;
+  opacity: 0;
+  pointer-events: none;
+  transition: all 0.3s ease;
+}
+
+/* Close Icon */
+.close-icon {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  font-size: 1.2rem;
+  color: var(--dark-blue);
+  cursor: pointer;
+}
+
+/* Modal Icon */
+.modal-icon {
+  width: 80px;
+  height: 80px;
+  background: var(--light-blue);
+  border-radius: 50%;
+  margin: 0 auto;
+  color: white;
+  font-size: 2.5rem;
+  line-height: 80px;
+}
+
+/* Modal Content */
+.modal-content h2 {
+  margin-top: 1rem;
+  font-size: 1.5rem;
+  color: var(--dark-blue);
+}
+
+.modal-content p {
+  margin: 0.5rem 0 1rem;
+  color: #333;
+}
+
+.modal-content form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.modal-content input,
+.modal-content textarea {
+  padding: 0.6rem;
+  border: 1px solid #ccc;
+  border-radius: 0.3rem;
+  font-size: 1rem;
+}
+
+.modal-content button {
+  background: var(--light-blue);
+  color: white;
+  border: none;
+  padding: 0.6rem;
+  border-radius: 0.3rem;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.modal-content button:hover {
+  background: var(--dark-blue);
+}
+
+.modal-note {
+  margin-top: 0.5rem;
+  font-size: 0.9rem;
+  color: #555;
+}
+
+/* Toasts */
+.toast {
+  position: fixed;
+  bottom: 2rem;
+  right: 2rem;
+  background: #4caf50;
+  color: white;
+  padding: 1rem 1.4rem;
+  border-radius: 0.5rem;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 1rem;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: all 0.4s ease;
+  z-index: 9999;
+}
+
+.toast i {
+  font-size: 1.5rem;
+  animation: pop 0.4s ease forwards;
+}
+
+.toast .message {
+  animation: fadein 0.6s ease forwards;
+}
+
+.toast.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.toast.hidden {
+  pointer-events: none;
+}
+
+/* Toast Animations */
+@keyframes pop {
+  0% { transform: scale(0.5); opacity: 0; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+@keyframes fadein {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+.modal-container #modal-toggle:checked ~ .subscription-modal {
+  opacity: 1;
+  pointer-events: auto;
+}
+.modal-container #modal-toggle:checked ~ .blur-overlay {
+  opacity: 1;
+  pointer-events: all;
+}
+
+.modal-content select {
+  padding: 0.6rem;
+  border-radius: 0.3rem;
+  border: 1px solid #ccc;
+  background-color: white;
+  font-size: 1rem;
+  font-family: homefont, sans-serif;
+  color: var(--dark-blue);
+  appearance: none;
+  cursor: pointer;
+}
+
+/* Optional: Add a custom arrow */
+.modal-content select {
+  background-image: url("data:image/svg+xml,%3Csvg fill='%23006D77' viewBox='0 0 24 24' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M7 10l5 5 5-5H7z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 0.8rem center;
+  background-size: 1rem;
+}
+
+/* Focus effect */
+.modal-content select:focus {
+  border-color: var(--light-blue);
+  outline: none;
+}
