@@ -231,6 +231,134 @@ public class UserService
         return string.Join("", parts.Select(p => p[0])).ToUpper();
     }
 
+    public async Task<IResult> RegisterUserAsAdmin(HttpRequest request)
+    {
+        var form = await request.ReadFormAsync();
+
+        var name = form["name"].ToString().Trim();
+        var email = form["email"].ToString().Trim();
+        var role = form["role"].ToString().Trim(); // Admin, Author, Editor, Member
+        var password = form["password"].ToString();
+        var wantsNewsletter = form["newsletter"] == "on";
+
+        // Basic validation
+        if (string.IsNullOrWhiteSpace(name))
+            return Results.BadRequest("Invalid name.");
+
+        if (string.IsNullOrWhiteSpace(role))
+            return Results.BadRequest("Invalid role selected.");
+
+        if (password.Length < 6)
+            return Results.BadRequest("Password must be at least 6 characters long.");
+
+        if (UserExists(email))
+            return Results.BadRequest("This email is already registered.");
+
+        // Hash password securely
+        var hashed = BCrypt.Net.BCrypt.HashPassword(password);
+
+        var user = new UserProfile
+        {
+            Name = name,
+            Email = email,
+            PasswordHash = hashed,
+            Role = role,
+            IsSubscribedToNewsletter = wantsNewsletter,
+            IsEmailVerified = true
+        };
+
+        SaveUser(user);
+
+        return Results.Ok("User created successfully!");
+    }
+
+
+    public Dictionary<string, int> GetUserRoleCounts()
+    {
+        var roles = new[] { "Admin", "Author", "Editor", "Member" };
+        var result = roles.ToDictionary(role => role + "s", role => 0); // plural keys
+
+        var usersRoot = Path.Combine("content", "users");
+        if (!Directory.Exists(usersRoot)) return result;
+
+        foreach (var dir in Directory.GetDirectories(usersRoot))
+        {
+            var profilePath = Path.Combine(dir, "Profile.json");
+            if (!File.Exists(profilePath)) continue;
+
+            var json = File.ReadAllText(profilePath);
+            var user = JsonSerializer.Deserialize<UserProfile>(json);
+            if (user == null || string.IsNullOrWhiteSpace(user.Role)) continue;
+
+            var key = user.Role + "s"; // pluralize
+            if (result.ContainsKey(key)) result[key]++;
+        }
+
+        return result;
+    }
+    public List<UserProfile> GetUsersByRole(string role)
+    {
+        var result = new List<UserProfile>();
+        var usersRoot = Path.Combine("content", "users");
+
+        if (!Directory.Exists(usersRoot)) return result;
+
+        foreach (var dir in Directory.GetDirectories(usersRoot))
+        {
+            var profilePath = Path.Combine(dir, "Profile.json");
+            if (!File.Exists(profilePath)) continue;
+
+            var json = File.ReadAllText(profilePath);
+            var user = JsonSerializer.Deserialize<UserProfile>(json);
+
+            if (user != null && user.Role.Equals(role, StringComparison.OrdinalIgnoreCase))
+                result.Add(user);
+        }
+
+        return result;
+    }
+
+    public async Task<IResult> ChangeUserRole(HttpRequest request)
+    {
+        var form = await request.ReadFormAsync();
+        var email = form["email"].ToString().Trim();
+        var newRole = form["role"].ToString().Trim();
+
+        if (string.IsNullOrWhiteSpace(email) || string.IsNullOrWhiteSpace(newRole))
+            return Results.BadRequest("Missing data.");
+
+        var dirName = Regex.Replace(email.ToLower(), @"[@\.]", "_");
+        var userDir = Path.Combine("content", "users", dirName);
+        var profilePath = Path.Combine(userDir, "Profile.json");
+
+        if (!File.Exists(profilePath))
+            return Results.BadRequest("User not found.");
+
+        var json = await File.ReadAllTextAsync(profilePath);
+        var user = JsonSerializer.Deserialize<UserProfile>(json);
+        if (user == null) return Results.BadRequest("Corrupted profile.");
+
+        user.Role = newRole;
+        var updated = JsonSerializer.Serialize(user, new JsonSerializerOptions { WriteIndented = true });
+        await File.WriteAllTextAsync(profilePath, updated);
+
+        return Results.Ok("Role updated.");
+    }
+
+    public async Task<IResult> DeleteUser(HttpRequest request)
+    {
+        var form = await request.ReadFormAsync();
+        var email = form["email"].ToString().Trim();
+        if (string.IsNullOrWhiteSpace(email)) return Results.BadRequest("Missing email.");
+
+        var dirName = Regex.Replace(email.ToLower(), @"[@\.]", "_");
+        var userDir = Path.Combine("content", "users", dirName);
+
+        if (!Directory.Exists(userDir)) return Results.BadRequest("User not found.");
+
+        Directory.Delete(userDir, true);
+        return Results.Ok("User deleted.");
+    }
 
 
 }

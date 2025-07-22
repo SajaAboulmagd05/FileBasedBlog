@@ -53,7 +53,7 @@
       <table class="user-table">
         <thead>
           <tr>
-            <th>Name</th><th>Email</th><th>Joined</th><th>Actions</th>
+            <th>Name</th><th>Email</th><th>Joined</th><th>Verified</th><th>Subscription to Newsletter</th><th>Actions</th>
           </tr>
         </thead>
         <tbody id="user-list">
@@ -108,6 +108,15 @@
     <div class="modal-content" id="modal-form-content">
       <!-- Dynamic form gets injected here -->
     </div>
+  </div>
+</div>
+<input type="checkbox" id="delete-toggle" />
+<div class="blur-overlay"></div>
+<div class="subscription-modal" id="delete-modal">
+  <label for="delete-toggle" class="close-icon"><i class="fas fa-times"></i></label>
+  <div class="modal-icon"><i class="fas fa-trash"></i></div>
+  <div class="modal-content" id="delete-form-content">
+    <!-- Injected dynamically -->
   </div>
 </div>
 

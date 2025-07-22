@@ -156,6 +156,7 @@ body {
   border-radius: 6px;
   cursor: pointer;
   font-size: 14px;
+  font-family:homefont ;
 }
 
 .role-btn {
@@ -177,3 +178,15 @@ body {
     flex-direction: column;
   }
 }
+
+.centered {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+}
+
+.centered i {
+  font-size: 1.2rem;
+}
+

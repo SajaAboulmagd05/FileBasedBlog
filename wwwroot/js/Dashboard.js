@@ -9,37 +9,12 @@ const singularize = {
   categories: 'Category'
 };
 
-// 📦 Sample Data
-const users = {
-  Admins: [
-    { name: 'Alice', email: 'alice@example.com', joined: '2022-03-10' },
-    { name: 'Bob', email: 'bob@example.com', joined: '2022-05-22' }
-  ],
-  Authors: [{ name: 'Tom', email: 'tom@example.com', joined: '2022-01-12' }],
-  Editors: [{ name: 'Jane', email: 'jane@example.com', joined: '2023-02-28' }],
-  Members: [{ name: 'Mona', email: 'mona@example.com', joined: '2023-07-15' }]
-};
-
-const tags = [
-  { name: 'JavaScript', associatedPosts: ['p1', 'p2'] },
-  { name: 'Design', associatedPosts: ['p3'] }
-];
-
-const categories = [
-  {
-    name: 'Security',
-    description: 'Protecting web apps with best practices',
-    associatedPosts: ['p1', 'p4']
-  },
-  {
-    name: 'UI/UX',
-    description: 'Designing delightful interactions',
-    associatedPosts: ['p2']
-  }
-];
+let activeSection = 'users'; // tracks current section for modal
 
 // 🔧 Navigation Logic
 function navigate(section) {
+  activeSection = section;
+
   document.getElementById('section-title').textContent = `Manage ${capitalize(section)}`;
   document.getElementById('add-btn').textContent = `Add ${singularize[section] || 'Item'}`;
 
@@ -51,9 +26,31 @@ function navigate(section) {
   document.getElementById('tags-content').style.display = section === 'tags' ? 'block' : 'none';
   document.getElementById('categories-content').style.display = section === 'categories' ? 'block' : 'none';
 
-  // Render relevant data
+  // Load content
   if (section === 'users') {
-    filterUsers('Admins');
+    fetch("/api/users/counts")
+      .then(res => res.json())
+      .then(counts => {
+        const statsContainer = document.getElementById("user-stats");
+        statsContainer.innerHTML = "";
+
+        for (const role in counts) {
+          const box = document.createElement("div");
+          const classMap = {
+              Admins: "admin",
+              Authors: "author",
+              Editors: "editor",
+              Members: "member"
+            };
+          box.className = `stat-card ${classMap[role] || "default"}`;
+          box.innerHTML = `<h3>${role}</h3><p>${counts[role]}</p>`;
+          box.addEventListener("click", () => fetchUsers(role.slice(0, -1))); // 'Admins' → 'Admin'
+          statsContainer.appendChild(box);
+        }
+
+        fetchUsers("Admin"); // default view
+      })
+      .catch(() => showToast("error", "Unable to fetch user stats"));
   } else if (section === 'tags') {
     renderTags();
   } else if (section === 'categories') {
@@ -61,102 +58,126 @@ function navigate(section) {
   }
 }
 
-
 // 👥 User Renderer
-function filterUsers(role) {
-  document.getElementById('user-type-label').textContent = `Showing: ${role}`;
-  const list = document.getElementById('user-list');
-  list.innerHTML = users[role].map(user => `
-    <tr>
-      <td>${user.name}</td>
-      <td>${user.email}</td>
-      <td>${user.joined}</td>
-      <td>
-        <button class="role-btn">Change Role</button>
-        <button class="delete-btn">Delete</button>
-      </td>
-    </tr>
-  `).join('');
+function fetchUsers(role) {
+  document.getElementById('user-type-label').textContent = `Showing: ${role}s`;
+
+  fetch(`/api/users/by-role/${role}`)
+    .then(res => res.json())
+    .then(users => {
+      const list = document.getElementById('user-list');
+      list.innerHTML = users.map(user => `
+        <tr>
+          <td>${user.name}</td>
+          <td>${user.email}</td>
+          <td>${new Date(user.createdDate).toLocaleDateString()}</td>
+          <td><div class="centered">${user.isEmailVerified 
+            ? '<i class="fas fa-check-circle" style="font-size: 1.2rem; color:green;"></i>' 
+            : '<i class="fas fa-times-circle" style="font-size: 1.2rem; color:red;"></i>'}
+          </div></td>
+
+          <td><div class="centered">${user.isSubscribedToNewsletter 
+            ? '<i class="fas fa-check-circle" style="font-size: 1.2rem; color:green;"></i>' 
+            : '<i class="fas fa-times-circle" style="font-size: 1.2rem; color:red;"></i>'}
+          </div><td>
+            <button class="role-btn" onclick="openRoleModal('${user.email}', '${user.role}')">Change Role</button>
+            <button class="delete-btn" onclick="openDeleteModal('${user.email}')">Delete</button>
+          </td>
+        </tr>
+      `).join('');
+    })
+    .catch(() => showToast("error", "Unable to fetch users"));
 }
 
-// Tag Renderer
+// 🏷️ Tag Renderer
 function renderTags() {
-  const totalTags = tags.length;
-  const totalPosts = tags.reduce((sum, tag) => sum + tag.associatedPosts.length, 0);
+  fetch("/api/tags/all")
+    .then(res => res.json())
+    .then(tags => {
+      const totalTags = tags.length;
+      const totalPosts = tags.reduce((sum, tag) => sum + tag.associatedPosts.length, 0);
 
-  document.getElementById('tag-stats').innerHTML = `
-    <div class="stat-card" style="background-color:#f0d9ff;">
-      <h3>Total Tags</h3><p>${totalTags}</p>
-    </div>
-    <div class="stat-card" style="background-color:#d0f0ff;">
-      <h3>Total Tag Posts</h3><p>${totalPosts}</p>
-    </div>
-  `;
+      document.getElementById('tag-stats').innerHTML = `
+        <div class="stat-card" style="background-color:#f0d9ff;">
+          <h3>Total Tags</h3><p>${totalTags}</p>
+        </div>
+        <div class="stat-card" style="background-color:#d0f0ff;">
+          <h3>Total Tag Posts</h3><p>${totalPosts}</p>
+        </div>
+      `;
 
-  document.getElementById('tag-list').innerHTML = tags.map(tag => `
-    <tr>
-      <td>${tag.name}</td>
-      <td>${tag.associatedPosts.length}</td>
-      <td>
-        <button class="role-btn">Edit</button>
-        <button class="delete-btn">Delete</button>
-      </td>
-    </tr>
-  `).join('');
+      document.getElementById('tag-list').innerHTML = tags.map(tag => `
+        <tr>
+          <td>${tag.name}</td>
+          <td>${tag.associatedPosts.length}</td>
+          <td>
+            <button class="role-btn">Edit</button>
+            <button class="delete-btn">Delete</button>
+          </td>
+        </tr>
+      `).join('');
+    });
 }
 
-// Category Renderer
+// 🗂️ Category Renderer
 function renderCategories() {
-  const totalCategories = categories.length;
-  const totalPosts = categories.reduce((sum, c) => sum + c.associatedPosts.length, 0);
+  fetch("/api/categories/all")
+    .then(res => res.json())
+    .then(categories => {
+      const totalCategories = categories.length;
+      const totalPosts = categories.reduce((sum, c) => sum + c.associatedPosts.length, 0);
 
-  document.getElementById('category-stats').innerHTML = `
-    <div class="stat-card" style="background-color:#d7f7d7;">
-      <h3>Total Categories</h3><p>${totalCategories}</p>
-    </div>
-    <div class="stat-card" style="background-color:#fdf6c5;">
-      <h3>Total Category Posts</h3><p>${totalPosts}</p>
-    </div>
-  `;
+      document.getElementById('category-stats').innerHTML = `
+        <div class="stat-card" style="background-color:#d7f7d7;">
+          <h3>Total Categories</h3><p>${totalCategories}</p>
+        </div>
+        <div class="stat-card" style="background-color:#fdf6c5;">
+          <h3>Total Category Posts</h3><p>${totalPosts}</p>
+        </div>
+      `;
 
-  document.getElementById('category-list').innerHTML = categories.map(c => `
-    <tr>
-      <td>${c.name}</td>
-      <td>${c.associatedPosts.length}</td>
-      <td>${c.description}</td>
-      <td>
-        <button class="role-btn">Edit</button>
-        <button class="delete-btn">Delete</button>
-      </td>
-    </tr>
-  `).join('');
+      document.getElementById('category-list').innerHTML = categories.map(c => `
+        <tr>
+          <td>${c.name}</td>
+          <td>${c.associatedPosts.length}</td>
+          <td>${c.description}</td>
+          <td>
+            <button class="role-btn">Edit</button>
+            <button class="delete-btn">Delete</button>
+          </td>
+        </tr>
+      `).join('');
+    });
 }
 
+// 🔘 Modal Logic
 function openModal(type) {
+  console.log(`Opening modal for type: ${type}, activeSection: ${activeSection}`);
   const modalContent = document.getElementById("modal-form-content");
+  modalContent.innerHTML = "";
   document.getElementById("modal-toggle").checked = true;
 
-  let formHTML = '';
+  let formHTML = "";
 
-  if (type === 'user') {
+  if (singularize[type].toLowerCase() === 'user') {
     formHTML = `
       <h2>Create New User</h2>
       <form id="create-user">
         <input type="email" name="email" placeholder="Email address" required />
         <input type="text" name="name" placeholder="Name" required />
         <select name="role" required>
-            <option value="" disabled selected>Select Role</option>
-            <option value="Admin">Admin</option>
-            <option value="Author">Author</option>
-            <option value="Editor">Editor</option>
-            <option value="Member">Member</option>
+          <option value="" disabled selected>Select Role</option>
+          <option value="Admin">Admin</option>
+          <option value="Author">Author</option>
+          <option value="Editor">Editor</option>
+          <option value="Member">Member</option>
         </select>
         <input type="password" name="password" placeholder="Password" required />
         <label><input type="checkbox" name="newsletter" /> Subscribe to newsletter</label>
         <button type="submit">Create User</button>
       </form>
     `;
-  } else if (type === 'category') {
+  } else if (singularize[type].toLowerCase() === 'category') {
     formHTML = `
       <h2>Create New Category</h2>
       <form id="create-category">
@@ -165,7 +186,7 @@ function openModal(type) {
         <button type="submit">Create Category</button>
       </form>
     `;
-  } else if (type === 'tag') {
+  } else if (singularize[type].toLowerCase() === 'tag') {
     formHTML = `
       <h2>Create New Tag</h2>
       <form id="create-tag">
@@ -176,21 +197,160 @@ function openModal(type) {
   }
 
   modalContent.innerHTML = formHTML;
+
+  const form = modalContent.querySelector("form");
+  form.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const formData = new FormData(form);
+
+    let endpoint = "";
+    if (singularize[type].toLowerCase() === "user") endpoint = "/api/users/admin-add";
+    if (singularize[type].toLowerCase() === "tag") endpoint = "/api/tags/add";
+    if (singularize[type].toLowerCase() === "category") endpoint = "/api/categories/add";
+
+    try {
+      const res = await fetch(endpoint, { method: "POST", body: formData });
+      if (res.ok) {
+        showToast("success", `${capitalize(type)} created!`);
+        form.reset();
+        document.getElementById("modal-toggle").checked = false;
+        if (singularize[type].toLowerCase() === "user") {
+            navigate("users");
+            const role = formData.get("role");
+            const statCard = document.querySelector(`.stat-card.${role.toLowerCase()}`);
+            const countElem = statCard.querySelector("p");
+            countElem.textContent = parseInt(countElem.textContent) + 1;
+            const list = document.getElementById("user-list");
+            const email = formData.get("email");
+            const name = formData.get("name");
+            const joined = new Date().toLocaleDateString();
+
+            const newRow = document.createElement("tr");
+            newRow.innerHTML = `
+              <td>${name}</td>
+              <td>${email}</td>
+              <td>${joined}</td>
+              <td>
+                <button class="role-btn" onclick="openRoleModal('${email}', '${role}')">Change Role</button>
+                <button class="delete-btn" onclick="openDeleteModal('${email}')">Delete</button>
+              </td>
+            `;
+            if (document.getElementById("user-type-label").textContent.includes(role)) {
+              list.appendChild(newRow);
+            }
+
+
+        }
+          
+        if (singularize[type].toLowerCase() === "tag") navigate("tags");
+        if (singularize[type].toLowerCase() === "category") navigate("categories");
+      } else {
+        const error = await res.text();
+        showToast("error", error);
+      }
+    } catch {
+      showToast("error", "Network error");
+    }
+  });
 }
 
-//  Initialize default view
-navigate('users');
+// 🍞 Toast Logic
+function showToast(type, message = "") {
+  const toast = document.getElementById(`${type}-toast`);
+  if (message) toast.querySelector(".message").textContent = message;
 
-document.getElementById('add-btn').addEventListener('click', function () {
-  // Determine which section is currently active
-   const currentSection = document.getElementById('section-title').textContent.toLowerCase().replace('manage ', '');
+  toast.classList.remove("hidden");
+  toast.classList.add("visible");
 
-  if (currentSection.includes('user')) {
-    openModal('user');
-  } else if (currentSection.includes('tag')) {
-    openModal('tag');
-  } else if (currentSection.includes('categor')) {
-    openModal('category');
-  }
+  setTimeout(() => {
+    toast.classList.remove("visible");
+    toast.classList.add("hidden");
+  }, 3000);
+}
+
+// 🚀 Default View + Add Button Logic
+navigate("users");
+
+document.getElementById("add-btn").addEventListener("click", () => {
+  openModal(activeSection);
 });
 
+function openRoleModal(email, currentRole) {
+  const modalContent = document.getElementById("modal-form-content");
+  modalContent.innerHTML = `
+    <h2>Change Role for ${email}</h2>
+    <form id="change-role-form">
+      <select name="role" required>
+        <option value="" disabled>Select New Role</option>
+        <option value="Admin">Admin</option>
+        <option value="Author">Author</option>
+        <option value="Editor">Editor</option>
+        <option value="Member">Member</option>
+      </select>
+      <input type="hidden" name="email" value="${email}" />
+      <button type="submit">Update Role</button>
+    </form>
+  `;
+  document.getElementById("modal-toggle").checked = true;
+
+  const form = modalContent.querySelector("form");
+  form.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const formData = new FormData(form);
+
+    try {
+      const res = await fetch("/api/users/change-role", {
+        method: "POST",
+        body: formData
+      });
+
+      if (res.ok) {
+        showToast("success", "Role updated!");
+        document.getElementById("modal-toggle").checked = false;
+        navigate("users");
+      } else {
+        const error = await res.text();
+        showToast("error", error);
+      }
+    } catch {
+      showToast("error", "Network error");
+    }
+  });
+}
+
+function openDeleteModal(email) {
+  const content = document.getElementById("delete-form-content");
+  content.innerHTML = `
+    <h2>Confirm Deletion</h2>
+    <p>Are you sure you want to delete the account of: <strong>${email}</strong>?</p>
+    <form id="delete-form">
+      <input type="hidden" name="email" value="${email}" />
+      <button type="submit" style="background:#f44336;">Yes, Delete</button>
+    </form>
+  `;
+  document.getElementById("delete-toggle").checked = true;
+
+  const form = document.getElementById("delete-form");
+  form.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const formData = new FormData(form);
+
+    try {
+      const res = await fetch("/api/users/delete", {
+        method: "POST",
+        body: formData
+      });
+
+      if (res.ok) {
+        showToast("success", "User deleted!");
+        document.getElementById("delete-toggle").checked = false;
+        navigate("users");
+      } else {
+        const error = await res.text();
+        showToast("error", error);
+      }
+    } catch {
+      showToast("error", "Network error");
+    }
+  });
+}

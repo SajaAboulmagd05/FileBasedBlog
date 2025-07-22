@@ -194,3 +194,13 @@
   border-color: var(--light-blue);
   outline: none;
 }
+
+#delete-toggle {
+  display: none;
+}
+
+#delete-toggle:checked ~ .blur-overlay,
+#delete-toggle:checked ~ #delete-modal {
+  opacity: 1;
+  pointer-events: auto;
+}

@@ -1,1 +1,31 @@
-{"Id":"93b3e71e-0439-449a-b766-ac97f91cd7a4","Title":"The Power of Code Reviews in Software Development","Description":"In the fast-moving world of software development, code reviews are often underrated. Yet, they play a pivotal role in maintaining code quality, fostering team collaboration, and enhancing developer growth.","Slug":"the-power-of-code-reviews-in-software-development","CreatedAt":"2025-07-21T09:20:05.4015476+03:00","UpdatedAt":null,"ScheduledAt":null,"ReadingTime":"3 min read","CoverImage":"assets/cover.jpg","LikeCount":0,"LikedByUserIds":[],"Comments":[],"Status":1,"Tags":["web-development"],"Categories":["Business"],"IsPublished":true}
+{
+  "Id": "93b3e71e-0439-449a-b766-ac97f91cd7a4",
+  "Title": "The Power of Code Reviews in Software Development",
+  "Description": "In the fast-moving world of software development, code reviews are often underrated. Yet, they play a pivotal role in maintaining code quality, fostering team collaboration, and enhancing developer growth.",
+  "Slug": "the-power-of-code-reviews-in-software-development",
+  "CreatedAt": "2025-07-21T09:20:05.4015476+03:00",
+  "UpdatedAt": null,
+  "ScheduledAt": null,
+  "ReadingTime": "3 min read",
+  "CoverImage": "assets/cover.jpg",
+  "LikeCount": 1,
+  "LikedByUserIds": [
+    "saja.aboulmagd05@eng-st.cu.edu.eg"
+  ],
+  "Comments": [
+    {
+      "Id": "9c9a1638-3a55-4520-ab6c-452f38acff65",
+      "SubscriberID": "Saja Nabeel",
+      "Content": "can i comment",
+      "CreatedAt": "2025-07-21T11:14:54.6277153+03:00"
+    }
+  ],
+  "Status": 1,
+  "Tags": [
+    "web-development"
+  ],
+  "Categories": [
+    "Business"
+  ],
+  "IsPublished": true
+}

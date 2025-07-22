@@ -245,6 +245,41 @@ app.MapGet("/api/posts/{slug}", ([FromServices] PostQueryService queryService, s
 app.MapPost("/api/register", async (HttpRequest request, UserService service) =>
     await service.RegisterUser(request));
 
+//add user by admin api
+app.MapPost("/api/users/admin-add", async (HttpRequest request, UserService userService) =>
+    await userService.RegisterUserAsAdmin(request));
+
+// retrieve the count of each type of users
+app.MapGet("/api/users/counts", () =>
+{
+    var service = new UserService();
+    return Results.Json(service.GetUserRoleCounts());
+});
+
+//retrieve users by role 
+app.MapGet("/api/users/by-role/{role}", (string role) =>
+{
+    var service = new UserService();
+    var users = service.GetUsersByRole(role);
+    return Results.Json(users);
+});
+
+//change the role of a user by admin 
+app.MapPost("/api/users/change-role", (HttpRequest request) =>
+{
+    var service = new UserService();
+    return service.ChangeUserRole(request);
+});
+
+
+//delete user by admin 
+app.MapPost("/api/users/delete", (HttpRequest request) =>
+{
+    var service = new UserService();
+    return service.DeleteUser(request);
+});
+
+
 
 app.MapGet("/api/verify", (HttpRequest request, UserService service) =>
 {
@@ -265,6 +300,9 @@ app.MapGet("/api/verify", (HttpRequest request, UserService service) =>
 //login api
 app.MapPost("/api/login", async (HttpRequest request, UserService userService, JwtService jwt) =>
     await userService.LoginUser(request, jwt));
+
+
+
 
 
 var postGroup = app.MapGroup("/api/posts").RequireAuthorization();
