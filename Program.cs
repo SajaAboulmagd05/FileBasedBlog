@@ -291,7 +291,7 @@ app.MapGet("/api/verify", (HttpRequest request, UserService service) =>
 
     var success = service.VerifyUserEmail(email, token);
     if (!success)
-        return Results.BadRequest("Invalid or expired token.");
+        return Results.Redirect("/?token=invalid");
     return Results.Redirect("/?verified=true&showLogin=true");
 
 

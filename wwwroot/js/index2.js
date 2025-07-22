@@ -538,6 +538,21 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 });
 
+const params = new URLSearchParams(window.location.search);
+
+if (params.get("token") === "invalid") {
+  const toast = document.getElementById("error-toast");
+    toast.querySelector(".message").textContent = "Invalid or expired verification link.";
+    toast.classList.remove("hidden");
+    toast.classList.add("visible");
+
+    setTimeout(() => {
+      toast.classList.remove("visible");
+      toast.classList.add("hidden");
+    }, 4000);
+  window.history.replaceState({}, document.title, window.location.pathname);
+
+}
 
 
 document.addEventListener("DOMContentLoaded", () => {
