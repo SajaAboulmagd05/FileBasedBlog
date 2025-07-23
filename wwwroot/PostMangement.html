@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Posts Admin Panel</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <link rel="stylesheet" href="css/Dashboard.css" />
+  <link rel="stylesheet" href="css/Modal.css" />
+  <link rel="stylesheet" href="css/PostForm.css" />
+</head>
+<body>
+  <!-- Shared Topbar -->
+  <header class="header">
+    <h1>My Blog</h1>
+    <nav class="main-nav" id="main-nav">
+      <a href="/">Home</a>
+      <a href="PostMangement.html" id="postManage-link">Posts Management</a>
+      <a href="Admin.html" id="dashboard-link">Dashboard</a>
+    </nav>
+    <div class="branding">
+      <div class="user-menu">
+        <div class="avatar-wrapper">
+          <div class="avatar" id="user-avatar">SA</div>
+          <div class="dropdown hidden" id="user-dropdown">
+            <a href="/edit-profile">Edit Profile</a>
+            <button id="logout-btn">Logout</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Dashboard Panel -->
+  <div class="panel-wrapper">
+    <div class="container">
+      <nav class="top-nav">
+        <button onclick="navigate('manage')">Manage Posts</button>
+        <button onclick="navigate('create')">Create Post</button>
+      </nav>
+
+        <main class="main-content">
+            <div class="section-header">
+            <h2 id="section-title">Manage Posts</h2>
+            </div>
+
+            <!-- Post Stat Boxes -->
+            <div class="stats" id="post-stats">
+                <div class="stat-card draft" onclick="filterPosts('Draft')">
+                    <h3>Drafts</h3><p>0</p>
+                </div>
+                <div class="stat-card scheduled" onclick="filterPosts('Scheduled')">
+                    <h3>Scheduled</h3><p>0</p>
+                </div>
+                <div class="stat-card posted" onclick="filterPosts('Posted')">
+                    <h3>Posted</h3><p>0</p>
+                </div>
+            </div>
+
+            <h3 id="post-type-label">Showing: Drafts</h3>
+
+            <!-- Posts Table -->
+            <table class="user-table">
+                <thead>
+                    <tr>
+                    <th>Title</th>
+                    <th>Author</th>
+                    <th>Date</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="post-list">
+                    <!-- JS will populate rows -->
+                </tbody>
+            </table>
+
+            <div id="create-post-section" style="display:none;">
+                <form id="post-form" enctype="multipart/form-data">
+                    <!-- Title Section -->
+                    <div class="form-group">
+                        <label for="post-title">Post Title</label>
+                        <input type="text" id="post-title" name="title" required placeholder="Enter post title">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="post-description">Post Description</label>
+                        <textarea id="post-description" name="description" rows="4" required placeholder="Write your post description here..."></textarea>
+                    </div>
+
+                    <!-- Body Section -->
+                    <div class="form-group">
+                        <label for="post-body">Post Content (Markdown)</label>
+                        <textarea id="post-body" name="body" ></textarea>
+                    </div>
+
+                    <!-- Media Upload and resize-->
+                    <div class="upload-box">
+                        <input type="file" id="cover-image" accept="image/*" name="coverImage" hidden required>
+                        <img src="css/icons/download.png" alt="">
+                        <p>This image will appear as the post's cover.</p>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="post-files">Attachments</label>
+                        <input type="file" id="post-files" name="files" multiple>
+                        <!-- multiple keyword allows the user to select many at once but can upload multiple times -->
+                    </div>
+
+                    <!-- Publishing Options -->
+                    <div class="form-group">
+                        <div class="publish-options-container">
+                            <span class="publish-options-label">Publishing Options</span>
+                            <div class="publish-options">
+                                <label class="radio-option">
+                                    <input type="radio" name="publish-option" value="immediate" checked>
+                                    Publish Immediately
+                                </label>
+                                <label class="radio-option">
+                                    <input type="radio" name="publish-option" value="schedule">
+                                    Schedule Publication
+                                </label>
+                            </div>
+                        </div>
+                
+                        <div id="schedule-container" style="display: none;">
+                            <div class="datetime-fields">
+                                <input type="date" id="publish-date" name="publish-date" class="datetime-input">
+                                <input type="time" id="publish-time" name="publish-time" value="12:00" class="datetime-input">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group tags-categories">
+                        <div>
+                            <label>Tags</label>
+                            <select id="post-tags" name="tags" multiple size="4"></select>
+                            <small>Hold Ctrl/Cmd to select multiple</small>
+                        </div>
+                        <div>
+                            <label>Categories</label>
+                            <select id="post-categories" name="categories" multiple size="4"></select>
+                            <small>Hold Ctrl/Cmd to select multiple</small>
+                        </div>
+                    </div>
+
+
+                    <!-- Custom URL -->
+                    <div class="form-group">
+                        <label for="post-slug">Custom URL Slug</label>
+                        <input type="text" id="post-slug" name="slug" placeholder="custom-url-slug, leave blank to auto-generate from title">
+                    </div>
+
+                    <!-- Form Actions -->
+                    <div class="form-actions">
+                        <button type="button" id="save-draft" class="secondary">Save Draft</button>
+                        <button type="submit" id="publish-post">Publish Post</button>
+                    </div>
+                </form>
+            </div>
+        </main>
+    </div>
+  </div>
+
+  <!-- Create/Edit Modal -->
+  <div class="modal-container">
+    <input type="checkbox" id="modal-toggle" />
+    <div class="blur-overlay"></div>
+    <div class="subscription-modal" id="post-modal">
+      <label for="modal-toggle" class="close-icon"><i class="fas fa-times"></i></label>
+      <div class="modal-icon"><i class="fas fa-pen"></i></div>
+      <div class="modal-content" id="modal-form-content">
+        <!-- Injected dynamically via JS -->
+      </div>
+    </div>
+  </div>
+
+  <!-- Delete Confirmation Modal -->
+  <input type="checkbox" id="delete-toggle" />
+  <div class="blur-overlay"></div>
+  <div class="subscription-modal" id="delete-modal">
+    <label for="delete-toggle" class="close-icon"><i class="fas fa-times"></i></label>
+    <div class="modal-icon"><i class="fas fa-trash"></i></div>
+    <div class="modal-content" id="delete-form-content">
+      <!-- Confirm delete post -->
+    </div>
+  </div>
+
+  <!-- Toast Feedback -->
+  <div id="success-toast" class="toast hidden">
+    <i class="fas fa-check-circle"></i>
+    <span class="message">Post created successfully 🎉</span>
+  </div>
+  <div id="error-toast" class="toast hidden" style="background: #f44336;">
+    <i class="fas fa-exclamation-circle"></i>
+    <span class="message">Something went wrong. Try again.</span>
+  </div>
+
+  <script src="js/postCreation.js"></script>
+</body>
+</html>

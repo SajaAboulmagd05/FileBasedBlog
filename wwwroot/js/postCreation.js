@@ -7,24 +7,66 @@ aspectRatioCheckbox = document.querySelector("#aspect-ratio-checkbox");
 
 const MAX_WIDTH = 800; // Maximum allowed width
 
-//adding easymde for markdown 
-const easyMDE = new EasyMDE({
-    element: document.getElementById("post-body"),
-    spellChecker: false,
-    placeholder: "Write your post content in Markdown...",
-    autosave: {
-        enabled: true,
-        uniqueId: "post-body-autosave",
-        delay: 1000
-    },
-    status: false,
-    imageUpload: true,
-    imageMaxSize: 2 * 1024 * 1024,
-    imageAccept: "image/*",
-    uploadImage: true,
-    imageUploadEndpoint: "/api/uploads/markdown-image",
-    promptURLs: true
+
+// Toggle between Manage Posts and Create Post
+function navigate(section) {
+  const stats = document.getElementById("post-stats");
+  const label = document.getElementById("post-type-label");
+  const table = document.querySelector(".user-table");
+  const createSection = document.getElementById("create-post-section");
+  const sectionTitle = document.getElementById("section-title");
+  
+
+  if (section === "manage") {
+    stats.style.display = "flex";
+    label.style.display = "block";
+    table.style.display = "table";
+    createSection.style.display = "none";
+    sectionTitle.textContent = "Manage Posts";
+   
+  } else if (section === "create") {
+    stats.style.display = "none";
+    label.style.display = "none";
+    table.style.display = "none";
+    createSection.style.display = "block";
+    sectionTitle.textContent = "Create Post";
+  
+
+    // Initialize EasyMDE once
+    if (!window.easyMDE) {
+      window.easyMDE = new EasyMDE({
+        element: document.getElementById("post-body"),
+        spellChecker: false,
+        placeholder: "Write your post content in Markdown...",
+        autosave: {
+          enabled: true,
+          uniqueId: "post-body-autosave",
+          delay: 1000
+        },
+        status: false,
+        imageUpload: true,
+        imageMaxSize: 2 * 1024 * 1024,
+        imageAccept: "image/*",
+        uploadImage: true,
+        imageUploadEndpoint: "/api/uploads/markdown-image",
+        promptURLs: true
+      });
+    }
+
+    // ✅ Load tags/categories
+    loadTags();
+    loadCategories();
+  }
+}
+
+// Hook tab buttons on DOM load
+window.addEventListener("DOMContentLoaded", () => {
+  document.getElementById("add-btn")?.addEventListener("click", () => navigate("create"));
+
+  // Optional: default to manage tab
+  navigate("manage");
 });
+
 
 const loadFile = (e) => {
     const file = e.target.files[0]; 

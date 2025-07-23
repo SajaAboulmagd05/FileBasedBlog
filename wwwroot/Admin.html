@@ -11,7 +11,28 @@
 
 </head>
 <body>
-  <div class="top-bar">Admin Panel</div>
+  <!-- should add the top bar -->
+    <header class="header">
+        <h1>My Blog</h1>
+
+        <nav class="main-nav hidden" id="main-nav">
+            <a href="/">Home</a>
+            <a href="PostMangement.html" id="postManage-link" class="hidden">Posts Management</a>
+            <a href="Admin.html" id="dashboard-link" class="hidden">Dashboard</a>
+        </nav>
+
+        <div class="branding">
+            <div id="user-menu" class="user-menu hidden">
+            <div class="avatar-wrapper">
+                <div class="avatar" id="user-avatar">SA</div>
+                <div class="dropdown hidden" id="user-dropdown">
+                <a href="/edit-profile">Edit Profile</a>
+                <button id="logout-btn">Logout</button>
+                </div>
+            </div>
+            </div>
+        </div>
+    </header>
 
 <div class="panel-wrapper">
   <div class="container">
@@ -132,5 +153,6 @@
 </div>
 
   <script src="js/Dashboard.js"></script>
+  <script src="js/index2.js"></script>
 </body>
 </html>

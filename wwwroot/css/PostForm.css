@@ -1,0 +1,143 @@
+/* ✅ Form Layout */
+#create-post-section {
+  margin-top: 2rem;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.form-group label {
+  font-weight: 500;
+  font-size: 1rem;
+  color: var(--dark-blue);
+}
+
+.form-group input,
+.form-group textarea,
+.form-group select {
+  padding: 0.6rem 0.8rem;
+  border: var(--border);
+  border-radius: 6px;
+  font-size: 1rem;
+  font-family: homefont;
+  background-color: #fff;
+  box-shadow: var(--box-shadow);
+  transition: border-color 0.3s ease;
+}
+
+.form-group input:focus,
+.form-group textarea:focus,
+.form-group select:focus {
+  border-color: var(--light-blue);
+  outline: none;
+}
+
+/* ✅ Side-by-Side Tag and Category Selects */
+.tags-categories {
+  display: flex;
+  gap: 2rem;
+  flex-wrap: wrap;
+}
+
+.tags-categories > div {
+  flex: 1;
+  min-width: 200px;
+}
+
+
+/* ✅ Upload Box Visual */
+.upload-box {
+  background: #f7f7f7;
+  border: dashed 2px var(--light-blue);
+  border-radius: 8px;
+  padding: 1rem;
+  text-align: center;
+  color: var(--dark-blue);
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.upload-box:hover {
+  background: #e0f7fa;
+}
+
+.upload-box img {
+  width: 48px;
+  margin-bottom: 0.5rem;
+}
+
+/* ✅ Publishing Options */
+.publish-options-container {
+  background: #f5faff;
+  border: var(--border);
+  border-radius: 8px;
+  padding: 1rem;
+  box-shadow: var(--box-shadow);
+}
+
+.publish-options-label {
+  font-weight: 600;
+  color: var(--dark-blue);
+  margin-bottom: 0.5rem;
+}
+
+.radio-option {
+  display: block;
+  margin-bottom: 0.5rem;
+  color: #333;
+}
+
+.datetime-fields {
+  display: flex;
+  gap: 1rem;
+  margin-top: 0.5rem;
+}
+
+.datetime-input {
+  flex: 1;
+  padding: 0.5rem;
+  border: var(--border);
+  border-radius: 6px;
+}
+
+/* ✅ Form Actions */
+.form-actions {
+  display: flex;
+  gap: 1rem;
+  justify-content: flex-end;
+  margin-top: 1rem;
+}
+
+.form-actions button {
+  font-family: homefont;
+  font-size: 1rem;
+  padding: 0.6rem 1.2rem;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.form-actions .secondary {
+  background: var(--pink);
+  color: var(--dark-blue);
+}
+
+.form-actions #publish-post {
+  background: var(--dark-blue);
+  color: white;
+}
+
+.form-actions button:hover {
+  opacity: 0.9;
+}

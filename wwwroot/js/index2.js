@@ -502,13 +502,14 @@ function showUserMenu(user) {
     dropdown.classList.toggle("hidden");
   });
 
+  
   document.getElementById("logout-btn").addEventListener("click", () => {
     localStorage.clear();
     menu.classList.add("hidden");
     dropdown.classList.add("hidden");
     NavMenu.classList.add("hidden");
     RegisterButton.classList.remove("hidden");
-    location.reload(); // or reset UI manually
+    window.location.href = "/";
   });
 }
 
