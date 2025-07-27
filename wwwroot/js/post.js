@@ -111,7 +111,7 @@ function renderPost(post) {
     </div>
 
     <div class="details">
-      <span class="author"><i class="far fa-user"></i> <span>by admin</span></span>
+      <span class="author"><i class="far fa-user"></i> <span>${post.author || "By Admin"}</span></span>
       <span class="likes"><i class="fas fa-thumbs-up"></i> <span>${post.likeCount || 0} Likes</span></span>
       <span class="comments"><i class="fas fa-comment"></i> <span>${post.comments?.length || 0} Comments</span></span>
       <span class="attachments"><i class="fas fa-paperclip"></i> <span>${post.attachmentCount || 0} file(s)</span></span>
@@ -137,7 +137,7 @@ function renderPost(post) {
     ${commentsSectionHTML}
   `;
 
-  // ❤️ Like button logic
+  // Like button logic
   const likeEl = container.querySelector(".likes");
 
   if (isLoggedIn && post.likedByUserIds?.includes(subscriberID)) {

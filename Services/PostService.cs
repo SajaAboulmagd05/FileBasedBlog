@@ -14,10 +14,12 @@ public class PostService
 
     public async Task<(bool success, string message)> PublishPostAsync(IFormCollection form, string userId, string userName, bool isDraft = false)
     {
+
         var title = form["title"].ToString().Trim();
         var description = form["description"].ToString().Trim();
         var body = form["body"].ToString().Trim();
         var slugInput = form["slug"].ToString().Trim();
+
 
         if (string.IsNullOrEmpty(title) || string.IsNullOrEmpty(description) || string.IsNullOrEmpty(body))
             return (false, "Missing required fields.");
@@ -79,6 +81,7 @@ public class PostService
 
         post.CoverImage = await SaveCoverImageAsync(form.Files["coverImage"], post.Slug, post.CreatedAt);
 
+        Console.WriteLine($"Creating folder for draft at: {folderPath}");
 
         await File.WriteAllTextAsync(Path.Combine(folderPath, "content.md"), body);
 
@@ -153,6 +156,63 @@ public class PostService
             await file.CopyToAsync(stream);
         }
     }
+
+    public async Task<PostStats> GetPostStatsAsync(string userId, string role, bool showAll)
+    {
+        var allPosts = await LoadAllPostsAsync();
+        IEnumerable<Post> relevantPosts = role == "Admin" && showAll
+            ? allPosts
+            : allPosts.Where(p => p.AuthorId == userId);
+
+        return new PostStats
+        {
+            DraftPosts = relevantPosts.Count(p => p.Status == PostStatus.Draft),
+            ScheduledPosts = relevantPosts.Count(p => p.Status == PostStatus.Scheduled),
+            PublishedPosts = relevantPosts.Count(p => p.Status == PostStatus.Published)
+        };
+    }
+
+    public async Task<List<Post>> GetPostsByStatusAsync(string status, string userId, string role, bool showAll)
+    {
+        var allPosts = await LoadAllPostsAsync();
+        var desiredStatus = Enum.Parse<PostStatus>(status, ignoreCase: true);
+
+        IEnumerable<Post> relevantPosts = role == "Admin" && showAll
+            ? allPosts
+            : allPosts.Where(p => p.AuthorId == userId);
+
+        return relevantPosts.Where(p => p.Status == desiredStatus).ToList();
+    }
+
+
+    public async Task<List<Post>> LoadAllPostsAsync()
+    {
+        var posts = new List<Post>();
+        var jsonOptions = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
+
+        var postFolders = Directory.GetDirectories("content/posts");
+
+        foreach (var folder in postFolders)
+        {
+            var metaPath = Path.Combine(folder, "meta.json");
+
+            if (!File.Exists(metaPath)) continue;
+
+            try
+            {
+                var postJson = await File.ReadAllTextAsync(metaPath);
+                var post = JsonSerializer.Deserialize<Post>(postJson, jsonOptions);
+                if (post != null) posts.Add(post);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error parsing post in '{folder}': {ex.Message}");
+            }
+        }
+
+        return posts;
+    }
+
 
 }
 

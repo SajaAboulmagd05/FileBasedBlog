@@ -11,4 +11,5 @@ public class PostSummary
     public int AttachmentCount { get; set; } = 0;
     public int LikeCount { get; set; } = 0;
     public int CommentCount { get; set; } = 0;
+    public string Author { get; set; } = string.Empty;
 }

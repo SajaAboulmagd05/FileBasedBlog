@@ -281,6 +281,36 @@ app.MapPost("/api/login", async (HttpRequest request, UserService userService, J
     await userService.LoginUser(request, jwt));
 
 
+//api to get post stats for each user for admin display all 
+app.MapGet("/api/posts/stats", async (HttpContext context, PostService postService) =>
+{
+    var userId = context.User.FindFirst("UserID")?.Value;
+    var role = context.User.FindFirst(ClaimTypes.Role)?.Value;
+    var queryAll = context.Request.Query["all"] == "true";
+
+    if (string.IsNullOrEmpty(userId)) return Results.Unauthorized();
+
+    var stats = await postService.GetPostStatsAsync(userId, role, queryAll);
+    return Results.Ok(stats);
+});
+
+
+
+//api to get post by status and for a specific user 
+app.MapGet("/api/posts/status", async (HttpContext context, PostService postService) =>
+{
+    var userId = context.User.FindFirst("UserID")?.Value;
+    var role = context.User.FindFirst(ClaimTypes.Role)?.Value;
+    var status = context.Request.Query["status"].ToString();
+    var showAll = context.Request.Query["all"] == "true";
+
+    if (string.IsNullOrEmpty(userId)) return Results.Unauthorized();
+
+    var posts = await postService.GetPostsByStatusAsync(status, userId, role, showAll);
+    return Results.Ok(posts);
+});
+
+
 
 
 

@@ -1,0 +1,25 @@
+{
+    "Id": "a85bc768-cf53-4371-b569-6d5d37ef1b80",
+    "Title": "Building a RESTful API with Node.js and Express: Best Practices",
+    "Description": "Learn how to design robust, maintainable REST APIs using Node.js and Express. This guide covers route structure, error handling, security, and performance optimization.",
+    "Slug": "building-a-restful-api-with-nodejs-and-express-best-practices",
+    "Author": "janey",
+    "AuthorId": "d103d961-6373-4560-9cae-112e62114e66",
+    "CreatedAt": "2025-07-27T14:38:42.2735551+03:00",
+    "UpdatedAt": null,
+    "ScheduledAt": null,
+    "ReadingTime": "3 min read",
+    "CoverImage": "assets/cover.jpg",
+    "LikeCount": 0,
+    "LikedByUserIds": [],
+    "Comments": [],
+    "Status": 0,
+    "Tags": [
+        "file-based-storage",
+        "minimal-api"
+    ],
+    "Categories": [
+        "Tutorials"
+    ],
+    "IsPublished": false
+}

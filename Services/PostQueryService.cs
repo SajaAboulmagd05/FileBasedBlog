@@ -53,7 +53,8 @@ public class PostQueryService
                     Image = imageUrl,
                     AttachmentCount = attachmentCount,
                     LikeCount = post.LikeCount,
-                    CommentCount = post.Comments?.Count ?? 0
+                    CommentCount = post.Comments?.Count ?? 0,
+                    Author = post.Author
                 });
             }
             catch (Exception ex)
@@ -122,7 +123,8 @@ public class PostQueryService
                     Image = imageUrl,
                     AttachmentCount = attachmentCount,
                     LikeCount = post.LikeCount,
-                    CommentCount = post.Comments?.Count ?? 0
+                    CommentCount = post.Comments?.Count ?? 0,
+                    Author = post.Author
                 });
             }
             catch (Exception ex)
@@ -188,7 +190,8 @@ public class PostQueryService
                     Image = imageUrl,
                     AttachmentCount = attachmentCount,
                     LikeCount = post.LikeCount,
-                    CommentCount = post.Comments?.Count ?? 0
+                    CommentCount = post.Comments?.Count ?? 0,
+                    Author = post.Author
                 });
             }
             catch (Exception ex)
@@ -248,7 +251,8 @@ public class PostQueryService
                 Image = imageUrl,
                 AttachmentCount = attachmentCount,
                 LikeCount = post.LikeCount,
-                CommentCount = post.Comments?.Count ?? 0
+                CommentCount = post.Comments?.Count ?? 0,
+                Author = post.Author
             });
         }
 
@@ -300,7 +304,8 @@ public class PostQueryService
             AttachmentCount = attachmentCount,
             LikeCount = post.LikeCount,
             Attachments = attachmentFiles,
-            Comments = post.Comments ?? new()
+            Comments = post.Comments ?? new(),
+            Author = post.Author
         };
     }
 

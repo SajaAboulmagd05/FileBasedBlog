@@ -13,4 +13,6 @@ public class FullPostModel
     public int LikeCount { get; set; } = 0;
     public List<string> Attachments { get; set; } = new();
     public List<Comment> Comments { get; set; } = new();
+
+    public String Author { get; set; } = string.Empty;
 }

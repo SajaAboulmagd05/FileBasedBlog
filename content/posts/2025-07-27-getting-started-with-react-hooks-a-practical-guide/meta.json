@@ -1,0 +1,27 @@
+{
+    "Id": "acb495a1-63b1-47eb-82a9-62e34c5fe6d9",
+    "Title": "Getting Started with React Hooks: A Practical Guide",
+    "Description": "Learn how to modernize your React components with Hooks. This guide covers useState, useEffect, and custom hooks with practical examples you can use in your projects today.",
+    "Slug": "getting-started-with-react-hooks-a-practical-guide",
+    "Author": "janey",
+    "AuthorId": "d103d961-6373-4560-9cae-112e62114e66",
+    "CreatedAt": "2025-07-27T14:14:47.01727+03:00",
+    "UpdatedAt": null,
+    "ScheduledAt": null,
+    "ReadingTime": "2 min read",
+    "CoverImage": "assets/cover.jpg",
+    "LikeCount": 0,
+    "LikedByUserIds": [],
+    "Comments": [],
+    "Status": 1,
+    "Tags": [
+        "dotnet-core",
+        "minimal-api"
+    ],
+    "Categories": [
+        "Design",
+        "Development",
+        "Tutorials"
+    ],
+    "IsPublished": true
+}

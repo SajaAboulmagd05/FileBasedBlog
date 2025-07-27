@@ -3,6 +3,8 @@
     "Title": "A Journey into C#",
     "Description": "exploring bacend logic for blog posts",
     "Slug": "journey-into-csharp",
+    "Author": "Saja Nabeel",
+    "AuthorId": "579666cb-d7c8-48b0-8b01-65ed03aea639",
     "CreatedAt": "2025-07-10T12:02:12.2025025+03:00",
     "UpdatedAt": null,
     "ScheduledAt": null,

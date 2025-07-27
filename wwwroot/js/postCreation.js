@@ -174,6 +174,23 @@ document.addEventListener('DOMContentLoaded', loadCategories);
 //saving the post as draft 
 document.getElementById("save-draft").addEventListener("click", async function () {
     const form = new FormData(document.getElementById("post-form"));
+   form.set("body", easyMDE.value()); 
+   
+    // Validate required fields
+    const title = form.get("title")?.toString().trim();
+    const description = form.get("description")?.toString().trim();
+    const body = form.get("body")?.toString().trim();
+    const coverImage = form.get("coverImage");
+
+    if (!title || !description || !body) {
+        alert("Title, description, and content are required.");
+        return;
+    }
+
+    if (!coverImage) {
+        alert("Please upload a cover image.");
+        return;
+    }
 
     try {
         const response = await fetch("/api/posts/draft", {
@@ -185,7 +202,9 @@ document.getElementById("save-draft").addEventListener("click", async function (
         });
 
         const result = await response.json();
-        alert(result.Message || "Draft saved successfully.");
+        showToast("success", `Post Drafted!`);
+           this.reset(); 
+        easyMDE.value("");
     } catch (err) {
         console.error("Failed to save draft:", err);
         alert("Draft save failed.");
@@ -256,8 +275,10 @@ document.getElementById("post-form").addEventListener("submit", async function (
         }
 
         const result = await response.json();
-        alert(result.Message || "Post published successfully!");
-        
+        showToast("success", `Post created!`);
+
+       this.reset(); 
+        easyMDE.value("");  
     } catch (error) {
         console.error("Submission failed:", error);
         alert("Error: " + error.message);
@@ -281,18 +302,21 @@ function getCurrentUser() {
 async function loadPostStats() {
   try {
     const user = getCurrentUser();
-    const url = `/api/posts/stats?userId=${user.id}`;
-    
-    const response = await fetch(url);
+    const url = user.role === 'admin'
+      ? `/api/posts/stats?all=true`
+      : `/api/posts/stats`;
+
+    const response = await fetch(url, {
+      headers: { "Authorization": `Bearer ${localStorage.getItem("authToken")}` }
+    });
     if (!response.ok) throw new Error('Failed to load stats');
-    
+
     const stats = await response.json();
-    
-    // Update stat cards
+
     document.querySelector('.stat-card.draft p').textContent = stats.drafts || 0;
     document.querySelector('.stat-card.scheduled p').textContent = stats.scheduled || 0;
     document.querySelector('.stat-card.posted p').textContent = stats.posted || 0;
-    
+
     return stats;
   } catch (error) {
     console.error('Error loading post stats:', error);
@@ -305,16 +329,20 @@ async function loadPostStats() {
 async function loadPostsByStatus(status) {
   try {
     const user = getCurrentUser();
-    const url = `/api/posts?status=${status}&userId=${user.id}`;
-    
-    const response = await fetch(url);
+    const url = user.role === 'admin'
+      ? `/api/posts/status?status=${status}&all=true`
+      : `/api/posts/status?status=${status}`;
+
+    const response = await fetch(url, {
+      headers: { "Authorization": `Bearer ${localStorage.getItem("authToken")}` }
+    });
     if (!response.ok) throw new Error('Failed to load posts');
-    
+
     const posts = await response.json();
     renderPostsTable(posts);
     updatePostLabel(status);
     currentFilter = status;
-    
+
     return posts;
   } catch (error) {
     console.error(`Error loading ${status} posts:`, error);
@@ -322,6 +350,7 @@ async function loadPostsByStatus(status) {
     return [];
   }
 }
+
 
 // Render posts in the table with authorization checks
 function renderPostsTable(posts) {
@@ -337,7 +366,7 @@ function renderPostsTable(posts) {
   tableBody.innerHTML = posts.map(post => `
     <tr class="${isAdmin || post.authorId === user.id ? '' : 'read-only'}">
       <td>${post.title}</td>
-      <td>${post.authorName || 'Unknown'}</td>
+      <td>${post.author || 'Unknown'}</td>
       <td>${formatDate(post.date)}</td>
       <td><span class="status-badge ${post.status.toLowerCase()}">${post.status}</span></td>
       <td class="actions">
@@ -379,5 +408,23 @@ document.addEventListener('DOMContentLoaded', () => {
   navigate("manage");
 });
 
+function formatDate(dateStr) {
+  const date = new Date(dateStr);
+  const options = { year: 'numeric', month: 'short', day: 'numeric' };
+  return date.toLocaleDateString(undefined, options);
+}
 
 
+// 🍞 Toast Logic
+function showToast(type, message = "") {
+  const toast = document.getElementById(`${type}-toast`);
+  if (message) toast.querySelector(".message").textContent = message;
+
+  toast.classList.remove("hidden");
+  toast.classList.add("visible");
+
+  setTimeout(() => {
+    toast.classList.remove("visible");
+    toast.classList.add("hidden");
+  }, 3000);
+}

@@ -82,7 +82,7 @@ function renderPosts(page) {
             <div class="details">
               <span class="author">
                 <i class="far fa-user"></i>
-                <span>by admin</span>
+                <span>${post.author}</span>
               </span>
               <span class="likes">
                 <i class="fas fa-thumbs-up"></i>
@@ -90,7 +90,7 @@ function renderPosts(page) {
               </span>
                <span class="comments">
                 <i class="fas fa-comment"></i>
-                <span>10 comments</span>
+                <span>${post.commentCount} Comments</span>
               </span>
               <span class="attachments">
                 <i class="fas fa-paperclip"></i>
