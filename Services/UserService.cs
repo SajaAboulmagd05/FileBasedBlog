@@ -214,14 +214,15 @@ public class UserService
         if (!user.IsEmailVerified)
             return Results.BadRequest("Please verify your email before logging in.");
 
-        var token = jwt.GenerateToken(user.Email, user.Role, user.Name);
+        var token = jwt.GenerateToken(user.UserID, user.Email, user.Role, user.Name);
 
         return Results.Ok(new
         {
             token,
             name = user.Name,
             role = user.Role,
-            initials = GetInitials(user.Name)
+            initials = GetInitials(user.Name),
+            id = user.UserID
         });
     }
 

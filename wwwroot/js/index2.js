@@ -440,6 +440,8 @@ document.getElementById("login-form")?.addEventListener("submit", async (event) 
       localStorage.setItem("userName", user.name);
       localStorage.setItem("userRole", user.role);
       localStorage.setItem("userInitials", user.initials);
+      localStorage.setItem("userId", user.id);
+
 
       // Show welcome toast
       const toast = document.getElementById("success-toast");

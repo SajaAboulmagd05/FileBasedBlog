@@ -154,27 +154,6 @@ app.UseStaticFiles(new StaticFileOptions
 });
 
 // API Endpoints
-//api to draft the posts
-app.MapPost("/api/posts/draft", async (HttpRequest request, PostService postService) =>
-{
-    var form = await request.ReadFormAsync();
-    var result = await postService.PublishPostAsync(form, isDraft: true);
-    return result.success ? Results.Ok(result.message) : Results.BadRequest(result.message);
-
-});
-
-
-//api to publish post 
-app.MapPost("/api/posts/publish", async (HttpRequest request, PostService postService) =>
-{
-    Console.WriteLine("Publish post API hit.");
-    var form = await request.ReadFormAsync();
-    Console.WriteLine($"Title: {form["title"]}");
-
-    var result = await postService.PublishPostAsync(form);
-    return result.success ? Results.Ok(result.message) : Results.BadRequest(result.message);
-});
-
 
 // loading the posts for the frontend display 
 app.MapGet("/api/posts", ([FromServices] PostQueryService queryService, [FromServices] PostSchedulerService schedulerService) =>
@@ -306,6 +285,46 @@ app.MapPost("/api/login", async (HttpRequest request, UserService userService, J
 
 
 var postGroup = app.MapGroup("/api/posts").RequireAuthorization();
+
+//api to draft the posts
+postGroup.MapPost("/draft", async (HttpContext context, PostService postService) =>
+{
+    var form = await context.Request.ReadFormAsync();
+    var userId = context.User.FindFirst("UserID")?.Value;
+    var userName = context.User.FindFirst("name")?.Value;
+
+    if (string.IsNullOrEmpty(userId) || string.IsNullOrEmpty(userName))
+    {
+        return Results.BadRequest("User credentials are missing. Post cannot be created.");
+    }
+
+    var result = await postService.PublishPostAsync(form, userId, userName, isDraft: true);
+    return result.success ? Results.Ok(result.message) : Results.BadRequest(result.message);
+});
+
+
+
+//api to publish post 
+postGroup.MapPost("/publish", async (HttpContext context, PostService postService) =>
+{
+    Console.WriteLine("Publish post API hit.");
+
+    var form = await context.Request.ReadFormAsync();
+    Console.WriteLine($"Title: {form["title"]}");
+
+    var userId = context.User.FindFirst("UserID")?.Value;
+    var userName = context.User.FindFirst("name")?.Value;
+
+    if (string.IsNullOrEmpty(userId) || string.IsNullOrEmpty(userName))
+    {
+        return Results.BadRequest("User credentials are missing. Post cannot be created.");
+    }
+
+    var result = await postService.PublishPostAsync(form, userId, userName);
+    return result.success ? Results.Ok(result.message) : Results.BadRequest(result.message);
+});
+
+
 
 postGroup.MapPost("/{slug}/like", async (HttpContext context, string slug, LikeCommentService service) =>
 {

@@ -8,10 +8,11 @@ public class JwtService
     private readonly string secretKey = "this_is_a_very_secure_jwt_secret_key_1234567890!";
 
 
-    public string GenerateToken(string email, string role, string name)
+    public string GenerateToken(string userId, string email, string role, string name)
     {
         var claims = new[]
         {
+            new Claim("UserID", userId),
             new Claim(ClaimTypes.Email, email),
             new Claim(ClaimTypes.Role, role),
             new Claim("name", name)

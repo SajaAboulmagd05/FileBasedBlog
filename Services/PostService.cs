@@ -12,7 +12,7 @@ public class PostService
         _categoryTagService = categoryTagService;
     }
 
-    public async Task<(bool success, string message)> PublishPostAsync(IFormCollection form, bool isDraft = false)
+    public async Task<(bool success, string message)> PublishPostAsync(IFormCollection form, string userId, string userName, bool isDraft = false)
     {
         var title = form["title"].ToString().Trim();
         var description = form["description"].ToString().Trim();
@@ -39,6 +39,8 @@ public class PostService
             Tags = form["tags"].ToList(),
             Categories = form["categories"].ToList(),
             ReadingTime = EstimateReadingTime(body),
+            Author = userName,
+            AuthorId = userId
         };
 
         // ⏳ Publishing Options

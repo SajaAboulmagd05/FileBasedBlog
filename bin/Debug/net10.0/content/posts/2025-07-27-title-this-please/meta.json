@@ -1,0 +1,35 @@
+{
+  "Id": "6246578a-58eb-4720-8f28-6e02cccf22a1",
+  "Title": "title this please",
+  "Description": "description yaarab",
+  "Slug": "title-this-please",
+  "Author": "Saja Nabeel",
+  "AuthorId": "579666cb-d7c8-48b0-8b01-65ed03aea639",
+  "CreatedAt": "2025-07-27T13:51:10.3062619+03:00",
+  "UpdatedAt": null,
+  "ScheduledAt": null,
+  "ReadingTime": "1 min read",
+  "CoverImage": "assets/cover.jpg",
+  "LikeCount": 1,
+  "LikedByUserIds": [
+    "saja.aboulmagd05@eng-st.cu.edu.eg"
+  ],
+  "Comments": [
+    {
+      "Id": "74345a26-2d5c-4bc0-83ee-9a8b0da86930",
+      "SubscriberID": "Saja Nabeel",
+      "Content": "can we write comment",
+      "CreatedAt": "2025-07-27T13:52:12.7625286+03:00"
+    }
+  ],
+  "Status": 1,
+  "Tags": [
+    "dotnet-core",
+    "file-based-storage"
+  ],
+  "Categories": [
+    "Design",
+    "Development"
+  ],
+  "IsPublished": true
+}

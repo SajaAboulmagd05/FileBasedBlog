@@ -84,10 +84,6 @@ const loadFile = (e) => {
             originalHeight = Math.floor(originalHeight * scaleFactor);
         }
 
-        widthInput.value = originalWidth;
-        heightInput.value = originalHeight;
-        previewImg.style.width = `${originalWidth}px`;
-        previewImg.style.height = `${originalHeight}px`;
 
         document.querySelector(".wrapper")?.classList.add("active");
     });
@@ -182,7 +178,10 @@ document.getElementById("save-draft").addEventListener("click", async function (
     try {
         const response = await fetch("/api/posts/draft", {
             method: "POST",
-            body: form
+            body: form  ,
+            headers: {
+          "Authorization": `Bearer ${localStorage.getItem("authToken")}`
+        },
         });
 
         const result = await response.json();
@@ -245,7 +244,10 @@ document.getElementById("post-form").addEventListener("submit", async function (
     try {
         const response = await fetch("/api/posts/publish", {
             method: "POST",
-            body: form
+            body: form,
+            headers: {
+          "Authorization": `Bearer ${localStorage.getItem("authToken")}`
+        },
         });
 
         if (!response.ok) {
@@ -262,7 +264,120 @@ document.getElementById("post-form").addEventListener("submit", async function (
     }
 });
 
+// Global variables
+let currentFilter = 'Draft';
 
+// Get user data from localStorage
+function getCurrentUser() {
+  return {
+    id: localStorage.getItem('userId'), // Make sure you store this during login
+    role: localStorage.getItem('userRole'),
+    name: localStorage.getItem('userName'),
+    initials: localStorage.getItem('userInitials')
+  };
+}
+
+// Load post statistics
+async function loadPostStats() {
+  try {
+    const user = getCurrentUser();
+    const url = `/api/posts/stats?userId=${user.id}`;
+    
+    const response = await fetch(url);
+    if (!response.ok) throw new Error('Failed to load stats');
+    
+    const stats = await response.json();
+    
+    // Update stat cards
+    document.querySelector('.stat-card.draft p').textContent = stats.drafts || 0;
+    document.querySelector('.stat-card.scheduled p').textContent = stats.scheduled || 0;
+    document.querySelector('.stat-card.posted p').textContent = stats.posted || 0;
+    
+    return stats;
+  } catch (error) {
+    console.error('Error loading post stats:', error);
+    showToast('Failed to load post statistics', 'error');
+    return { drafts: 0, scheduled: 0, posted: 0 };
+  }
+}
+
+// Load posts by status
+async function loadPostsByStatus(status) {
+  try {
+    const user = getCurrentUser();
+    const url = `/api/posts?status=${status}&userId=${user.id}`;
+    
+    const response = await fetch(url);
+    if (!response.ok) throw new Error('Failed to load posts');
+    
+    const posts = await response.json();
+    renderPostsTable(posts);
+    updatePostLabel(status);
+    currentFilter = status;
+    
+    return posts;
+  } catch (error) {
+    console.error(`Error loading ${status} posts:`, error);
+    showToast(`Failed to load ${status.toLowerCase()} posts`, 'error');
+    return [];
+  }
+}
+
+// Render posts in the table with authorization checks
+function renderPostsTable(posts) {
+  const tableBody = document.getElementById('post-list');
+  const user = getCurrentUser();
+  const isAdmin = user.role === 'admin';
+  
+  if (posts.length === 0) {
+    tableBody.innerHTML = '<tr><td colspan="5">No posts found</td></tr>';
+    return;
+  }
+  
+  tableBody.innerHTML = posts.map(post => `
+    <tr class="${isAdmin || post.authorId === user.id ? '' : 'read-only'}">
+      <td>${post.title}</td>
+      <td>${post.authorName || 'Unknown'}</td>
+      <td>${formatDate(post.date)}</td>
+      <td><span class="status-badge ${post.status.toLowerCase()}">${post.status}</span></td>
+      <td class="actions">
+        ${isAdmin || post.authorId === user.id ? `
+          <button class="edit-btn" data-id="${post.id}"><i class="fas fa-edit"></i></button>
+          <button class="delete-btn" data-id="${post.id}"><i class="fas fa-trash"></i></button>
+        ` : ''}
+      </td>
+    </tr>
+  `).join('');
+  
+  // Add event listeners to buttons
+  document.querySelectorAll('.edit-btn').forEach(btn => {
+    btn.addEventListener('click', () => editPost(btn.dataset.id));
+  });
+  
+  document.querySelectorAll('.delete-btn').forEach(btn => {
+    btn.addEventListener('click', () => confirmDeletePost(btn.dataset.id));
+  });
+}
+
+// Initialize the page
+async function initPostManagement() {
+  await loadPostStats();
+  await loadPostsByStatus(currentFilter);
+  
+  // Add event listeners to stat cards
+  document.querySelectorAll('.stat-card').forEach(card => {
+    const status = card.classList.contains('draft') ? 'Draft' :
+                  card.classList.contains('scheduled') ? 'Scheduled' : 'Posted';
+    card.addEventListener('click', () => filterPosts(status));
+  });
+}
+
+// Update your DOMContentLoaded
+document.addEventListener('DOMContentLoaded', () => {
+  initPostManagement();
+  document.getElementById("add-btn")?.addEventListener("click", () => navigate("create"));
+  navigate("manage");
+});
 
 
 
