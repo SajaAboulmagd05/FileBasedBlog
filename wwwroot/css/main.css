@@ -410,7 +410,7 @@ html {
     color:#fff;
 }
 
-.tag {
+.container .sidebar .tag {
   display: flex;
   flex-wrap: wrap;
   justify-content: space-between; 

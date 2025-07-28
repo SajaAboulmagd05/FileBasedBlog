@@ -64,7 +64,6 @@ builder.Services.AddSwaggerGen(options =>
 
 
 builder.Services.AddSingleton<CategoryTagService>();
-builder.Services.AddSingleton<FileService>();
 builder.Services.AddSingleton<PostService>();
 builder.Services.AddSingleton<PostQueryService>();
 builder.Services.AddSingleton<PostSchedulerService>();
@@ -72,6 +71,8 @@ builder.Services.AddSingleton<SubscriberService>();
 builder.Services.AddSingleton<UserService>();
 builder.Services.AddSingleton<JwtService>();
 builder.Services.AddSingleton<LikeCommentService>();
+builder.Services.AddSingleton<TagService>();
+builder.Services.AddSingleton<CategoryService>();
 var app = builder.Build();
 
 //to change the slug 
@@ -224,9 +225,14 @@ app.MapGet("/api/posts/{slug}", ([FromServices] PostQueryService queryService, s
 app.MapPost("/api/register", async (HttpRequest request, UserService service) =>
     await service.RegisterUser(request));
 
+
 //add user by admin api
-app.MapPost("/api/users/admin-add", async (HttpRequest request, UserService userService) =>
+var userGroup = app.MapGroup("/api/users").RequireAuthorization();
+
+userGroup.MapPost("/admin-add", async (HttpRequest request, UserService userService) =>
     await userService.RegisterUserAsAdmin(request));
+
+
 
 // retrieve the count of each type of users
 app.MapGet("/api/users/counts", () =>
@@ -378,6 +384,61 @@ postGroup.MapPost("/{slug}/comment", async (HttpContext context, HttpRequest req
     return await service.AddComment(slug, subscriberId, content);
 });
 
+var tagGroup = app.MapGroup("/api/tags").RequireAuthorization();
 
+// Add Tag
+tagGroup.MapPost("/add", async (HttpContext context, TagService tagService) =>
+{
+    var userId = context.User.FindFirst("UserID")?.Value;
+    if (string.IsNullOrEmpty(userId))
+        return Results.Unauthorized();
+
+    var form = await context.Request.ReadFormAsync();
+    var name = form["name"].ToString();
+
+    if (string.IsNullOrWhiteSpace(name))
+        return Results.BadRequest("Tag name is required.");
+
+    var msg = await tagService.CreateTagAsync(name);
+    if (msg.Contains("already exists", StringComparison.OrdinalIgnoreCase))
+        return Results.BadRequest(msg);
+    return Results.Ok(msg);
+});
+
+// Get All Tags
+tagGroup.MapGet("/all", async (TagService tagService) =>
+{
+    var tags = await tagService.GetAllTagsAsync();
+    return Results.Ok(tags);
+});
+
+var categoryGroup = app.MapGroup("/api/categories").RequireAuthorization();
+
+// Add Category
+categoryGroup.MapPost("/add", async (HttpContext context, CategoryService categoryService) =>
+{
+    var userId = context.User.FindFirst("UserID")?.Value;
+    if (string.IsNullOrEmpty(userId))
+        return Results.Unauthorized();
+
+    var form = await context.Request.ReadFormAsync();
+    var name = form["name"].ToString();
+    var description = form["description"].ToString();
+
+    if (string.IsNullOrWhiteSpace(name) || string.IsNullOrWhiteSpace(description))
+        return Results.BadRequest("Name and description are required.");
+
+    var msg = await categoryService.CreateCategoryAsync(name, description);
+    if (msg.Contains("already exists", StringComparison.OrdinalIgnoreCase))
+        return Results.BadRequest(msg);
+    return Results.Ok(msg);
+});
+
+// Get All Categories
+categoryGroup.MapGet("/all", async (CategoryService categoryService) =>
+{
+    var categories = await categoryService.GetAllCategoriesAsync();
+    return Results.Ok(categories);
+});
 
 app.Run();

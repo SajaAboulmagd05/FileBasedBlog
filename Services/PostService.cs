@@ -6,9 +6,8 @@ public class PostService
     // private readonly FileService _fileService;
     private readonly CategoryTagService _categoryTagService;
 
-    public PostService(FileService fileService, CategoryTagService categoryTagService)
+    public PostService(CategoryTagService categoryTagService)
     {
-        // _fileService = fileService;
         _categoryTagService = categoryTagService;
     }
 
@@ -45,7 +44,7 @@ public class PostService
             AuthorId = userId
         };
 
-        // ⏳ Publishing Options
+        //  Publishing Options
         if (isDraft)
         {
             post.Status = PostStatus.Draft;

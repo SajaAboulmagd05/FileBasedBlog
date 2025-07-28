@@ -135,6 +135,10 @@
   overflow: hidden;
 }
 
+.hidden {
+  display: none !important;
+}
+
 .user-table th,
 .user-table td {
   padding: 14px;
@@ -149,7 +153,8 @@
 }
 
 .role-btn,
-.delete-btn {
+.delete-btn,
+.show-posts-btn {
   padding: 6px 10px;
   margin-right: 6px;
   border: none;
@@ -168,6 +173,22 @@
   background-color: var(--dark-blue);
   color: white;
 }
+
+.show-posts-btn{
+  background-color: #f0d9ff;
+}
+
+.posts-cell {
+  display: flex;
+  align-items: center;
+  gap: 8px; 
+}
+
+.post-count {
+  min-width: 24px; /* Prevent shift on single vs double digits */
+  text-align: center;
+}
+
 
 @media (max-width: 768px) {
   .top-nav {

@@ -62,7 +62,7 @@ function renderPost(post) {
     </div>
   `;
 
-  // 🔄 Conditional comment section
+  // Conditional comment section
   let commentsSectionHTML = "";
 
   if (!isLoggedIn) {
@@ -77,7 +77,7 @@ function renderPost(post) {
     `;
   } else {
     const comments = post.comments?.map(comment => `
-      <div class="comment">
+      <div class="comment diff">
         <div class="comment-meta">
           <span class="comment-id">#${comment.subscriberID || "anon"}</span>
           <span class="comment-date">${new Date(comment.createdAt).toLocaleString()}</span>
@@ -136,7 +136,7 @@ function renderPost(post) {
 
     ${commentsSectionHTML}
   `;
-
+  Prism.highlightAll();
   // Like button logic
   const likeEl = container.querySelector(".likes");
 
@@ -168,7 +168,7 @@ function renderPost(post) {
     likeEl.querySelector("span").textContent = `${result.likes} Likes`;
   });
 
-  // 💬 Comment submission
+  // Comment submission
   if (isLoggedIn) {
     document.querySelector(".comment-btn").addEventListener("click", async () => {
       const content = document.getElementById("comment-input").value.trim();
@@ -191,7 +191,7 @@ function renderPost(post) {
     });
   }
 
-  // ⏬ Scroll helpers
+  // Scroll helpers
   container.querySelector(".comments").addEventListener("click", () => {
     document.querySelector(".comments-section")?.scrollIntoView({ behavior: "smooth" });
   });
@@ -221,7 +221,7 @@ function updateCommentList(comments) {
 
 
   list.innerHTML = comments.map(comment => `
-    <div class="comment">
+    <div class="comment diff">
       <div class="comment-meta">
         <span class="comment-id">#${comment.subscriberID || "anon"}</span>
         <span class="comment-date">${new Date(comment.createdAt).toLocaleString()}</span>
@@ -230,4 +230,3 @@ function updateCommentList(comments) {
     </div>
   `).join("");
 }
-

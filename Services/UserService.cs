@@ -59,15 +59,41 @@ public class UserService
     {
         var link = $"http://localhost:5000/api/verify?email={Uri.EscapeDataString(email)}&token={token}";
         var body = $"""
-    Hi {name},
+        <html>
+        <body style="background:#f4f4f4; padding:2rem; font-family:'Segoe UI', sans-serif;">
+            <div style="max-width:600px; margin:auto; background:#ffffff; border-radius:8px; padding:2rem; box-shadow:0 0 10px rgba(0,0,0,0.1);">
+            
+            <!-- Header with Icon -->
+            <div style="display:flex; align-items:center; margin-bottom:2rem;">
+                <img src="https://img.icons8.com/ios-filled/50/006d77/blog.png" alt="Blog Icon" style="width:40px; height:40px; margin-right:1rem;">
+                <h1 style="margin:0; color:#006d77; font-size:1.5rem;">My Blog</h1>
+            </div>
 
-    Thanks for registering!
+            <!-- Greeting -->
+            <h2 style="color:#333;">Hello {name},</h2>
+            <p style="font-size:1rem; color:#555; line-height:1.5;">
+                Welcome aboard! To finish setting up your account, please verify your email by clicking the button below.
+            </p>
 
-    Please verify your email by clicking here: <a href="{link}">Verify Email</a>
+            <!-- Verification Button -->
+            <p style="text-align:center; margin:2rem 0;">
+                <a href="{link}" style="background:#006d77; color:#ffffff; padding:0.75rem 1.5rem; border-radius:5px; text-decoration:none; font-weight:bold; display:inline-block;">
+                Verify Email
+                </a>
+            </p>
 
-    Cheers,  
-    My Blog Team
-    """;
+            <!-- Footer -->
+            <p style="font-size:0.875rem; color:#888;">
+                If you didn’t create this account, feel free to ignore this email.
+            </p>
+            <p style="margin-top:2rem; font-size:0.9rem; color:#444;">
+                Cheers,<br/>The My Blog Team
+            </p>
+            </div>
+        </body>
+        </html>
+        """;
+
 
         using var client = new SmtpClient("smtp.gmail.com")
         {

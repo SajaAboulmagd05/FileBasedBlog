@@ -11,7 +11,7 @@ const singularize = {
 
 let activeSection = 'users'; // tracks current section for modal
 
-// 🔧 Navigation Logic
+// Navigation Logic
 function navigate(section) {
   activeSection = section;
 
@@ -58,7 +58,7 @@ function navigate(section) {
   }
 }
 
-// 👥 User Renderer
+// User Renderer
 function fetchUsers(role) {
   document.getElementById('user-type-label').textContent = `Showing: ${role}s`;
 
@@ -88,10 +88,15 @@ function fetchUsers(role) {
     })
     .catch(() => showToast("error", "Unable to fetch users"));
 }
+const token = localStorage.getItem("authToken");
 
-// 🏷️ Tag Renderer
+// Tag Renderer
 function renderTags() {
-  fetch("/api/tags/all")
+    fetch("/api/tags/all", {
+      headers: {
+        'Authorization': `Bearer ${token}`
+      }
+    })
     .then(res => res.json())
     .then(tags => {
       const totalTags = tags.length;
@@ -109,7 +114,12 @@ function renderTags() {
       document.getElementById('tag-list').innerHTML = tags.map(tag => `
         <tr>
           <td>${tag.name}</td>
-          <td>${tag.associatedPosts.length}</td>
+          <td>
+            <div class="posts-cell">
+              <span class="post-count">${tag.associatedPosts.length}</span>
+              <button class="show-posts-btn" >Show Posts</button>
+            </div>
+          </td>
           <td>
             <button class="role-btn">Edit</button>
             <button class="delete-btn">Delete</button>
@@ -119,9 +129,13 @@ function renderTags() {
     });
 }
 
-// 🗂️ Category Renderer
+// Category Renderer
 function renderCategories() {
-  fetch("/api/categories/all")
+      fetch("/api/categories/all", {
+      headers: {
+        'Authorization': `Bearer ${token}`
+      }
+    })
     .then(res => res.json())
     .then(categories => {
       const totalCategories = categories.length;
@@ -139,8 +153,12 @@ function renderCategories() {
       document.getElementById('category-list').innerHTML = categories.map(c => `
         <tr>
           <td>${c.name}</td>
-          <td>${c.associatedPosts.length}</td>
-          <td>${c.description}</td>
+          <td>
+            <div class="posts-cell">
+              <span class="post-count">${c.associatedPosts.length}</span>
+              <button class="show-posts-btn" >Show Posts</button>
+            </div>
+          </td>
           <td>
             <button class="role-btn">Edit</button>
             <button class="delete-btn">Delete</button>
@@ -150,7 +168,7 @@ function renderCategories() {
     });
 }
 
-// 🔘 Modal Logic
+// Modal Logic
 function openModal(type) {
   console.log(`Opening modal for type: ${type}, activeSection: ${activeSection}`);
   const modalContent = document.getElementById("modal-form-content");
@@ -209,9 +227,16 @@ function openModal(type) {
     if (singularize[type].toLowerCase() === "category") endpoint = "/api/categories/add";
 
     try {
-      const res = await fetch(endpoint, { method: "POST", body: formData });
+      const res = await fetch(endpoint, {
+      method: "POST",
+      body: formData,
+      headers: {
+        "Authorization": `Bearer ${localStorage.getItem("authToken")}`
+      }
+    });
+
       if (res.ok) {
-        showToast("success", `${capitalize(type)} created!`);
+        showToast("success", `${singularize[type]} created!`);
         form.reset();
         document.getElementById("modal-toggle").checked = false;
         if (singularize[type].toLowerCase() === "user") {
@@ -253,8 +278,13 @@ function openModal(type) {
     }
   });
 }
+// Default View + Add Button Logic
+navigate("users");
 
-// 🍞 Toast Logic
+document.getElementById("add-btn").addEventListener("click", () => {
+  openModal(activeSection);
+});
+//  Toast Logic
 function showToast(type, message = "") {
   const toast = document.getElementById(`${type}-toast`);
   if (message) toast.querySelector(".message").textContent = message;
@@ -268,12 +298,7 @@ function showToast(type, message = "") {
   }, 3000);
 }
 
-// 🚀 Default View + Add Button Logic
-navigate("users");
 
-document.getElementById("add-btn").addEventListener("click", () => {
-  openModal(activeSection);
-});
 
 function openRoleModal(email, currentRole) {
   const modalContent = document.getElementById("modal-form-content");
@@ -354,3 +379,46 @@ function openDeleteModal(email) {
     }
   });
 }
+
+function parseToken(token) {
+  try {
+    return JSON.parse(atob(token.split('.')[1]));
+  } catch {
+    return {};
+  }
+}
+
+//rendering of nav menu according to user intials 
+const claims = token ? parseToken(token) : {};
+const userRole = claims.role; //  "Admin"
+const userName = claims.name; // for avatar initials
+const userInitials = claims.userInitials || "SA";
+
+document.addEventListener("DOMContentLoaded", () => {
+  
+  // Show avatar + initials
+  const avatar = document.getElementById("user-menu");
+  document.getElementById("user-avatar").textContent = userInitials;
+  avatar.classList.remove("hidden");
+  document.getElementById("dashboard-link").classList.remove("hidden");
+  document.getElementById("postManage-link").classList.remove("hidden");
+});
+
+
+//handle the branding menu 
+document.addEventListener("DOMContentLoaded", () => {
+  const avatar = document.getElementById("user-avatar");
+  const dropdown = document.getElementById("user-dropdown");
+
+  // Toggle dropdown on avatar click
+  avatar.addEventListener("click", () => {
+    dropdown.classList.toggle("hidden");
+  });
+
+  // Close dropdown if clicked elsewhere
+  document.addEventListener("click", (e) => {
+    if (!avatar.contains(e.target) && !dropdown.contains(e.target)) {
+      dropdown.classList.add("hidden");
+    }
+  });
+});

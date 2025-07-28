@@ -1,27 +1,49 @@
 {
-    "Id": "acb495a1-63b1-47eb-82a9-62e34c5fe6d9",
-    "Title": "Getting Started with React Hooks: A Practical Guide",
-    "Description": "Learn how to modernize your React components with Hooks. This guide covers useState, useEffect, and custom hooks with practical examples you can use in your projects today.",
-    "Slug": "getting-started-with-react-hooks-a-practical-guide",
-    "Author": "janey",
-    "AuthorId": "d103d961-6373-4560-9cae-112e62114e66",
-    "CreatedAt": "2025-07-27T14:14:47.01727+03:00",
-    "UpdatedAt": null,
-    "ScheduledAt": null,
-    "ReadingTime": "2 min read",
-    "CoverImage": "assets/cover.jpg",
-    "LikeCount": 0,
-    "LikedByUserIds": [],
-    "Comments": [],
-    "Status": 1,
-    "Tags": [
-        "dotnet-core",
-        "minimal-api"
-    ],
-    "Categories": [
-        "Design",
-        "Development",
-        "Tutorials"
-    ],
-    "IsPublished": true
+  "Id": "acb495a1-63b1-47eb-82a9-62e34c5fe6d9",
+  "Title": "Getting Started with React Hooks: A Practical Guide",
+  "Description": "Learn how to modernize your React components with Hooks. This guide covers useState, useEffect, and custom hooks with practical examples you can use in your projects today.",
+  "Slug": "getting-started-with-react-hooks-a-practical-guide",
+  "Author": "janey",
+  "AuthorId": "d103d961-6373-4560-9cae-112e62114e66",
+  "CreatedAt": "2025-07-27T14:14:47.01727+03:00",
+  "UpdatedAt": null,
+  "ScheduledAt": null,
+  "ReadingTime": "2 min read",
+  "CoverImage": "assets/cover.jpg",
+  "LikeCount": 2,
+  "LikedByUserIds": [
+    "saja.aboulmagd05@eng-st.cu.edu.eg",
+    "sajanabil74@gmail.com"
+  ],
+  "Comments": [
+    {
+      "Id": "c6055df8-c8ef-4fce-ac98-f792c7840c97",
+      "SubscriberID": "badr",
+      "Content": "he can add anything",
+      "CreatedAt": "2025-07-28T11:12:36.3655114+03:00"
+    },
+    {
+      "Id": "d5ad7f77-1600-40b7-8224-c9da4fa71f05",
+      "SubscriberID": "Saja Aboulmagd",
+      "Content": "this is saja here",
+      "CreatedAt": "2025-07-28T13:38:41.7570432+03:00"
+    },
+    {
+      "Id": "f5ab28a5-5d49-4eed-a925-f014f5db095b",
+      "SubscriberID": "badr",
+      "Content": "can i add anything",
+      "CreatedAt": "2025-07-28T14:15:21.3912939+03:00"
+    }
+  ],
+  "Status": 1,
+  "Tags": [
+    "dotnet-core",
+    "minimal-api"
+  ],
+  "Categories": [
+    "Design",
+    "Development",
+    "Tutorials"
+  ],
+  "IsPublished": true
 }
