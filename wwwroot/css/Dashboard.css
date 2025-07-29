@@ -120,7 +120,8 @@
 .stat-card.scheduled { background-color: #e0ecff; color: var(--dark-blue); }
 .stat-card.posted   { background-color: #d8ffd7; color: var(--dark-blue); }
 
-#user-type-label {
+#user-type-label ,
+#post-type-label{
   margin: 20px 0 10px;
   font-size: 18px;
   font-weight: bold;
@@ -154,7 +155,8 @@
 
 .role-btn,
 .delete-btn,
-.show-posts-btn {
+.show-posts-btn,
+.edit-btn {
   padding: 6px 10px;
   margin-right: 6px;
   border: none;

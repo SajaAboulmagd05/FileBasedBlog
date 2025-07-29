@@ -11,7 +11,8 @@
       "generate-my-own-slug",
       "title-this-please",
       "getting-started-with-react-hooks-a-practical-guide",
-      "modern-css-layouts-flexbox-grid-and-custom-properties-in-2024"
+      "modern-css-layouts-flexbox-grid-and-custom-properties-in-2024",
+      "the-magic-of-css-grid-building-responsive-layouts-without-headaches"
     ]
   },
   {
@@ -39,15 +40,8 @@
       "generate-my-own-slug",
       "getting-started-with-react-hooks-a-practical-guide",
       "building-a-restful-api-with-nodejs-and-express-best-practices",
-      "modern-css-layouts-flexbox-grid-and-custom-properties-in-2024"
-    ]
-  },
-  {
-    "Id": "0c964ce6-9dce-461b-855b-cddf71d4053b",
-    "Name": "News",
-    "Description": "Latest updates and announcements related to the tech and blog industry.",
-    "AssociatedPosts": [
-      "lets-try-something-new-here"
+      "modern-css-layouts-flexbox-grid-and-custom-properties-in-2024",
+      "the-magic-of-css-grid-building-responsive-layouts-without-headaches"
     ]
   },
   {
@@ -60,6 +54,12 @@
     "Id": "be7e8cce-2d37-483b-b0b4-d4f026740dcd",
     "Name": "Reading ",
     "Description": "this is just a trial ",
+    "AssociatedPosts": []
+  },
+  {
+    "Id": "0c9ff9b1-8f9f-48b5-be89-d9f301e48d0d",
+    "Name": "Business",
+    "Description": "welcome to the world of economy and finance ",
     "AssociatedPosts": []
   }
 ]

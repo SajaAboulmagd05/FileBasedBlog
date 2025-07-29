@@ -1,21 +1,35 @@
-const uploadBox = document.querySelector(".upload-box"),
-previewImg = uploadBox.querySelector("img"),
-fileInput = uploadBox.querySelector("input"),
-widthInput = document.querySelector(".width input"),
-heightInput = document.querySelector(".height input"),
-aspectRatioCheckbox = document.querySelector("#aspect-ratio-checkbox");
 
 const MAX_WIDTH = 800; // Maximum allowed width
 
 
-// Toggle between Manage Posts and Create Post
+const uploadBox = document.getElementById("upload-box"),
+  previewImg = document.getElementById("preview-img"),
+  fileInput = document.getElementById("cover-image"),
+  placeholderIcon = document.getElementById("placeholder-icon"),
+  uploadMessage = document.getElementById("upload-message");
+
+fileInput.addEventListener("change", (e) => {
+  const file = e.target.files[0];
+  if (!file) return;
+
+  // Show preview
+  previewImg.src = URL.createObjectURL(file);
+  previewImg.style.display = "block";
+
+  // Hide placeholder icon/message
+  placeholderIcon.style.display = "none";
+  uploadMessage.style.display = "none";
+});
+
+uploadBox.addEventListener("click", () => fileInput.click());
+
+
 function navigate(section) {
   const stats = document.getElementById("post-stats");
   const label = document.getElementById("post-type-label");
   const table = document.querySelector(".user-table");
   const createSection = document.getElementById("create-post-section");
   const sectionTitle = document.getElementById("section-title");
-  
 
   if (section === "manage") {
     stats.style.display = "flex";
@@ -23,14 +37,42 @@ function navigate(section) {
     table.style.display = "table";
     createSection.style.display = "none";
     sectionTitle.textContent = "Manage Posts";
-   
+
+    // Bind post status box click events
+    document.querySelectorAll('.stat-card').forEach(card => {
+      const classList = card.classList;
+      let statusEnum = null;
+
+      if (classList.contains("draft")) statusEnum = 0;
+      else if (classList.contains("posted")) statusEnum = 1;
+      else if (classList.contains("scheduled")) statusEnum = 2;
+
+      card.addEventListener("click", () => {
+        if (statusEnum === null) {
+          showToast("error", "Invalid post status");
+          return;
+        }
+
+        loadPostsByStatus(statusEnum);
+        updatePostLabel(getStatusText(statusEnum));
+
+        // Optional: highlight selected card
+        document.querySelectorAll(".stat-card").forEach(c => c.classList.remove("active"));
+        card.classList.add("active");
+      });
+    });
+
+
+    // Trigger default view (e.g. Drafts)
+    loadPostsByStatus(0);
+    updatePostLabel("Drafts");
+
   } else if (section === "create") {
     stats.style.display = "none";
     label.style.display = "none";
     table.style.display = "none";
     createSection.style.display = "block";
     sectionTitle.textContent = "Create Post";
-  
 
     // Initialize EasyMDE once
     if (!window.easyMDE) {
@@ -53,10 +95,16 @@ function navigate(section) {
       });
     }
 
-    // ✅ Load tags/categories
+    // Load tags/categories
     loadTags();
     loadCategories();
   }
+}
+
+
+//update the showing label above the table 
+function updatePostLabel(label) {
+  document.getElementById("post-type-label").textContent = `Showing: ${label}`;
 }
 
 // Hook tab buttons on DOM load
@@ -66,33 +114,6 @@ window.addEventListener("DOMContentLoaded", () => {
   // Optional: default to manage tab
   navigate("manage");
 });
-
-
-const loadFile = (e) => {
-    const file = e.target.files[0]; 
-    if (!file) return;
-
-    previewImg.src = URL.createObjectURL(file); 
-    previewImg.addEventListener("load", () => {
-        let originalWidth = previewImg.naturalWidth;
-        let originalHeight = previewImg.naturalHeight;
-
-        // Apply max width constraint
-        if (originalWidth > MAX_WIDTH) {
-            let scaleFactor = MAX_WIDTH / originalWidth;
-            originalWidth = MAX_WIDTH;
-            originalHeight = Math.floor(originalHeight * scaleFactor);
-        }
-
-
-        document.querySelector(".wrapper")?.classList.add("active");
-    });
-};
-
-fileInput.addEventListener("change", loadFile);
-uploadBox.addEventListener("click", () => fileInput.click());
-
-
 
 
 
@@ -288,10 +309,14 @@ document.getElementById("post-form").addEventListener("submit", async function (
 // Global variables
 let currentFilter = 'Draft';
 
+
+
 // Get user data from localStorage
+// Make sure you store this during login
 function getCurrentUser() {
   return {
-    id: localStorage.getItem('userId'), // Make sure you store this during login
+    token: localStorage.getItem("authToken"),
+    id: localStorage.getItem('userId'), 
     role: localStorage.getItem('userRole'),
     name: localStorage.getItem('userName'),
     initials: localStorage.getItem('userInitials')
@@ -302,7 +327,7 @@ function getCurrentUser() {
 async function loadPostStats() {
   try {
     const user = getCurrentUser();
-    const url = user.role === 'admin'
+    const url = user.role === 'Admin'
       ? `/api/posts/stats?all=true`
       : `/api/posts/stats`;
 
@@ -313,9 +338,10 @@ async function loadPostStats() {
 
     const stats = await response.json();
 
-    document.querySelector('.stat-card.draft p').textContent = stats.drafts || 0;
-    document.querySelector('.stat-card.scheduled p').textContent = stats.scheduled || 0;
-    document.querySelector('.stat-card.posted p').textContent = stats.posted || 0;
+  document.querySelector('.stat-card.draft p').textContent = stats.draftPosts || 0;
+  document.querySelector('.stat-card.scheduled p').textContent = stats.scheduledPosts || 0;
+  document.querySelector('.stat-card.posted p').textContent = stats.publishedPosts || 0;
+
 
     return stats;
   } catch (error) {
@@ -325,11 +351,24 @@ async function loadPostStats() {
   }
 }
 
+//mapping the vlaues to the enum values
+const statusLabels = {
+  0: "draft",
+  1: "published",
+  2: "scheduled"
+};
+
+function getStatusText(statusEnum) {
+  return statusLabels[statusEnum] || "unknown";
+}
+
+
+
 // Load posts by status
 async function loadPostsByStatus(status) {
   try {
     const user = getCurrentUser();
-    const url = user.role === 'admin'
+    const url = user.role === 'Admin'
       ? `/api/posts/status?status=${status}&all=true`
       : `/api/posts/status?status=${status}`;
 
@@ -340,7 +379,7 @@ async function loadPostsByStatus(status) {
 
     const posts = await response.json();
     renderPostsTable(posts);
-    updatePostLabel(status);
+    //updatePostLabel(status);
     currentFilter = status;
 
     return posts;
@@ -356,19 +395,26 @@ async function loadPostsByStatus(status) {
 function renderPostsTable(posts) {
   const tableBody = document.getElementById('post-list');
   const user = getCurrentUser();
-  const isAdmin = user.role === 'admin';
+  const isAdmin = user.role === 'Admin';
   
+
   if (posts.length === 0) {
     tableBody.innerHTML = '<tr><td colspan="5">No posts found</td></tr>';
     return;
   }
-  
-  tableBody.innerHTML = posts.map(post => `
+  console.log("Raw posts:", posts);
+ 
+  tableBody.innerHTML = posts.map(post => {
+  const statusText = getStatusText(post.status);
+  const displayText = statusText.charAt(0).toUpperCase() + statusText.slice(1);
+
+  return `
     <tr class="${isAdmin || post.authorId === user.id ? '' : 'read-only'}">
       <td>${post.title}</td>
       <td>${post.author || 'Unknown'}</td>
-      <td>${formatDate(post.date)}</td>
-      <td><span class="status-badge ${post.status.toLowerCase()}">${post.status}</span></td>
+      <td>${new Date(post.createdAt).toLocaleDateString()}</td>
+      <td>${post.likeCount}</td>
+      <td>${post.comments.length}</td>
       <td class="actions">
         ${isAdmin || post.authorId === user.id ? `
           <button class="edit-btn" data-id="${post.id}"><i class="fas fa-edit"></i></button>
@@ -376,15 +422,66 @@ function renderPostsTable(posts) {
         ` : ''}
       </td>
     </tr>
-  `).join('');
+  `;
+}).join('');
+
   
   // Add event listeners to buttons
-  document.querySelectorAll('.edit-btn').forEach(btn => {
-    btn.addEventListener('click', () => editPost(btn.dataset.id));
-  });
-  
+  // document.querySelectorAll('.edit-btn').forEach(btn => {
+  //   btn.addEventListener('click', () => editPost(btn.dataset.id));
+  // });
   document.querySelectorAll('.delete-btn').forEach(btn => {
-    btn.addEventListener('click', () => confirmDeletePost(btn.dataset.id));
+  const postId = btn.dataset.id;
+  const post = posts.find(p => p.id === postId); // match the post
+
+  if (post) {
+    btn.addEventListener('click', () => openDeleteModal(post));
+  }
+});
+
+ 
+}
+
+
+//update this to be delete post not user 
+function openDeleteModal(post) {
+  const content = document.getElementById("delete-form-content");
+  content.innerHTML = `
+    <h2>Confirm Deletion</h2>
+
+    <div className="modal-content">
+     
+      <p>Are you sure you want to delete <strong>${post.title}</strong>? This action cannot be undone.</p>
+
+        <form id="delete-form">
+          <button type="submit" style="background:#f44336;">Yes, Delete</button>
+        </form>
+    </div>
+  `;
+  document.getElementById("delete-toggle").checked = true;
+
+  const form = document.getElementById("delete-form");
+  form.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const formData = new FormData(form);
+
+    try {
+      const res = await fetch("/api/users/delete", {
+        method: "POST",
+        body: formData
+      });
+
+      if (res.ok) {
+        showToast("success", "Post deleted!");
+        document.getElementById("delete-toggle").checked = false;
+        
+      } else {
+        const error = await res.text();
+        showToast("error", error);
+      }
+    } catch {
+      showToast("error", "Network error");
+    }
   });
 }
 
@@ -392,13 +489,7 @@ function renderPostsTable(posts) {
 async function initPostManagement() {
   await loadPostStats();
   await loadPostsByStatus(currentFilter);
-  
-  // Add event listeners to stat cards
-  document.querySelectorAll('.stat-card').forEach(card => {
-    const status = card.classList.contains('draft') ? 'Draft' :
-                  card.classList.contains('scheduled') ? 'Scheduled' : 'Posted';
-    card.addEventListener('click', () => filterPosts(status));
-  });
+
 }
 
 // Update your DOMContentLoaded
@@ -408,11 +499,6 @@ document.addEventListener('DOMContentLoaded', () => {
   navigate("manage");
 });
 
-function formatDate(dateStr) {
-  const date = new Date(dateStr);
-  const options = { year: 'numeric', month: 'short', day: 'numeric' };
-  return date.toLocaleDateString(undefined, options);
-}
 
 
 // 🍞 Toast Logic
@@ -428,3 +514,5 @@ function showToast(type, message = "") {
     toast.classList.add("hidden");
   }, 3000);
 }
+
+

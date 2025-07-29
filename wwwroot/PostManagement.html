@@ -4,6 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Posts Admin Panel</title>
+  <link rel="icon" href="css/favicon.ico" />
    <!-- ✅ EasyMDE Markdown Editor styles -->
   <link rel="stylesheet" href="https://unpkg.com/easymde/dist/easymde.min.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
@@ -48,13 +49,13 @@
 
             <!-- Post Stat Boxes -->
             <div class="stats" id="post-stats">
-                <div class="stat-card draft" onclick="filterPosts('Draft')">
+                <div class="stat-card draft" >
                     <h3>Drafts</h3><p>0</p>
                 </div>
-                <div class="stat-card scheduled" onclick="filterPosts('Scheduled')">
+                <div class="stat-card scheduled" >
                     <h3>Scheduled</h3><p>0</p>
                 </div>
-                <div class="stat-card posted" onclick="filterPosts('Posted')">
+                <div class="stat-card posted" >
                     <h3>Posted</h3><p>0</p>
                 </div>
             </div>
@@ -67,8 +68,9 @@
                     <tr>
                     <th>Title</th>
                     <th>Author</th>
-                    <th>Date</th>
-                    <th>Status</th>
+                    <th>Creation Date</th>
+                    <th>Likes</th>
+                    <th>Comments</th>
                     <th>Actions</th>
                     </tr>
                 </thead>
@@ -97,11 +99,13 @@
                     </div>
 
                     <!-- Media Upload and resize-->
-                    <div class="upload-box">
-                        <input type="file" id="cover-image" accept="image/*" name="coverImage" hidden required>
-                        <img src="css/icons/download.png" alt="">
-                        <p>This image will appear as the post's cover.</p>
+                    <div class="upload-box" id="upload-box">
+                      <input type="file" id="cover-image" accept="image/*" name="coverImage" hidden required>
+                      <img id="placeholder-icon" src="css/icons/download.png" alt="Upload Icon">
+                      <img id="preview-img" style="display: none;" />
+                      <p id="upload-message">This image will appear as the post's cover.</p>
                     </div>
+
 
                     <div class="form-group">
                         <label for="post-files">Attachments</label>

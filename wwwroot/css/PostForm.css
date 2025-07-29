@@ -75,7 +75,7 @@ form {
 }
 
 
-/* ✅ Side-by-Side Tag and Category Selects */
+/* Side-by-Side Tag and Category Selects */
 .tags-categories {
   display: flex;
   justify-content: space-between;
@@ -107,7 +107,7 @@ form {
 
 
 
-/* ✅ Upload Box Visual */
+/* Upload Box Visual */
 .upload-box {
   background: #f7f7f7;
   border: dashed 2px var(--light-blue);
@@ -118,7 +118,24 @@ form {
   font-size: 0.95rem;
   cursor: pointer;
   transition: background 0.2s ease;
+  min-height: 300px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
+
+.upload-box img#preview-img {
+  max-width: 100%;
+  width: 400px;
+  height: auto;
+  object-fit: contain;
+  margin-bottom: 1rem;
+  border-radius: 6px;
+  box-shadow: var(--box-shadow);
+}
+
+
 
 .upload-box:hover {
   background: #e0f7fa;
@@ -129,7 +146,7 @@ form {
   margin-bottom: 0.5rem;
 }
 
-/* ✅ Publishing Options */
+/* Publishing Options */
 .publish-options-container {
   background: #f5faff;
   border: var(--border);
@@ -163,7 +180,7 @@ form {
   border-radius: 6px;
 }
 
-/* ✅ Form Actions */
+/* Form Actions */
 .form-actions {
   display: flex;
   gap: 1rem;

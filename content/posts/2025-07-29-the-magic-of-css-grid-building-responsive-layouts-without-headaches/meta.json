@@ -1,0 +1,26 @@
+{
+    "Id": "8e0e1330-3f29-44f9-b0a1-2803610f201b",
+    "Title": "The Magic of CSS Grid: Building Responsive Layouts Without Headaches",
+    "Description": "Discover how CSS Grid simplifies layout management and creates fluid, responsive designs. Learn the basics, dive into code snippets, and see how Grid compares to Flexbox in real-world use cases.",
+    "Slug": "the-magic-of-css-grid-building-responsive-layouts-without-headaches",
+    "Author": "Saja Nabeel",
+    "AuthorId": "579666cb-d7c8-48b0-8b01-65ed03aea639",
+    "CreatedAt": "2025-07-29T17:00:59.9886275+03:00",
+    "UpdatedAt": null,
+    "ScheduledAt": null,
+    "ReadingTime": "1 min read",
+    "CoverImage": "assets/cover.png",
+    "LikeCount": 0,
+    "LikedByUserIds": [],
+    "Comments": [],
+    "Status": 1,
+    "Tags": [
+        "cross development",
+        "web-development"
+    ],
+    "Categories": [
+        "Development",
+        "Tutorials"
+    ],
+    "IsPublished": true
+}

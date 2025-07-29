@@ -288,7 +288,7 @@ app.MapPost("/api/login", async (HttpRequest request, UserService userService, J
     await userService.LoginUser(request, jwt));
 
 
-//api to get post stats for each user for admin display all 
+//api to get post stats for each user for admin display all for authors display their own posts 
 app.MapGet("/api/posts/stats", async (HttpContext context, PostService postService) =>
 {
     var userId = context.User.FindFirst("UserID")?.Value;

@@ -28,7 +28,8 @@
       "i-want-to-create-this-on-own-bismillah-1",
       "generate-my-own-slug",
       "the-power-of-code-reviews-in-software-development",
-      "modern-css-layouts-flexbox-grid-and-custom-properties-in-2024"
+      "modern-css-layouts-flexbox-grid-and-custom-properties-in-2024",
+      "the-magic-of-css-grid-building-responsive-layouts-without-headaches"
     ]
   },
   {
@@ -47,7 +48,9 @@
   {
     "Id": "e23a4814-9fe7-4872-965f-02fb8c93165b",
     "Name": "cross development",
-    "AssociatedPosts": []
+    "AssociatedPosts": [
+      "the-magic-of-css-grid-building-responsive-layouts-without-headaches"
+    ]
   },
   {
     "Id": "61006a31-6bfe-41b8-ae33-bb881361dd97",
