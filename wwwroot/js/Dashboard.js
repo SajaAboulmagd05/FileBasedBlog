@@ -467,10 +467,10 @@ function openEditModal(type, item) {
       <h2>Edit Category</h2>
       <form id="edit-category-form">
         <input type="hidden" name="id" value="${item.id}" />
-        <label for="edit-category-name">Category Name</label>
-        <input type="text" name="name" placeholder="Category Name" value="${item.name}" required />
-        <label for="edit-description">Description</label>
-        <textarea name="description" placeholder="Description" class="multi-line-input" required>${item.description}</textarea>
+        <label for="categoryName">Category Name</label>
+        <input type="text" name="name" id="categoryName" placeholder="Category Name" value="${item.name}" required />
+        <label for="editDescription">Description</label>
+        <textarea name="description" id="editDescription" placeholder="Description" class="multi-line-input" required>${item.description}</textarea>
         <button type="submit">Update Category</button>
       </form>
     `;
