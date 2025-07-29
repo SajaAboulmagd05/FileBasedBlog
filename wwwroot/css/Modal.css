@@ -204,3 +204,12 @@
   opacity: 1;
   pointer-events: auto;
 }
+
+form label {
+  font-weight:200;
+  font-size: larger;
+  margin-top: 10px;
+  display: block;
+  color: var(--light-blue);
+  text-align: left;
+}

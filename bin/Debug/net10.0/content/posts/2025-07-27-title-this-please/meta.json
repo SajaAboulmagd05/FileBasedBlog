@@ -24,8 +24,7 @@
   ],
   "Status": 1,
   "Tags": [
-    "dotnet-core",
-    "file-based-storage"
+    "dotnet-core"
   ],
   "Categories": [
     "Design",

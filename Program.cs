@@ -73,6 +73,7 @@ builder.Services.AddSingleton<JwtService>();
 builder.Services.AddSingleton<LikeCommentService>();
 builder.Services.AddSingleton<TagService>();
 builder.Services.AddSingleton<CategoryService>();
+// builder.Services.AddSingleton<PostFileManager>();
 var app = builder.Build();
 
 //to change the slug 
@@ -412,6 +413,27 @@ tagGroup.MapGet("/all", async (TagService tagService) =>
     return Results.Ok(tags);
 });
 
+// Update Tag
+tagGroup.MapPost("/update", async (HttpContext context, TagService service) =>
+{
+    var form = await context.Request.ReadFormAsync();
+    var id = form["id"].ToString();
+    var name = form["name"].ToString();
+    var result = await service.UpdateTagAsync(id, name);
+    return Results.Ok(result);
+});
+
+// Delete Tag
+tagGroup.MapPost("/delete", async (HttpContext context, TagService service) =>
+{
+    var form = await context.Request.ReadFormAsync();
+    var id = form["id"].ToString();
+
+    var result = await service.DeleteTagAsync(id);
+    return Results.Ok(result);
+});
+
+
 var categoryGroup = app.MapGroup("/api/categories").RequireAuthorization();
 
 // Add Category
@@ -440,5 +462,28 @@ categoryGroup.MapGet("/all", async (CategoryService categoryService) =>
     var categories = await categoryService.GetAllCategoriesAsync();
     return Results.Ok(categories);
 });
+
+//Update Category
+categoryGroup.MapPost("/update", async (HttpContext context, CategoryService service) =>
+{
+    var form = await context.Request.ReadFormAsync();
+    var id = form["id"].ToString();
+    var name = form["name"].ToString();
+    var description = form["description"].ToString();
+
+    var result = await service.UpdateCategoryAsync(id, name, description);
+    return Results.Ok(result);
+});
+
+// Delete Category
+categoryGroup.MapPost("/delete", async (HttpContext context, CategoryService service) =>
+{
+    var form = await context.Request.ReadFormAsync();
+    var id = form["id"].ToString();
+
+    var result = await service.DeleteCategoryAsync(id);
+    return Results.Ok(result);
+});
+
 
 app.Run();

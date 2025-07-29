@@ -23,9 +23,7 @@
     }
   ],
   "Status": 1,
-  "Tags": [
-    "file-based-storage"
-  ],
+  "Tags": [],
   "Categories": [
     "Design",
     "Tutorials"

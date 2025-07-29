@@ -8,6 +8,11 @@ const singularize = {
   tags: 'Tag',
   categories: 'Category'
 };
+const pluralize = {
+  user: 'users',
+  tag: 'tags',
+  category: 'categories'
+};
 
 let activeSection = 'users'; // tracks current section for modal
 
@@ -110,14 +115,14 @@ function renderTags() {
           <h3>Total Tag Posts</h3><p>${totalPosts}</p>
         </div>
       `;
-
+      tags.sort((a, b) => a.name.localeCompare(b.name));
       document.getElementById('tag-list').innerHTML = tags.map(tag => `
         <tr>
           <td>${tag.name}</td>
           <td>
             <div class="posts-cell">
               <span class="post-count">${tag.associatedPosts.length}</span>
-              <button class="show-posts-btn" >Show Posts</button>
+              <!-- <button class="show-posts-btn" >Show Posts</button>-->
             </div>
           </td>
           <td>
@@ -126,6 +131,14 @@ function renderTags() {
           </td>
         </tr>
       `).join('');
+          // Bind Edit/Delete buttons for tags
+    document.querySelectorAll("#tag-list .role-btn").forEach((btn, i) => {
+      btn.addEventListener("click", () => openEditModal("tag", tags[i]));
+    });
+    document.querySelectorAll("#tag-list .delete-btn").forEach((btn, i) => {
+      btn.addEventListener("click", () => openTagCategoryDeleteModal("tag", tags[i]));
+    });
+
     });
 }
 
@@ -149,14 +162,14 @@ function renderCategories() {
           <h3>Total Category Posts</h3><p>${totalPosts}</p>
         </div>
       `;
-
+      categories.sort((a, b) => a.name.localeCompare(b.name));
       document.getElementById('category-list').innerHTML = categories.map(c => `
         <tr>
           <td>${c.name}</td>
           <td>
             <div class="posts-cell">
               <span class="post-count">${c.associatedPosts.length}</span>
-              <button class="show-posts-btn" >Show Posts</button>
+              <!--<button class="show-posts-btn" >Show Posts</button>-->
             </div>
           </td>
           <td>
@@ -165,6 +178,14 @@ function renderCategories() {
           </td>
         </tr>
       `).join('');
+      // Bind Edit/Delete buttons for categories
+      document.querySelectorAll("#category-list .role-btn").forEach((btn, i) => {
+        btn.addEventListener("click", () => openEditModal("category", categories[i]));
+      });
+      document.querySelectorAll("#category-list .delete-btn").forEach((btn, i) => {
+        btn.addEventListener("click", () => openTagCategoryDeleteModal("category", categories[i]));
+      });
+
     });
 }
 
@@ -200,7 +221,8 @@ function openModal(type) {
       <h2>Create New Category</h2>
       <form id="create-category">
         <input type="text" name="name" placeholder="Category Name" required />
-        <input type="text" name="description" placeholder="Short Description" required />
+        <textarea type="text" name="description" placeholder="Short Description" class="multi-line-input" required></textarea>
+        <!--<input type="text" name="description" placeholder="Short Description" required />-->
         <button type="submit">Create Category</button>
       </form>
     `;
@@ -422,3 +444,115 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 });
+
+
+//edit modal for tags and categories
+function openEditModal(type, item) {
+  const modalContent = document.getElementById("modal-form-content");
+  document.getElementById("modal-toggle").checked = true;
+
+  let formHTML = "";
+
+  if (type === "tag") {
+    formHTML = `
+      <h2>Edit Tag</h2>
+      <form id="edit-tag-form">
+        <input type="hidden" name="id" value="${item.id}" />
+        <input type="text" name="name" placeholder="Tag Name" value="${item.name}" required />
+        <button type="submit">Update Tag</button>
+      </form>
+    `;
+  } else if (type === "category") {
+    formHTML = `
+      <h2>Edit Category</h2>
+      <form id="edit-category-form">
+        <input type="hidden" name="id" value="${item.id}" />
+        <label for="edit-category-name">Category Name</label>
+        <input type="text" name="name" placeholder="Category Name" value="${item.name}" required />
+        <label for="edit-description">Description</label>
+        <textarea name="description" placeholder="Description" class="multi-line-input" required>${item.description}</textarea>
+        <button type="submit">Update Category</button>
+      </form>
+    `;
+  }
+
+  modalContent.innerHTML = formHTML;
+
+  const form = modalContent.querySelector("form");
+  form.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const formData = new FormData(form);
+
+    const endpoint =
+      type === "tag" ? "/api/tags/update" :
+      type === "category" ? "/api/categories/update" : "";
+
+    try {
+      const res = await fetch(endpoint, {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("authToken")}`
+        },
+        body: formData
+      });
+
+      if (res.ok) {
+        showToast("success", `${type.charAt(0).toUpperCase() + type.slice(1)} updated!`);
+        document.getElementById("modal-toggle").checked = false;
+        navigate(pluralize[type]);
+      } else {
+        const error = await res.text();
+        showToast("error", error);
+      }
+    } catch {
+      showToast("error", "Network error");
+    }
+  });
+}
+
+
+//delete modal for tags and categories 
+function openTagCategoryDeleteModal(type, item) {
+  const content = document.getElementById("delete-form-content");
+  document.getElementById("delete-toggle").checked = true;
+
+  content.innerHTML = `
+    <h2>Confirm Deletion</h2>
+    <p>Delete ${type}: <strong>${item.name}</strong>?</p>
+    <form id="delete-form">
+      <input type="hidden" name="id" value="${item.id}" />
+      <button type="submit" style="background:#f44336;">Yes, Delete</button>
+    </form>
+  `;
+
+  const form = content.querySelector("form");
+  form.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const formData = new FormData(form);
+
+    const endpoint =
+      type === "tag" ? "/api/tags/delete" :
+      type === "category" ? "/api/categories/delete" : "";
+
+    try {
+      const res = await fetch(endpoint, {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("authToken")}`
+        },
+        body: formData
+      });
+
+      if (res.ok) {
+        showToast("success", `${type.charAt(0).toUpperCase() + type.slice(1)} deleted!`);
+        document.getElementById("delete-toggle").checked = false;
+        navigate(pluralize[type]);
+      } else {
+        const error = await res.text();
+        showToast("error", error);
+      }
+    } catch {
+      showToast("error", "Network error");
+    }
+  });
+}
