@@ -2,7 +2,7 @@
   "UserID": "ef5668c6-ea1f-48f6-bfe9-17063ee79a85",
   "Email": "admin1@gmail.com",
   "Name": "admino",
-  "Role": "Editor",
+  "Role": "Author",
   "CreatedDate": "2025-07-22T12:19:13.2697894+03:00",
   "PasswordHash": "$2a$11$wRI0vm3llKj.dhCLcDvBfuVrWZ914IocqH0viPEHt4VTb8wY9IKt.",
   "IsSubscribedToNewsletter": true,

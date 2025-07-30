@@ -156,7 +156,8 @@
 .role-btn,
 .delete-btn,
 .show-posts-btn,
-.edit-btn {
+.edit-btn ,
+.status-btn{
   padding: 6px 10px;
   margin-right: 6px;
   border: none;
@@ -165,6 +166,11 @@
   font-size: 14px;
   font-family:homefont ;
 }
+
+td.actions {
+  white-space: nowrap;
+}
+
 
 .role-btn {
   background-color: var(--pink);
@@ -347,3 +353,7 @@ section{
   white-space: pre-wrap;
 }
 
+.edit-btn[disabled] {
+  opacity: 0.5;
+  cursor: not-allowed;
+}

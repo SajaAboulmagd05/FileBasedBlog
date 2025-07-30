@@ -213,6 +213,53 @@ public class PostService
     }
 
 
+    //needs revising 
+    public async Task<(bool success, string message)> UpdatePostAsync(IFormCollection form, string userId, string userName)
+    {
+        var oldSlug = form["oldSlug"].ToString().Trim();
+        var matchingDirectory = Directory.GetDirectories("content/posts")
+            .FirstOrDefault(d => d.EndsWith($"-{oldSlug}"));
+
+        if (matchingDirectory == null)
+            return (false, "Original post not found.");
+
+        var metaPath = Path.Combine(matchingDirectory, "meta.json");
+        var contentPath = Path.Combine(matchingDirectory, "content.md");
+
+        var post = JsonSerializer.Deserialize<Post>(await File.ReadAllTextAsync(metaPath));
+        if (post == null) return (false, "Unable to deserialize post metadata.");
+
+        // Update fields
+        post.Title = form["title"].ToString().Trim();
+        post.Description = form["description"].ToString().Trim();
+        var body = form["body"].ToString().Trim();
+
+        var slugInput = form["slug"].ToString().Trim();
+        post.Slug = string.IsNullOrWhiteSpace(slugInput)
+            ? GenerateSlug(post.Title)
+            : GenerateSlug(slugInput);
+
+        post.UpdatedAt = DateTime.Now;
+        post.Tags = form["tags"].ToList();
+        post.Categories = form["categories"].ToList();
+        post.ReadingTime = EstimateReadingTime(body);
+
+        // Optional updates: cover image, attached files
+        if (form.Files != null && form.Files.Any())
+        {
+            post.CoverImage = await SaveCoverImageAsync(form.Files["coverImage"], post.Slug, post.CreatedAt);
+            await HandleFileUploads(form, matchingDirectory);
+        }
+
+        await File.WriteAllTextAsync(contentPath, body);
+        var updatedMetadata = JsonSerializer.Serialize(post, new JsonSerializerOptions { WriteIndented = true });
+        await File.WriteAllTextAsync(metaPath, updatedMetadata);
+
+        _categoryTagService.UpdateCategoriesAndTags(post);
+
+        return (true, "Post updated successfully.");
+    }
+
 }
 
 

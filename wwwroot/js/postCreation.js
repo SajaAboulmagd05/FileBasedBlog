@@ -61,12 +61,40 @@ function navigate(section) {
         card.classList.add("active");
       });
     });
+    
+     const form = document.getElementById("post-form");
 
+  // Clear all fields
+  form.reset();
+  window.easyMDE?.value(""); // Clear markdown editor
+    // Wipe autosave + preview content
+  if (window.easyMDE?.options?.autosave?.uniqueId) {
+    localStorage.removeItem("easyMDE-autosave-" + window.easyMDE.options.autosave.uniqueId);
+  }
 
+  // Clear preview layer manually
+  const livePreview = document.querySelector('.editor-preview');
+  if (livePreview) {
+    livePreview.innerHTML = ""; // Wipe ghost content
+  }
+  document.querySelectorAll(".full-preview-modal").forEach(modal => modal.remove());
+  document.getElementById("preview-img").style.display = "none";
+  document.getElementById("placeholder-icon").style.display = "block";
+  document.getElementById("upload-message").style.display = "block";
+
+  // Remove attachments container if it exists
+  const attachments = document.querySelector(".existing-attachments");
+  if (attachments) attachments.remove();
+
+  // Reset form state
+  delete form.dataset.editSlug;
+  document.getElementById("section-title").textContent = "Manage Posts";
+  document.getElementById("save-draft").textContent = "Save Draft";
+  document.getElementById("publish-post").textContent = "Publish Post";
     // Trigger default view (e.g. Drafts)
     loadPostsByStatus(0);
     updatePostLabel("Drafts");
-
+    
   } else if (section === "create") {
     stats.style.display = "none";
     label.style.display = "none";
@@ -74,7 +102,7 @@ function navigate(section) {
     createSection.style.display = "block";
     sectionTitle.textContent = "Create Post";
 
-    // Initialize EasyMDE once
+    // Initialize EasyMDE with enhanced preview
     if (!window.easyMDE) {
       window.easyMDE = new EasyMDE({
         element: document.getElementById("post-body"),
@@ -85,13 +113,93 @@ function navigate(section) {
           uniqueId: "post-body-autosave",
           delay: 1000
         },
+        previewClass: "post-body", // Applies your post styling
+        renderingConfig: {
+          codeSyntaxHighlighting: true // Enable syntax highlighting
+        },
+        toolbar: [
+          "bold", "italic", "heading", "|",
+          "quote", "unordered-list", "ordered-list", "|",
+          "link", "image", "|", "side-by-side", "fullscreen", "|",
+          {
+            name: "enhanced-preview",
+            action: function customPreview(editor) {
+            // Create modal preview with full post styling
+            const modal = document.createElement('div');
+            modal.className = 'full-preview-modal';
+            modal.innerHTML = `
+              <div class="modal-content">
+                <button class="close-preview">&times;</button>
+                <div class="post-preview post-body"></div>
+              </div>
+            `;
+
+            document.body.appendChild(modal);
+
+            // Render raw Markdown using EasyMDE's built-in preview renderer
+            const rawHTML = editor.options.previewRender(editor.value(), editor);
+            const previewDiv = modal.querySelector('.post-preview');
+            previewDiv.innerHTML = rawHTML;
+
+            // Ensure images are displayed correctly with fallback styling
+            previewDiv.querySelectorAll('img').forEach(img => {
+              img.onload = () => {
+                img.style.display = 'block';
+                img.style.maxWidth = '100%';
+                img.style.height = 'auto';
+              };
+              img.onerror = () => {
+              img.src =
+                "data:image/svg+xml;base64," +
+                btoa(`<svg xmlns='http://www.w3.org/2000/svg' width='120' height='90'><rect width='100%' height='100%' fill='#ccc'/><text x='50%' y='50%' dominant-baseline='middle' text-anchor='middle' fill='#333' font-size='12'>Image not found</text></svg>`);
+              img.alt = "Image not found";
+              img.style.opacity = '0.6';
+            };
+
+            });
+
+            // Apply Prism syntax highlighting
+            setTimeout(() => {
+              Prism.highlightAllUnder(previewDiv);
+            }, 10);
+
+            // Close handler
+            modal.querySelector('.close-preview').addEventListener('click', () => {
+              modal.remove();
+            });
+          },
+
+            className: "fa fa-eye",
+            title: "Enhanced Preview"
+          }
+        ],
         status: false,
         imageUpload: true,
         imageMaxSize: 2 * 1024 * 1024,
         imageAccept: "image/*",
         uploadImage: true,
-        imageUploadEndpoint: "/api/uploads/markdown-image",
-        promptURLs: true
+        promptURLs: true,
+        imageUploadFunction: function(file, onSuccess, onError) {
+          const reader = new FileReader();
+          reader.onloadend = () => {
+            const base64Image = reader.result;
+            const filename = file.name.replace(/\s+/g, "-").toLowerCase();
+            const markdownImage = `![${filename}](${base64Image})`;
+            onSuccess(markdownImage);
+          };
+          reader.onerror = () => onError("Image upload failed.");
+          reader.readAsDataURL(file);
+        }
+      });
+
+      // Update preview when content changes
+      window.easyMDE.codemirror.on("change", function() {
+        setTimeout(() => {
+          const preview = document.querySelector('.editor-preview-active');
+          if (preview) {
+            Prism.highlightAllUnder(preview);
+          }
+        }, 100);
       });
     }
 
@@ -99,6 +207,55 @@ function navigate(section) {
     loadTags();
     loadCategories();
   }
+}
+
+// Add CSS for the full preview modal if not already added
+if (!document.getElementById('preview-modal-style')) {
+  const style = document.createElement('style');
+  style.id = 'preview-modal-style';
+  style.textContent = `
+    .full-preview-modal {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0,0,0,0.9);
+      z-index: 1000;
+      overflow-y: auto;
+      padding: 2rem;
+    }
+    .full-preview-modal .modal-content {
+      max-width: 800px;
+      margin: 2rem auto;
+      background: white;
+      padding: 2rem;
+      border-radius: 0.5rem;
+      position: relative;
+    }
+    .full-preview-modal .close-preview {
+      position: absolute;
+      top: 1rem;
+      right: 1rem;
+      background: none;
+      border: none;
+      font-size: 1.5rem;
+      cursor: pointer;
+      color: var(--dark-blue);
+    }
+    .full-preview-modal .close-preview:hover {
+      color: var(--light-blue);
+    }
+    #post-body + .EasyMDEContainer .editor-preview {
+      background: white;
+      padding: 2rem;
+      border-radius: 0.5rem;
+      font-family: homefont, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      line-height: 1.7;
+      color: #333;
+    }
+  `;
+  document.head.appendChild(style);
 }
 
 
@@ -407,6 +564,7 @@ function renderPostsTable(posts) {
   tableBody.innerHTML = posts.map(post => {
   const statusText = getStatusText(post.status);
   const displayText = statusText.charAt(0).toUpperCase() + statusText.slice(1);
+  const canEdit = post.authorId === user.id;
 
   return `
     <tr class="${isAdmin || post.authorId === user.id ? '' : 'read-only'}">
@@ -416,20 +574,35 @@ function renderPostsTable(posts) {
       <td>${post.likeCount}</td>
       <td>${post.comments.length}</td>
       <td class="actions">
-        ${isAdmin || post.authorId === user.id ? `
-          <button class="edit-btn" data-id="${post.id}"><i class="fas fa-edit"></i></button>
+       
+          <button class="edit-btn" data-slug="${post.slug}" ${!canEdit ? 'disabled' : ''}>
+            <i class="fas fa-edit"></i>
+          </button>
           <button class="delete-btn" data-id="${post.id}"><i class="fas fa-trash"></i></button>
-        ` : ''}
+          <!-- <button class="status-btn" data-id="${post.id}">
+            <i class="fas fa-sync-alt"></i> -->
+          </button>
+
       </td>
     </tr>
   `;
 }).join('');
-
+;
   
-  // Add event listeners to buttons
-  // document.querySelectorAll('.edit-btn').forEach(btn => {
-  //   btn.addEventListener('click', () => editPost(btn.dataset.id));
-  // });
+  // Corrected event listener for edit buttons
+  document.addEventListener("click", (e) => {
+  // Handle edit button clicks (works even when clicking the icon inside)
+  const editButton = e.target.closest('.edit-btn');
+  if (editButton) {
+    const slug = editButton.dataset.slug;
+    console.log("Edit button clicked for slug:", slug);
+    if (slug) {
+      openEditPost(slug);
+    } else {
+      console.error("No slug found for edit button");
+    }
+  }
+  });
   document.querySelectorAll('.delete-btn').forEach(btn => {
   const postId = btn.dataset.id;
   const post = posts.find(p => p.id === postId); // match the post
@@ -439,8 +612,24 @@ function renderPostsTable(posts) {
   }
 });
 
- 
 }
+
+
+//edit event listener
+document.addEventListener("click", async (e) => {
+  if (e.target.matches(".edit-post-btn")) {
+    const slug = e.target.dataset.slug;
+    try {
+      const res = await fetch(`/api/posts/${slug}`);
+      if (!res.ok) throw new Error("Post not found");
+
+      const post = await res.json();
+      openEditModal(post); // fills post create with data 
+    } catch (err) {
+      showToast("Error fetching post: " + err.message); // optional toast
+    }
+  }
+});
 
 
 //update this to be delete post not user 
@@ -501,7 +690,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
 
-// 🍞 Toast Logic
+// Toast Logic
 function showToast(type, message = "") {
   const toast = document.getElementById(`${type}-toast`);
   if (message) toast.querySelector(".message").textContent = message;
@@ -516,3 +705,117 @@ function showToast(type, message = "") {
 }
 
 
+
+async function openEditPost(slug) {
+  try {
+    const res = await fetch(`/api/posts/${slug}`);
+    if (!res.ok) throw new Error("Post not found");
+    const post = await res.json();
+
+    // Switch to "create" section
+    navigate("create");
+
+    // Fill basic form fields
+    document.getElementById("post-title").value = post.title || "";
+    document.getElementById("post-description").value = post.description || "";
+    document.getElementById("post-slug").value = post.slug || "";
+
+    if (window.easyMDE) {
+      window.easyMDE.value(post.content || "");
+    }
+
+    // Cover Image Handling
+    if (post.image) {
+      const previewImg = document.getElementById("preview-img");
+      previewImg.src = post.image;
+      previewImg.style.display = "block";
+      document.getElementById("placeholder-icon").style.display = "none";
+      document.getElementById("upload-message").style.display = "none";
+    }
+    const oldAttachments = document.querySelector('.existing-attachments');
+    if (oldAttachments) oldAttachments.remove();
+
+    // Create a temporary div for attachments (since we don't have attachment-list in HTML)
+    let attachmentsHTML = '';
+    (post.attachments || []).forEach(file => {
+      attachmentsHTML += `
+        <div class="existing-attachment">
+          <a href="${file.url || file}" target="_blank" class="attachment-link">
+            ${file.name || file.split("/").pop()}
+          </a>
+        </div>
+      `;
+    });
+
+    // Insert attachments after the file input
+    const fileInputGroup = document.querySelector('.form-group input[id="post-files"]').parentNode;
+    if (attachmentsHTML) {
+      const attachmentsContainer = document.createElement('div');
+      attachmentsContainer.className = 'existing-attachments';
+      attachmentsContainer.innerHTML = `<label>Existing Attachments</label>${attachmentsHTML}`;
+      fileInputGroup.insertAdjacentElement('afterend', attachmentsContainer);
+    }
+
+    // Tags and Categories
+    await loadTags(); // Make sure tags are loaded first
+    await loadCategories(); // Make sure categories are loaded first
+    
+    // Modified preselectOptions to work with current HTML
+    preselectOptions("post-tags", post.tags || []);
+    preselectOptions("post-categories", post.categories || []);
+
+
+    // Handle scheduled posts
+    if (post.status === 2 && post.scheduledAt) { // 2 is scheduled
+      document.querySelector('input[name="publish-option"][value="schedule"]').checked = true;
+      document.getElementById("schedule-container").style.display = "block";
+      const date = new Date(post.scheduledAt);
+      document.getElementById("publish-date").value = date.toISOString().split('T')[0];
+      document.getElementById("publish-time").value = 
+        `${String(date.getHours()).padStart(2, '0')}:${String(date.getMinutes()).padStart(2, '0')}`;
+    }
+
+    // Store slug for future PUT
+    document.getElementById("post-form").dataset.editSlug = slug;
+    
+    document.getElementById("section-title").textContent = "Edit Post";
+
+    document.getElementById("save-draft").textContent = "Update Draft";
+    document.getElementById("publish-post").textContent = "Update and Publish";
+
+
+  } catch (err) {
+    console.error("Error editing post:", err);
+    showToast("error", err.message);
+  }
+}
+
+function preselectOptions(selectId, values) {
+  const select = document.getElementById(selectId);
+  if (!select) {
+    console.error(`Select element with ID ${selectId} not found`);
+    return;
+  }
+
+  // Convert values to lowercase for case-insensitive comparison
+  const lowerValues = values.map(v => v.toLowerCase());
+  
+  Array.from(select.options).forEach(opt => {
+    // Check if option value or text matches any of the values
+    const optValue = opt.value.toLowerCase();
+    const optText = opt.text.toLowerCase();
+    
+    opt.selected = lowerValues.includes(optValue) || lowerValues.includes(optText);
+  });
+}
+
+
+let lastAction = null;
+
+document.getElementById("save-draft").addEventListener("click", () => {
+  lastAction = document.getElementById("save-draft").textContent;
+});
+
+document.getElementById("publish-post").addEventListener("click", () => {
+  lastAction = document.getElementById("publish-post").textContent;
+});

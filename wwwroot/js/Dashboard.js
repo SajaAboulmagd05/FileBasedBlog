@@ -411,10 +411,10 @@ function parseToken(token) {
 }
 
 //rendering of nav menu according to user intials 
-// const claims = token ? parseToken(token) : {};
-// const userRole = claims.role; //  "Admin"
-// const userName = claims.name; // for avatar initials
-// const userInitials = claims.userInitials || "SA";
+const claims = token ? parseToken(token) : {};
+const userRole = claims.role; //  "Admin"
+const userName = claims.name; // for avatar initials
+const userInitials = claims.userInitials || "SA";
 
 document.addEventListener("DOMContentLoaded", () => {
   
