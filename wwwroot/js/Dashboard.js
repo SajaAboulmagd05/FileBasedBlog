@@ -18,6 +18,14 @@ let activeSection = 'users'; // tracks current section for modal
 
 // Navigation Logic
 function navigate(section) {
+  const user = getCurrentUser(); // from session or JWT
+
+
+    if (!user || user.role !== "Admin") {
+      localStorage.setItem("toastMessage", "Unauthorized access");
+      window.location.href = "/";
+
+    }
   activeSection = section;
 
   document.getElementById('section-title').textContent = `Manage ${capitalize(section)}`;
@@ -411,17 +419,23 @@ function parseToken(token) {
 }
 
 //rendering of nav menu according to user intials 
-const claims = token ? parseToken(token) : {};
-const userRole = claims.role; //  "Admin"
-const userName = claims.name; // for avatar initials
-const userInitials = claims.userInitials || "SA";
+function getCurrentUser() {
+  return {
+    token: localStorage.getItem("authToken"),
+    id: localStorage.getItem('userId'), 
+    role: localStorage.getItem('userRole'),
+    name: localStorage.getItem('userName'),
+    initials: localStorage.getItem('userInitials')
+  };
+}
 
 document.addEventListener("DOMContentLoaded", () => {
-  
+   const user = getCurrentUser();
   // Show avatar + initials
   const avatar = document.getElementById("user-menu");
-  document.getElementById("user-avatar").textContent = userInitials;
+  document.getElementById("user-avatar").textContent = user.initials;
   avatar.classList.remove("hidden");
+  if(user.role=="Admin")
   document.getElementById("dashboard-link").classList.remove("hidden");
   document.getElementById("postManage-link").classList.remove("hidden");
 });
@@ -556,3 +570,9 @@ function openTagCategoryDeleteModal(type, item) {
     }
   });
 }
+
+//logout handler 
+document.getElementById("logout-btn").addEventListener("click", () => {
+    localStorage.clear();
+    window.location.href = "/";
+  });

@@ -25,6 +25,13 @@ uploadBox.addEventListener("click", () => fileInput.click());
 
 
 function navigate(section) {
+  const user = getCurrentUser(); // from session or JWT
+  console.log(user)
+   if (user.id==null || user.role == "Member") {
+      localStorage.setItem("toastMessage", "Unauthorized access");
+      window.location.href = "/";
+
+    }
   const stats = document.getElementById("post-stats");
   const label = document.getElementById("post-type-label");
   const table = document.querySelector(".user-table");
@@ -480,6 +487,39 @@ function getCurrentUser() {
   };
 }
 
+
+
+//render nav bar correctly
+document.addEventListener("DOMContentLoaded", () => {
+   const user = getCurrentUser();
+  // Show avatar + initials
+  
+  document.getElementById("user-avatar").textContent = user.initials;
+  
+   document.getElementById("postManage-link").classList.remove("hidden");
+  if(user.role=="Admin")
+  document.getElementById("dashboard-link").classList.remove("hidden");
+ 
+});
+
+//handle the branding menu 
+document.addEventListener("DOMContentLoaded", () => {
+  const avatar = document.getElementById("user-avatar");
+  const dropdown = document.getElementById("user-dropdown");
+
+  // Toggle dropdown on avatar click
+  avatar.addEventListener("click", () => {
+    dropdown.classList.toggle("hidden");
+  });
+
+  // Close dropdown if clicked elsewhere
+  document.addEventListener("click", (e) => {
+    if (!avatar.contains(e.target) && !dropdown.contains(e.target)) {
+      dropdown.classList.add("hidden");
+    }
+  });
+});
+
 // Load post statistics
 async function loadPostStats() {
   try {
@@ -688,6 +728,11 @@ document.addEventListener('DOMContentLoaded', () => {
   navigate("manage");
 });
 
+//logout handler 
+ document.getElementById("logout-btn").addEventListener("click", () => {
+    localStorage.clear();
+    window.location.href = "/";
+  });
 
 
 // Toast Logic

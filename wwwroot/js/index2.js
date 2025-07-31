@@ -5,6 +5,12 @@ let currentCategory = null;
 let selectedTags = [];
 
 async function loadPosts() {
+  const message = localStorage.getItem("toastMessage");
+
+    if (message) {
+      showToast("error", message);
+      localStorage.removeItem("toastMessage"); // clean up
+    }
   try {
     let url = "/api/posts";
 
@@ -558,9 +564,23 @@ if (params.get("token") === "invalid") {
 }
 
 
+
 document.addEventListener("DOMContentLoaded", () => {
   loadCategories();
   loadTags();
   loadPosts();
   document.querySelector(".search-form").addEventListener("submit", handleSearch);
 });
+
+function showToast(type, message = "") {
+  const toast = document.getElementById(`${type}-toast`);
+  if (message) toast.querySelector(".message").textContent = message;
+
+  toast.classList.remove("hidden");
+  toast.classList.add("visible");
+
+  setTimeout(() => {
+    toast.classList.remove("visible");
+    toast.classList.add("hidden");
+  }, 3000);
+}

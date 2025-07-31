@@ -74,12 +74,12 @@ D:\internship\FileBasedBlog\bin\Debug\net10.0\content\users\lilo_gmail_com\Profi
 D:\internship\FileBasedBlog\obj\Debug\net10.0\compressed\9ujy18ld8r-{0}-cpdpc167ah-cpdpc167ah.gz
 D:\internship\FileBasedBlog\obj\Debug\net10.0\compressed\wflujha465-{0}-drx34qmj80-drx34qmj80.gz
 D:\internship\FileBasedBlog\obj\Debug\net10.0\compressed\mllc8dgnli-{0}-29n3xdsxft-29n3xdsxft.gz
-D:\internship\FileBasedBlog\obj\Debug\net10.0\compressed\ppb7qmn678-{0}-55s7jyj9iv-55s7jyj9iv.gz
 D:\internship\FileBasedBlog\bin\Debug\net10.0\content\posts\2025-07-29-the-magic-of-css-grid-building-responsive-layouts-without-headaches\meta.json
-D:\internship\FileBasedBlog\obj\Debug\net10.0\compressed\k0z96n6t0r-{0}-qq87qvkjh4-qq87qvkjh4.gz
 D:\internship\FileBasedBlog\obj\Debug\net10.0\compressed\u1px9nsevi-{0}-y00zxis041-y00zxis041.gz
 D:\internship\FileBasedBlog\obj\Debug\net10.0\compressed\w1pe7z9smp-{0}-bv3qcnkbme-bv3qcnkbme.gz
 D:\internship\FileBasedBlog\obj\Debug\net10.0\compressed\eiygvdigow-{0}-7dgaxnng3u-7dgaxnng3u.gz
-D:\internship\FileBasedBlog\obj\Debug\net10.0\compressed\6ogthmmq6i-{0}-zbkl5ar05d-zbkl5ar05d.gz
-D:\internship\FileBasedBlog\obj\Debug\net10.0\compressed\pkrx0c6jpk-{0}-ifi3gwskvh-ifi3gwskvh.gz
-D:\internship\FileBasedBlog\obj\Debug\net10.0\compressed\k22diq12v8-{0}-cayu4x2mnf-cayu4x2mnf.gz
+D:\internship\FileBasedBlog\obj\Debug\net10.0\compressed\6ogthmmq6i-{0}-d63exrw4ju-d63exrw4ju.gz
+D:\internship\FileBasedBlog\obj\Debug\net10.0\compressed\k0z96n6t0r-{0}-sqpfyp6w1p-sqpfyp6w1p.gz
+D:\internship\FileBasedBlog\obj\Debug\net10.0\compressed\ppb7qmn678-{0}-4gzwmhsse7-4gzwmhsse7.gz
+D:\internship\FileBasedBlog\obj\Debug\net10.0\compressed\pkrx0c6jpk-{0}-cnlqn05b7b-cnlqn05b7b.gz
+D:\internship\FileBasedBlog\obj\Debug\net10.0\compressed\k22diq12v8-{0}-d0zmmmvp3u-d0zmmmvp3u.gz
