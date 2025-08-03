@@ -19,7 +19,13 @@ let activeSection = 'users'; // tracks current section for modal
 // Navigation Logic
 function navigate(section) {
   const user = getCurrentUser(); // from session or JWT
+    const token = localStorage.getItem("authToken");
 
+    if (isTokenExpired(token)) {
+      localStorage.setItem("toastMessage", "Session expired. Please log in again.");
+      window.location.href = "/";
+      return;
+    }
 
     if (!user || user.role !== "Admin") {
       localStorage.setItem("toastMessage", "Unauthorized access");
@@ -74,7 +80,13 @@ function navigate(section) {
 // User Renderer
 function fetchUsers(role) {
   document.getElementById('user-type-label').textContent = `Showing: ${role}s`;
+  const token = localStorage.getItem("authToken");
 
+    if (isTokenExpired(token)) {
+      localStorage.setItem("toastMessage", "Session expired. Please log in again.");
+      window.location.href = "/";
+      return;
+    }
   fetch(`/api/users/by-role/${role}`)
     .then(res => res.json())
     .then(users => {
@@ -105,6 +117,13 @@ const token = localStorage.getItem("authToken");
 
 // Tag Renderer
 function renderTags() {
+   const token = localStorage.getItem("authToken");
+
+    if (isTokenExpired(token)) {
+      localStorage.setItem("toastMessage", "Session expired. Please log in again.");
+      window.location.href = "/";
+      return;
+    }
     fetch("/api/tags/all", {
       headers: {
         'Authorization': `Bearer ${token}`
@@ -152,6 +171,13 @@ function renderTags() {
 
 // Category Renderer
 function renderCategories() {
+      const token = localStorage.getItem("authToken");
+
+      if (isTokenExpired(token)) {
+        localStorage.setItem("toastMessage", "Session expired. Please log in again.");
+        window.location.href = "/";
+        return;
+      }
       fetch("/api/categories/all", {
       headers: {
         'Authorization': `Bearer ${token}`
@@ -250,7 +276,13 @@ function openModal(type) {
   form.addEventListener("submit", async (e) => {
     e.preventDefault();
     const formData = new FormData(form);
+    const token = localStorage.getItem("authToken");
 
+    if (isTokenExpired(token)) {
+      localStorage.setItem("toastMessage", "Session expired. Please log in again.");
+      window.location.href = "/";
+      return;
+    }
     let endpoint = "";
     if (singularize[type].toLowerCase() === "user") endpoint = "/api/users/admin-add";
     if (singularize[type].toLowerCase() === "tag") endpoint = "/api/tags/add";
@@ -352,7 +384,13 @@ function openRoleModal(email, currentRole) {
   form.addEventListener("submit", async (e) => {
     e.preventDefault();
     const formData = new FormData(form);
+    const token = localStorage.getItem("authToken");
 
+    if (isTokenExpired(token)) {
+      localStorage.setItem("toastMessage", "Session expired. Please log in again.");
+      window.location.href = "/";
+      return;
+    }
     try {
       const res = await fetch("/api/users/change-role", {
         method: "POST",
@@ -389,7 +427,13 @@ function openDeleteModal(email) {
   form.addEventListener("submit", async (e) => {
     e.preventDefault();
     const formData = new FormData(form);
+    const token = localStorage.getItem("authToken");
 
+      if (isTokenExpired(token)) {
+        localStorage.setItem("toastMessage", "Session expired. Please log in again.");
+        window.location.href = "/";
+        return;
+      }
     try {
       const res = await fetch("/api/users/delete", {
         method: "POST",
@@ -496,7 +540,13 @@ function openEditModal(type, item) {
   form.addEventListener("submit", async (e) => {
     e.preventDefault();
     const formData = new FormData(form);
+    const token = localStorage.getItem("authToken");
 
+    if (isTokenExpired(token)) {
+      localStorage.setItem("toastMessage", "Session expired. Please log in again.");
+      window.location.href = "/";
+      return;
+    }
     const endpoint =
       type === "tag" ? "/api/tags/update" :
       type === "category" ? "/api/categories/update" : "";
@@ -543,7 +593,13 @@ function openTagCategoryDeleteModal(type, item) {
   form.addEventListener("submit", async (e) => {
     e.preventDefault();
     const formData = new FormData(form);
+    const token = localStorage.getItem("authToken");
 
+    if (isTokenExpired(token)) {
+      localStorage.setItem("toastMessage", "Session expired. Please log in again.");
+      window.location.href = "/";
+      return;
+    }
     const endpoint =
       type === "tag" ? "/api/tags/delete" :
       type === "category" ? "/api/categories/delete" : "";
@@ -576,3 +632,12 @@ document.getElementById("logout-btn").addEventListener("click", () => {
     localStorage.clear();
     window.location.href = "/";
   });
+
+
+  function isTokenExpired(token) {
+  if (!token) return true;
+
+  const payload = JSON.parse(atob(token.split(".")[1]));
+  const expiry = payload.exp * 1000; // Convert to ms
+  return Date.now() > expiry;
+}

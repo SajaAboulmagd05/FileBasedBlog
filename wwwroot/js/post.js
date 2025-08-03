@@ -45,9 +45,10 @@ function renderPost(post) {
     `<span class="tag-label">${tag}</span>${i < arr.length - 1 ? '<span class="dot-separator">•</span>' : ''}`
   ).join("");
 
-  const categories = post.categories.map(cat =>
-    `<span class="category-btn">${cat}</span>`
-  ).join("");
+  // Generate category labels
+     const categories = post.categories?.map((tag, index, arr) => `
+      <span class="category-label">${tag}</span>${index < arr.length - 1 ? '<span class="dot-separator">•</span>' : ''}
+   `).join("") || "";
 
   const html = post.content ? marked.parse(post.content) : "<p>No content available.</p>";
 
@@ -100,7 +101,7 @@ function renderPost(post) {
     `;
   }
 
-  // 🧩 Full post markup
+  //  Full post markup
   container.innerHTML = `
     <h1 class="post-title">${post.title}</h1>
     <p class="post-description">${post.description}</p>
@@ -229,4 +230,270 @@ function updateCommentList(comments) {
       <p class="comment-text">${comment.content}</p>
     </div>
   `).join("");
+}
+
+//toggling on showing passwords for login and signup 
+document.addEventListener("DOMContentLoaded", () => {
+const passwordInput = document.querySelector('input[name="password"]');
+const confirmInput = document.getElementById("confirm-password");
+const toggle = document.getElementById("show-password");
+
+if (toggle) {
+    toggle.addEventListener("change", () => {
+        const type = toggle.checked ? "text" : "password";
+        passwordInput.type = type;
+        confirmInput.type = type;
+    });
+}
+});
+
+document.addEventListener("DOMContentLoaded", () => {
+    const loginPasswordInput = document.getElementById("login-password");
+    const showLoginPassword = document.getElementById("show-login-password");
+    
+    if (showLoginPassword) {
+        showLoginPassword.addEventListener("change", () => {
+            loginPasswordInput.type = showLoginPassword.checked ? "text" : "password";
+        });
+    }
+});
+
+
+//switching between register and login form 
+document.addEventListener("DOMContentLoaded", () => {
+  const registerSection = document.getElementById("register-section");
+  const loginSection = document.getElementById("login-section");
+  const switchToLogin = document.getElementById("switch-to-login");
+  const switchToRegister = document.getElementById("switch-to-register");
+  const LoginButton = document.getElementById("login-btn");
+  const RegisterButton = document.getElementById("register-btn");
+
+  switchToLogin?.addEventListener("click", () => {
+    registerSection.classList.add("hidden");
+    loginSection.classList.remove("hidden");
+  });
+  
+  LoginButton?.addEventListener("click", () => {
+    registerSection.classList.add("hidden");
+    loginSection.classList.remove("hidden");
+  });
+  
+
+  switchToRegister?.addEventListener("click", () => {
+    loginSection.classList.add("hidden");
+    registerSection.classList.remove("hidden");
+  });
+
+  RegisterButton?.addEventListener("click", () => {
+    loginSection.classList.add("hidden");
+    registerSection.classList.remove("hidden");
+  });
+});
+
+
+
+
+//register handler 
+document.addEventListener("DOMContentLoaded", () => {
+  const form = document.getElementById("subscribe-form");
+
+  form?.addEventListener("submit", async (event) => {
+    event.preventDefault();
+    const formData = new FormData(form);
+
+    try {
+      const res = await fetch("/api/register", {
+        method: "POST",
+        body: formData
+      });
+
+      if (res.ok) {
+        const toast = document.getElementById("success-toast");
+        toast.classList.remove("hidden");
+        toast.classList.add("visible");
+
+        setTimeout(() => {
+          toast.classList.remove("visible");
+          toast.classList.add("hidden");
+        }, 4000);
+
+        form.reset();
+        document.getElementById("toggle").checked = false;
+      } else {
+        const errorText = await res.text();
+        const errorToast = document.getElementById("error-toast");
+        errorToast.querySelector(".message").textContent = errorText;
+
+        errorToast.classList.remove("hidden");
+        errorToast.classList.add("visible");
+
+        setTimeout(() => {
+          errorToast.classList.remove("visible");
+          errorToast.classList.add("hidden");
+        }, 4000);
+      }
+    } catch (err) {
+      alert("Something went wrong. Please try again.");
+      console.error(err);
+    }
+  });
+});
+
+
+document.addEventListener("DOMContentLoaded", () => {
+  const params = new URLSearchParams(window.location.search);
+
+  if (params.get("verified") === "true") {
+    const toast = document.getElementById("success-toast");
+    toast.querySelector(".message").textContent = "Email verified! You can now log in 🎉";
+    toast.classList.remove("hidden");
+    toast.classList.add("visible");
+
+    setTimeout(() => {
+      toast.classList.remove("visible");
+      toast.classList.add("hidden");
+    }, 4000);
+  }
+
+  if (params.get("showLogin") === "true") {
+    const toggle = document.getElementById("toggle");
+    const registerSection = document.getElementById("register-section");
+    const loginSection = document.getElementById("login-section");
+
+    if (toggle) toggle.checked = true; // open modal
+    if (registerSection && loginSection) {
+      registerSection.classList.add("hidden");
+      loginSection.classList.remove("hidden");
+    }
+  }
+
+  window.history.replaceState({}, document.title, window.location.pathname);
+});
+
+document.getElementById("login-form")?.addEventListener("submit", async (event) => {
+  event.preventDefault();
+  const form = event.target;
+  const formData = new FormData(form);
+
+  try {
+    const res = await fetch("/api/login", {
+      method: "POST",
+      body: formData
+    });
+
+    if (res.ok) {
+      const user = await res.json();
+
+      // Store token
+      localStorage.setItem("authToken", user.token);
+      localStorage.setItem("userName", user.name);
+      localStorage.setItem("userRole", user.role);
+      localStorage.setItem("userInitials", user.initials);
+      localStorage.setItem("userId", user.id);
+
+      
+
+      // Show welcome toast
+      const toast = document.getElementById("success-toast");
+      toast.querySelector(".message").textContent = `Welcome, ${user.name}! 🎉`;
+      toast.classList.remove("hidden");
+      toast.classList.add("visible");
+
+      setTimeout(() => {
+        toast.classList.remove("visible");
+        toast.classList.add("hidden");
+        window.location.reload();
+      }, 4000);
+
+      // Show avatar + menu
+      showUserMenu(user);
+      form.reset();
+      document.getElementById("toggle").checked = false;
+    } else {
+      const errorText = await res.text();
+      const errorToast = document.getElementById("error-toast");
+      errorToast.querySelector(".message").textContent = errorText;
+
+      errorToast.classList.remove("hidden");
+      errorToast.classList.add("visible");
+
+      setTimeout(() => {
+        errorToast.classList.remove("visible");
+        errorToast.classList.add("hidden");
+      }, 4000);
+    }
+  } catch (err) {
+    alert("Login failed. Try again.");
+    console.error(err);
+  }
+});
+
+function showUserMenu(user) {
+  const avatar = document.getElementById("user-avatar");
+  const menu = document.getElementById("user-menu");
+  const dropdown = document.getElementById("user-dropdown");
+  const dashboardLink = document.getElementById("dashboard-link");
+  const PostManagmentLink= document.getElementById("postManage-link");
+  const RegisterButton = document.getElementById("register-btn");
+  const NavMenu = document.getElementById("main-nav");
+  const LoginButton =document.getElementById("login-btn");
+
+  avatar.textContent = user.initials;
+  menu.classList.remove("hidden");
+  RegisterButton.classList.add("hidden");
+  LoginButton.classList.add("hidden");
+  NavMenu.classList.remove("hidden");
+
+  if (["Admin"].includes(user.role)) {
+    dashboardLink.classList.remove("hidden");
+  }
+
+  if (["Admin", "Editor", "Author"].includes(user.role)) {
+    PostManagmentLink.classList.remove("hidden");
+
+  }
+
+  avatar.addEventListener("click", () => {
+    dropdown.classList.toggle("hidden");
+  });
+
+  
+  document.getElementById("logout-btn").addEventListener("click", () => {
+    localStorage.clear();
+    menu.classList.add("hidden");
+    dropdown.classList.add("hidden");
+    NavMenu.classList.add("hidden");
+    RegisterButton.classList.remove("hidden");
+    LoginButton.classList.remove("hidden");
+    window.location.href = "/";
+  });
+}
+document.addEventListener("DOMContentLoaded", () => {
+  const token = localStorage.getItem("authToken");
+  const name = localStorage.getItem("userName");
+  const role = localStorage.getItem("userRole");
+  const initials = localStorage.getItem("userInitials");
+
+  if (token && name && role && initials) {
+    showUserMenu({ name, role, initials });
+  }
+});
+
+function clearForms() {
+  // Clear login form
+  const loginForm = document.getElementById('login-form');
+  if (loginForm) loginForm.reset();
+  
+  // Clear registration form
+  const registerForm = document.getElementById('subscribe-form');
+  if (registerForm) registerForm.reset();
+  
+  // Reset password fields
+  document.querySelector('input[name="password"]').type = 'password';
+  document.getElementById('confirm-password').type = 'password';
+  document.getElementById('login-password').type = 'password';
+  
+  // Uncheck "show password" boxes
+  document.getElementById('show-password').checked = false;
+  document.getElementById('show-login-password').checked = false;
 }

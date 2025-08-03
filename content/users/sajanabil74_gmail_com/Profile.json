@@ -1,10 +1,10 @@
 {
-  "UserID": "b962777a-6cf3-49d0-87dc-037fb52568a2",
+  "UserID": "931a48f5-dc28-4b98-92c2-b3312c655ebb",
   "Email": "sajanabil74@gmail.com",
-  "Name": "Saja Aboulmagd",
+  "Name": "saja Aboulmagd",
   "Role": "Member",
-  "CreatedDate": "2025-07-23T15:46:52.5784398+03:00",
-  "PasswordHash": "$2a$11$GaRLQCkFJAGwaH6qLu7q..P38LLJI5RrBnRkkC2PKpm1zF8jIUpsi",
-  "IsSubscribedToNewsletter": true,
+  "CreatedDate": "2025-07-31T15:12:54.2529242+03:00",
+  "PasswordHash": "$2a$11$qKFJ6TmA1tHU3a3uW9bbbegR4CespSccM6sIQibN7NctiQmLp48cu",
+  "IsSubscribedToNewsletter": false,
   "IsEmailVerified": true
 }

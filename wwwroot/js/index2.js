@@ -55,10 +55,11 @@ function renderPosts(page) {
   paginatedPosts.forEach(post => {
     const readingTime = post.readingTime || "2 min read";
 
-    // Generate category buttons
-    const categoriesHTML = post.categories?.map(cat => `
-      <span class="category-btn">${cat}</span>
+    // Generate category labels
+     const categoriesHTML = post.categories?.map((tag, index, arr) => `
+      <span class="category-label">${tag}</span>${index < arr.length - 1 ? '<span class="dot-separator">•</span>' : ''}
    `).join("") || "";
+   
 
     // Generate tag labels
     const tagsHTML = post.tags?.map((tag, index, arr) => `
@@ -337,13 +338,26 @@ document.addEventListener("DOMContentLoaded", () => {
   const loginSection = document.getElementById("login-section");
   const switchToLogin = document.getElementById("switch-to-login");
   const switchToRegister = document.getElementById("switch-to-register");
+  const LoginButton = document.getElementById("login-btn");
+  const RegisterButton = document.getElementById("register-btn");
 
   switchToLogin?.addEventListener("click", () => {
     registerSection.classList.add("hidden");
     loginSection.classList.remove("hidden");
   });
+  
+  LoginButton?.addEventListener("click", () => {
+    registerSection.classList.add("hidden");
+    loginSection.classList.remove("hidden");
+  });
+  
 
   switchToRegister?.addEventListener("click", () => {
+    loginSection.classList.add("hidden");
+    registerSection.classList.remove("hidden");
+  });
+
+  RegisterButton?.addEventListener("click", () => {
     loginSection.classList.add("hidden");
     registerSection.classList.remove("hidden");
   });
@@ -490,11 +504,13 @@ function showUserMenu(user) {
   const dashboardLink = document.getElementById("dashboard-link");
   const PostManagmentLink= document.getElementById("postManage-link");
   const RegisterButton = document.getElementById("register-btn");
+  const LoginButton =document.getElementById("login-btn");
   const NavMenu = document.getElementById("main-nav");
 
   avatar.textContent = user.initials;
   menu.classList.remove("hidden");
   RegisterButton.classList.add("hidden");
+  LoginButton.classList.add("hidden");
   NavMenu.classList.remove("hidden");
 
   if (["Admin"].includes(user.role)) {
@@ -517,6 +533,7 @@ function showUserMenu(user) {
     dropdown.classList.add("hidden");
     NavMenu.classList.add("hidden");
     RegisterButton.classList.remove("hidden");
+    LoginButton.classList.remove("hidden");
     window.location.href = "/";
   });
 }
@@ -583,4 +600,23 @@ function showToast(type, message = "") {
     toast.classList.remove("visible");
     toast.classList.add("hidden");
   }, 3000);
+}
+
+function clearForms() {
+  // Clear login form
+  const loginForm = document.getElementById('login-form');
+  if (loginForm) loginForm.reset();
+  
+  // Clear registration form
+  const registerForm = document.getElementById('subscribe-form');
+  if (registerForm) registerForm.reset();
+  
+  // Reset password fields
+  document.querySelector('input[name="password"]').type = 'password';
+  document.getElementById('confirm-password').type = 'password';
+  document.getElementById('login-password').type = 'password';
+  
+  // Uncheck "show password" boxes
+  document.getElementById('show-password').checked = false;
+  document.getElementById('show-login-password').checked = false;
 }

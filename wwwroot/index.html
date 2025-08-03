@@ -20,6 +20,7 @@
             </nav>
 
             <div class="branding">
+              <label for="toggle" class="login-btn" id="login-btn">Login</label>
               <label for="toggle" class="subscribe-btn" id="register-btn">Register</label>
 
               <form action="" class="search-form" id="search-form">
@@ -43,7 +44,7 @@
          <input type="checkbox" id="toggle" />
          <div class="blur-overlay"></div>
         <div class="subscription-modal">
-          <label for="toggle" class="close-icon"><i class="fas fa-times"></i></label>
+          <label for="toggle" class="close-icon"><i class="fas fa-times" onclick="clearForms()"></i></label>
           <div class="modal-icon"><i class="far fa-envelope"></i></div>
           <div class="modal-content">
            <!-- Registration Form -->
