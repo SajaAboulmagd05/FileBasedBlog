@@ -1,0 +1,25 @@
+{
+    "Id": "d8d8394d-94c8-4762-b7cf-729b679d85df",
+    "Title": "The Future of Edge Computing: Bringing Cloud Power Closer",
+    "Description": "As data demands increase, edge computing is stepping up to transform how we process, analyze, and act on information\u2014right at the source. Here\u0027s what you need to know.",
+    "Slug": "the-future-of-edge-computing-bringing-cloud-power-closer",
+    "Author": "badr",
+    "AuthorId": "ed09d944-9f89-425e-a6a8-50a461f0acc1",
+    "CreatedAt": "2025-08-03T19:27:53.6707251+03:00",
+    "UpdatedAt": null,
+    "ScheduledAt": null,
+    "ReadingTime": "1 min read",
+    "CoverImage": "assets/cover.jpg",
+    "LikeCount": 0,
+    "LikedByUserIds": [],
+    "Comments": [],
+    "Status": 0,
+    "Tags": [
+        "minimal-api"
+    ],
+    "Categories": [
+        "Business",
+        "Development"
+    ],
+    "IsPublished": false
+}

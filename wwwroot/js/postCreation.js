@@ -26,7 +26,6 @@ uploadBox.addEventListener("click", () => fileInput.click());
 
 function navigate(section) {
   const user = getCurrentUser(); // from session or JWT
-  console.log(user)
    if (user.id==null || user.role == "Member") {
       localStorage.setItem("toastMessage", "Unauthorized access");
       window.location.href = "/";
@@ -365,17 +364,19 @@ document.getElementById("save-draft").addEventListener("click", async function (
     const title = form.get("title")?.toString().trim();
     const description = form.get("description")?.toString().trim();
     const body = form.get("body")?.toString().trim();
-    const coverImage = form.get("coverImage");
-
+    
+    
     if (!title || !description || !body) {
-        alert("Title, description, and content are required.");
+        showToast("error","Title, description, and content are required.");
         return;
     }
-
-    if (!coverImage) {
-        alert("Please upload a cover image.");
+   
+    const coverImageInput = document.getElementById("cover-image");
+    if (!validateCoverImage(coverImageInput)) {
+        showToast("error","Please upload a cover image.");
         return;
     }
+   
 
     try {
         const response = await fetch("/api/posts/draft", {
@@ -386,13 +387,21 @@ document.getElementById("save-draft").addEventListener("click", async function (
         },
         });
 
-        const result = await response.json();
+        if (!response.ok) {
+            const errorText = await response.text(); // fallback to plain text
+            throw new Error(errorText || "Failed to save draft");
+          }
+
+          const result = await response.json();
+        
         showToast("success", `Post Drafted!`);
-           this.reset(); 
+        document.getElementById("post-form").reset(); 
         easyMDE.value("");
+        localStorage.removeItem("smde_post-body-autosave");
+        
     } catch (err) {
         console.error("Failed to save draft:", err);
-        alert("Draft save failed.");
+        showToast("error","Draft save failed.");
     }
 });
 
@@ -413,7 +422,7 @@ document.getElementById("post-form").addEventListener("submit", async function (
         const timeValue = document.getElementById("publish-time").value;
 
         if (!dateValue || !timeValue) {
-            alert("Please select both a publish date and time.");
+            showToast("error","Please select both a publish date and time.");
             return;
         }
 
@@ -421,7 +430,7 @@ document.getElementById("post-form").addEventListener("submit", async function (
         const now = new Date();
 
         if (scheduled <= now) {
-            alert("Scheduled time must be in the future.");
+            showToast("error","Scheduled time must be in the future.");
             return;
         }
 
@@ -433,15 +442,16 @@ document.getElementById("post-form").addEventListener("submit", async function (
     const title = form.get("title")?.toString().trim();
     const description = form.get("description")?.toString().trim();
     const body = form.get("body")?.toString().trim();
-    const coverImage = form.get("coverImage");
+    
 
     if (!title || !description || !body) {
-        alert("Title, description, and content are required.");
+       showToast("error","Title, description, and content are required.");
         return;
     }
 
-    if (!coverImage) {
-        alert("Please upload a cover image.");
+    const coverImageInput = document.getElementById("cover-image");
+    if (!validateCoverImage(coverImageInput)) {
+        showToast("error","Please upload a cover image.");
         return;
     }
 
@@ -462,14 +472,21 @@ document.getElementById("post-form").addEventListener("submit", async function (
         const result = await response.json();
         showToast("success", `Post created!`);
 
-       this.reset(); 
-        easyMDE.value("");  
+         this.reset(); 
+         easyMDE.value("");
+         localStorage.removeItem("smde_post-body-autosave");  
     } catch (error) {
         console.error("Submission failed:", error);
-        alert("Error: " + error.message);
+        showToast("error" ,error.message);
     }
 });
 
+function validateCoverImage(fileInput) {
+  if (!fileInput.files || fileInput.files.length === 0) {
+    return false;
+  }
+  return true;
+}
 // Global variables
 let currentFilter = 'Draft';
 
@@ -857,10 +874,10 @@ function preselectOptions(selectId, values) {
 
 let lastAction = null;
 
-document.getElementById("save-draft").addEventListener("click", () => {
-  lastAction = document.getElementById("save-draft").textContent;
-});
+// document.getElementById("save-draft").addEventListener("click", () => {
+//   lastAction = document.getElementById("save-draft").textContent;
+// });
 
-document.getElementById("publish-post").addEventListener("click", () => {
-  lastAction = document.getElementById("publish-post").textContent;
-});
+// document.getElementById("publish-post").addEventListener("click", () => {
+//   lastAction = document.getElementById("publish-post").textContent;
+// });

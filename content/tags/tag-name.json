@@ -13,7 +13,9 @@
       "lets-try-something-new-here",
       "getting-started-with-react-hooks-a-practical-guide",
       "building-a-restful-api-with-nodejs-and-express-best-practices",
-      "understanding-rate-limiting-in-apis-why-it-matters-and-how-it-works"
+      "understanding-rate-limiting-in-apis-why-it-matters-and-how-it-works",
+      "the-future-of-edge-computing-bringing-cloud-power-closer",
+      "5g-technology-more-than-just-faster-internet"
     ]
   },
   {
@@ -30,7 +32,8 @@
       "generate-my-own-slug",
       "the-power-of-code-reviews-in-software-development",
       "modern-css-layouts-flexbox-grid-and-custom-properties-in-2024",
-      "the-magic-of-css-grid-building-responsive-layouts-without-headaches"
+      "the-magic-of-css-grid-building-responsive-layouts-without-headaches",
+      "5g-technology-more-than-just-faster-internet"
     ]
   },
   {
@@ -43,14 +46,16 @@
       "i-want-to-create-this-on-own-bismillah-1",
       "generate-my-own-slug",
       "title-this-please",
-      "getting-started-with-react-hooks-a-practical-guide"
+      "getting-started-with-react-hooks-a-practical-guide",
+      "blockchain-beyond-bitcoin-real-world-applications-you-didnt-expect"
     ]
   },
   {
     "Id": "e23a4814-9fe7-4872-965f-02fb8c93165b",
     "Name": "cross development",
     "AssociatedPosts": [
-      "the-magic-of-css-grid-building-responsive-layouts-without-headaches"
+      "the-magic-of-css-grid-building-responsive-layouts-without-headaches",
+      "blockchain-beyond-bitcoin-real-world-applications-you-didnt-expect"
     ]
   },
   {

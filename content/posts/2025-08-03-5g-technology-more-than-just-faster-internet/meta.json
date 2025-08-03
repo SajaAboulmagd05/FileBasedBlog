@@ -1,0 +1,40 @@
+{
+  "Id": "2cfa54b6-de57-4f55-95cb-bed7ba4740d8",
+  "Title": "5G Technology: More Than Just Faster Internet",
+  "Description": "5G is not just an upgrade\u2014it\u0027s a game-changer. With ultra-low latency, lightning-fast speeds, and massive connectivity, 5G is setting the foundation for the next wave of innovation.",
+  "Slug": "5g-technology-more-than-just-faster-internet",
+  "Author": "badr",
+  "AuthorId": "ed09d944-9f89-425e-a6a8-50a461f0acc1",
+  "CreatedAt": "2025-08-03T23:15:14.0610177+03:00",
+  "UpdatedAt": null,
+  "ScheduledAt": null,
+  "ReadingTime": "1 min read",
+  "CoverImage": "assets/cover.jpg",
+  "LikeCount": 1,
+  "LikedByUserIds": [
+    "saja.aboulmagd05@eng-st.cu.edu.eg"
+  ],
+  "Comments": [
+    {
+      "Id": "1d5e7c09-5562-42c0-bfd7-d993150ab04e",
+      "SubscriberID": "Saja Nabeel",
+      "Content": "I like this !",
+      "CreatedAt": "2025-08-03T23:25:15.2446242+03:00"
+    },
+    {
+      "Id": "84fed768-f1da-452b-9cec-154125a40410",
+      "SubscriberID": "Saja Nabeel",
+      "Content": "only few things left hopefully :)",
+      "CreatedAt": "2025-08-03T23:25:30.2606898+03:00"
+    }
+  ],
+  "Status": 1,
+  "Tags": [
+    "minimal-api"
+  ],
+  "Categories": [
+    "Development",
+    "Reading "
+  ],
+  "IsPublished": true
+}
