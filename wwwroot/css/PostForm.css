@@ -212,7 +212,6 @@ form {
   opacity: 0.9;
 }
 
-/* Add these styles to your PostForm.css */
 #post-body + .EasyMDEContainer .editor-preview {
   background: white;
   padding: 2rem;

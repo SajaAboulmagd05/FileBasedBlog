@@ -157,7 +157,8 @@
 .delete-btn,
 .show-posts-btn,
 .edit-btn ,
-.status-btn{
+.status-btn,
+.view-btn{
   padding: 6px 10px;
   margin-right: 6px;
   border: none;
@@ -178,10 +179,18 @@ td.actions {
 }
 
 .delete-btn {
-  background-color: var(--dark-blue);
-  color: white;
+  background-color: #fff2dc;
+  color:  var(--dark-blue);
 }
 
+.view-btn{
+  background-color: #e0ecff;
+  color:  var(--dark-blue);
+}
+.edit-btn{
+  background-color: #d8ffd7;
+  color:  var(--dark-blue);
+}
 .show-posts-btn{
   background-color: #f0d9ff;
 }

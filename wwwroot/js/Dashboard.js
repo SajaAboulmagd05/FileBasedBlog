@@ -229,7 +229,10 @@ function openModal(type) {
   const modalContent = document.getElementById("modal-form-content");
   modalContent.innerHTML = "";
   document.getElementById("modal-toggle").checked = true;
-
+  const icon = document.getElementById("modal-action-icon");
+  if (icon) {
+    icon.className = "fas fa-plus"; // or use "fa-pen" for a pencil icon
+  }
   let formHTML = "";
 
   if (singularize[type].toLowerCase() === 'user') {
@@ -364,6 +367,10 @@ function showToast(type, message = "") {
 
 function openRoleModal(email, currentRole) {
   const modalContent = document.getElementById("modal-form-content");
+  const icon = document.getElementById("modal-action-icon");
+  if (icon) {
+    icon.className = "fas fa-sync"; 
+  }
   modalContent.innerHTML = `
     <h2>Change Role for ${email}</h2>
     <form id="change-role-form">
@@ -506,8 +513,13 @@ document.addEventListener("DOMContentLoaded", () => {
 
 //edit modal for tags and categories
 function openEditModal(type, item) {
+  
   const modalContent = document.getElementById("modal-form-content");
   document.getElementById("modal-toggle").checked = true;
+  const icon = document.getElementById("modal-action-icon");
+  if (icon) {
+    icon.className = "fas fa-edit"; // or use "fa-pen" for a pencil icon
+  }
 
   let formHTML = "";
 

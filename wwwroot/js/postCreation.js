@@ -617,8 +617,10 @@ function renderPostsTable(posts) {
     return;
   }
   console.log("Raw posts:", posts);
- 
-  tableBody.innerHTML = posts.map(post => {
+  const sortedPosts = [...posts].sort((a, b) => {
+  return new Date(b.createdAt) - new Date(a.createdAt);
+  });
+  tableBody.innerHTML = sortedPosts.map(post => {
   const statusText = getStatusText(post.status);
   const displayText = statusText.charAt(0).toUpperCase() + statusText.slice(1);
   const canEdit = post.authorId === user.id;
@@ -631,7 +633,9 @@ function renderPostsTable(posts) {
       <td>${post.likeCount}</td>
       <td>${post.comments.length}</td>
       <td class="actions">
-       
+          <button class="view-btn" data-slug="${post.slug}" title="View Post">
+            <i class="fas fa-eye"></i>
+          </button>
           <button class="edit-btn" data-slug="${post.slug}" ${!canEdit ? 'disabled' : ''}>
             <i class="fas fa-edit"></i>
           </button>
@@ -878,6 +882,12 @@ function preselectOptions(selectId, values) {
 }
 
 
+document.addEventListener('click', function(e) {
+  if (e.target.closest('.view-btn')) {
+    const slug = e.target.closest('.view-btn').dataset.slug;
+    window.location.href = `/${slug}`;
+  }
+});
 let lastAction = null;
 
 // document.getElementById("save-draft").addEventListener("click", () => {
