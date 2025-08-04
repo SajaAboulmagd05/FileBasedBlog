@@ -385,6 +385,20 @@ postGroup.MapPost("/{slug}/comment", async (HttpContext context, HttpRequest req
     return await service.AddComment(slug, subscriberId, content);
 });
 
+//api to delete post by authorized users 
+postGroup.MapPost("/delete", async (HttpRequest request, PostService postService) =>
+{
+    var form = await request.ReadFormAsync();
+    var slug = form["slug"].ToString().Trim();
+
+    if (string.IsNullOrEmpty(slug))
+        return Results.BadRequest("Missing post slug.");
+
+    var result = await postService.DeletePostAsync(slug);
+    return result.success ? Results.Ok(result.message) : Results.BadRequest(result.message);
+});
+
+
 var tagGroup = app.MapGroup("/api/tags").RequireAuthorization();
 
 // Add Tag
@@ -483,6 +497,15 @@ categoryGroup.MapPost("/delete", async (HttpContext context, CategoryService ser
 
     var result = await service.DeleteCategoryAsync(id);
     return Results.Ok(result);
+});
+
+app.MapGet("/api/users/me", (HttpContext context, UserService userService) =>
+{
+    var email = context.User.FindFirst(ClaimTypes.Email)?.Value;
+    if (string.IsNullOrWhiteSpace(email))
+        return Results.Unauthorized();
+
+    return userService.GetUserProfileJson(email);
 });
 
 

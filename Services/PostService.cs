@@ -212,6 +212,27 @@ public class PostService
         return posts;
     }
 
+    public Task<(bool success, string message)> DeletePostAsync(string slug)
+    {
+        var postDir = Directory.GetDirectories("content/posts")
+            .FirstOrDefault(d => d.EndsWith($"-{slug}"));
+
+        if (postDir == null)
+            return Task.FromResult((false, "Post not found."));
+
+        try
+        {
+            Directory.Delete(postDir, true); // recursive delete
+            return Task.FromResult((true, "Post deleted successfully."));
+        }
+        catch (Exception ex)
+        {
+            Console.Error.WriteLine($"Error deleting post: {ex.Message}");
+            return Task.FromResult((false, "Failed to delete post."));
+        }
+    }
+
+
 
     //needs revising 
     public async Task<(bool success, string message)> UpdatePostAsync(IFormCollection form, string userId, string userName)

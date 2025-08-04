@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Edit Profile</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <link rel="icon" href="css/favicon.ico" />
+  <link rel="stylesheet" href="css/EditProfile.css" />
+  <link rel="stylesheet" href="css/Dashboard.css" />
+  <link rel="stylesheet" href="css/Modal.css" />
+</head>
+<body>
+  <!-- Reuse your header -->
+  <header class="header">
+    <h1>My Blog</h1>
+    <nav class="main-nav" id="main-nav">
+      <a href="/">Home</a>
+      <a href="PostManagement.html" id="postManage-link" class="hidden">Posts Management</a>
+      <a href="Admin.html" id="dashboard-link" class="hidden">Dashboard</a>
+    </nav>
+    <div class="branding">
+      <div id="user-menu" class="user-menu hidden">
+        <div class="avatar-wrapper">
+          <div class="avatar" id="user-avatar">SA</div>
+          <div class="dropdown hidden" id="user-dropdown">
+            <a href="/edit-profile">Edit Profile</a>
+            <button id="logout-btn">Logout</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <div class="panel-wrapper">
+    <div class="container">
+      <main class="main-content">
+        <h2>Edit Profile</h2>
+
+        <div class="profile-header">
+          <div class="avatar large" id="profile-avatar">SA</div>
+          <div class="user-info">
+            <p><strong>Email:</strong> <span id="email-display"></span></p>
+            <p><strong>Role:</strong> <span id="role-display"></span></p>
+            <p><strong>Joined:</strong> <span id="joined-display"></span></p>
+            <p><strong>Verified:</strong> <span id="verified-display"></span></p>
+          </div>
+        </div>
+
+        <form id="edit-profile-form">
+          <label>
+            Display Name
+            <input type="text" name="name" required />
+          </label>
+
+          <label class="checkbox-label">
+            <input type="checkbox" name="newsletter" />
+            Subscribe to Newsletter
+          </label>
+
+          <button type="submit" style="background:#ffe1e1;">Save Changes</button>
+        </form>
+
+        <div class="profile-actions">
+          <button id="change-password-btn" style="background:#dceeff;">Change Password</button>
+          <button id="request-role-btn" style="background:#ddffe6;">Request Role Change</button>
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <!-- Password Modal -->
+  <input type="checkbox" id="password-toggle" />
+  <div class="blur-overlay"></div>
+  <div class="subscription-modal" id="password-modal">
+    <label for="password-toggle" class="close-icon"><i class="fas fa-times"></i></label>
+    <div class="modal-icon"><i class="fas fa-lock"></i></div>
+    <div class="modal-content" id="password-form-content">
+      <!-- Injected dynamically -->
+    </div>
+  </div>
+
+  <!-- Toasts -->
+  <div id="success-toast" class="toast hidden">
+    <i class="fas fa-check-circle"></i>
+    <span class="message">Profile updated! 🎉</span>
+  </div>
+  <div id="error-toast" class="toast hidden" style="background: #f44336;">
+    <i class="fas fa-exclamation-circle"></i>
+    <span class="message">Something went wrong. Please try again.</span>
+  </div>
+
+  <script src="js/EditProfile.js"></script>
+</body>
+</html>

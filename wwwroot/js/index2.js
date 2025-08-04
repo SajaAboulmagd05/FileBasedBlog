@@ -1,5 +1,5 @@
 let currentPage = 1;
-const postsPerPage = 2;
+const postsPerPage = 3;
 let allPosts = [];
 let currentCategory = null;
 let selectedTags = [];
@@ -74,66 +74,87 @@ function renderPosts(page) {
     });
 
     article.innerHTML = `
-      <div class="post-preview">
-        <div class="post">
-          ${post.image ? `<img src="${post.image}" alt="cover image" class="image" />` : ""}
-          <div class="date">
-            <i class="far fa-clock"></i>
-            <span>${formattedDate}</span>
-            <span class="dot-separator">•</span>
-            <span>${readingTime}</span>
+      <div class="post-card">
+        <div class="post-content">
+          <div class="post-image">
+            ${post.image ? `<img src="${post.image}" alt="cover image" />` : ""}
           </div>
-          <div class="post-content">
+          <div class="post-info">
+            <div class="date">
+              <i class="far fa-clock"></i>
+              <span>${formattedDate}</span>
+              <span class="dot-separator">•</span>
+              <span>${readingTime}</span>
+            </div>
             <h3 class="title"><a href="/${post.slug}" class="custom-link">${post.title}</a></h3>
             <p class="text">${post.description || 'No description available'}</p>
             <div class="details">
-              <span class="author">
-                <i class="far fa-user"></i>
-                <span>${post.author}</span>
-              </span>
-              <span class="likes">
-                <i class="fas fa-thumbs-up"></i>
-                <span>${post.likeCount} Likes</span>
-              </span>
-               <span class="comments">
-                <i class="fas fa-comment"></i>
-                <span>${post.commentCount} Comments</span>
-              </span>
-              <span class="attachments">
-                <i class="fas fa-paperclip"></i>
-                <span>${post.attachmentCount || 0} file(s)</span>
-              </span>
-            </div>
-            <div class="meta">
-              <div class="meta-row">
-                <div class="meta-section categories">
-                  <strong>Categories:</strong>
-                  <div class="category-list">${categoriesHTML}</div>
-                </div>
-                <div class="meta-section tags">
-                  <strong>Tags:</strong>
-                  <div class="tag-list">${tagsHTML}</div>
-                </div>
-              </div>
+              <span class="author"><i class="far fa-user"></i> ${post.author}</span>
+              <span class="likes"><i class="fas fa-thumbs-up"></i> ${post.likeCount} Likes</span>
+              <span class="comments"><i class="fas fa-comment"></i> ${post.commentCount} Comments</span>
+              <span class="attachments"><i class="fas fa-paperclip"></i> ${post.attachmentCount || 0} file(s)</span>
             </div>
           </div>
-        </div>
+        </div> 
+        <div class="meta">
+            <div class="meta-section categories">
+              <strong>Categories:</strong>
+              <div class="category-list">${categoriesHTML}</div>
+            </div>
+            <div class="meta-section tags">
+              <strong>Tags:</strong>
+              <div class="tag-list">${tagsHTML}</div>
+            </div>
+          </div>
       </div>
     `;
+
 
     postList.appendChild(article);
   });
 
-  const pagination = document.createElement("div");
-  pagination.className = "pagination";
-  pagination.innerHTML = `
-    <button class="btn prev-btn" ${currentPage === 1 ? 'disabled' : ''} onclick="renderPosts(${currentPage - 1})">Previous</button>
-    <span class="page-info">Page ${currentPage} of ${totalPages}</span>
-    <button class="btn next-btn" ${currentPage >= totalPages ? 'disabled' : ''} onclick="renderPosts(${currentPage + 1})">Next</button>
-  `;
-
+  const pagination = renderPagination(currentPage, totalPages);
   postList.appendChild(pagination);
+
+
   postList.scrollIntoView({ behavior: "smooth", block: "start" });
+}
+
+function renderPagination(currentPage, totalPages) {
+  // Create container wrapper
+  const container = document.createElement("div");
+  container.className = "pagination-container";
+
+  // Create pagination bar
+  const pagination = document.createElement("div");
+  pagination.className = "pagination-bar";
+
+  // Previous Button
+  const prevBtn = document.createElement("button");
+  prevBtn.className = "pagination-btn"; 
+  prevBtn.disabled = currentPage === 1;
+  prevBtn.setAttribute("aria-label", "Previous");
+  prevBtn.innerHTML = `<i class="fas fa-arrow-left"></i>`;
+  prevBtn.onclick = () => renderPosts(currentPage - 1);
+
+  // Page Info
+  const pageInfo = document.createElement("span");
+  pageInfo.className = "page-info";
+  pageInfo.textContent = `${currentPage} of ${totalPages}`;
+
+  // Next Button
+  const nextBtn = document.createElement("button");
+  nextBtn.className = "pagination-btn"; 
+  nextBtn.disabled = currentPage === totalPages;
+  nextBtn.setAttribute("aria-label", "Next");
+  nextBtn.innerHTML = `<i class="fas fa-arrow-right"></i>`;
+  nextBtn.onclick = () => renderPosts(currentPage + 1);
+
+  // Assemble components
+  pagination.append(prevBtn, pageInfo, nextBtn);
+  container.appendChild(pagination);
+  
+  return container;
 }
 
 async function loadCategories() {

@@ -613,7 +613,7 @@ function renderPostsTable(posts) {
   
 
   if (posts.length === 0) {
-    tableBody.innerHTML = '<tr><td colspan="5">No posts found</td></tr>';
+    tableBody.innerHTML = '<tr><td colspan="6">No posts found</td></tr>';
     return;
   }
   console.log("Raw posts:", posts);
@@ -689,38 +689,43 @@ document.addEventListener("click", async (e) => {
 });
 
 
-//update this to be delete post not user 
+//update this to be delete post 
 function openDeleteModal(post) {
   const content = document.getElementById("delete-form-content");
   content.innerHTML = `
     <h2>Confirm Deletion</h2>
-
-    <div className="modal-content">
-     
+    <div class="modal-content">
       <p>Are you sure you want to delete <strong>${post.title}</strong>? This action cannot be undone.</p>
-
-        <form id="delete-form">
-          <button type="submit" style="background:#f44336;">Yes, Delete</button>
-        </form>
+      <form id="delete-form">
+        <input type="hidden" name="slug" value="${post.slug}" />
+        <button type="submit" style="background:#f44336;">Yes, Delete</button>
+      </form>
     </div>
   `;
+
   document.getElementById("delete-toggle").checked = true;
 
   const form = document.getElementById("delete-form");
   form.addEventListener("submit", async (e) => {
     e.preventDefault();
+
     const formData = new FormData(form);
 
     try {
-      const res = await fetch("/api/users/delete", {
+      const res = await fetch("/api/posts/delete", {
         method: "POST",
-        body: formData
+        body: formData,
+        headers: {
+          "Authorization": `Bearer ${localStorage.getItem("authToken")}`
+        }
       });
 
       if (res.ok) {
+        
         showToast("success", "Post deleted!");
         document.getElementById("delete-toggle").checked = false;
-        
+        loadPostsByStatus(0);
+        updatePostLabel("Drafts");
       } else {
         const error = await res.text();
         showToast("error", error);
@@ -730,6 +735,7 @@ function openDeleteModal(post) {
     }
   });
 }
+
 
 // Initialize the page
 async function initPostManagement() {

@@ -15,7 +15,9 @@
       "the-magic-of-css-grid-building-responsive-layouts-without-headaches",
       "understanding-rate-limiting-in-apis-why-it-matters-and-how-it-works",
       "the-future-of-edge-computing-bringing-cloud-power-closer",
-      "quantum-computing-the-next-tech-revolution"
+      "quantum-computing-the-next-tech-revolution",
+      "augmented-reality-blending-digital-with-the-real-world",
+      "5g-technology-more-than-just-faster-internet"
     ]
   },
   {
@@ -44,7 +46,9 @@
       "getting-started-with-react-hooks-a-practical-guide",
       "building-a-restful-api-with-nodejs-and-express-best-practices",
       "modern-css-layouts-flexbox-grid-and-custom-properties-in-2024",
-      "the-magic-of-css-grid-building-responsive-layouts-without-headaches"
+      "the-magic-of-css-grid-building-responsive-layouts-without-headaches",
+      "blockchain-beyond-bitcoin-real-world-applications-you-didnt-expect",
+      "blockchain-beyond-bitcoin-real-world-applications-you-didnt-expect-1"
     ]
   },
   {
@@ -58,15 +62,9 @@
     "Name": "Reading ",
     "Description": "this is just a trial ",
     "AssociatedPosts": [
-      "quantum-computing-the-next-tech-revolution"
-    ]
-  },
-  {
-    "Id": "0c9ff9b1-8f9f-48b5-be89-d9f301e48d0d",
-    "Name": "Business",
-    "Description": "welcome to the world of economy and finance ",
-    "AssociatedPosts": [
-      "the-future-of-edge-computing-bringing-cloud-power-closer"
+      "quantum-computing-the-next-tech-revolution",
+      "augmented-reality-blending-digital-with-the-real-world",
+      "5g-technology-more-than-just-faster-internet"
     ]
   }
 ]

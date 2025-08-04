@@ -1,0 +1,115 @@
+@font-face {
+  font-family: homefont;
+  src: url('fonts/Poppins-Regular.ttf') format('truetype');
+}
+
+:root {
+  --pink: rgb(255, 221, 210);
+  --dark-blue: rgb(0, 109, 119);
+  --light-blue: rgb(131, 197, 190);
+  --border: 0.1rem solid #ccc;
+  --box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.05);
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: homefont;
+  text-decoration: none;
+  font-weight: lighter;
+}
+
+.edit-wrapper {
+  max-width: 600px;
+  margin: 40px auto;
+  padding: 30px;
+  background-color: white;
+  border: var(--border);
+  box-shadow: var(--box-shadow);
+  border-radius: 10px;
+}
+
+.edit-header {
+  font-size: 24px;
+  font-weight: bold;
+  color: var(--dark-blue);
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.edit-form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.edit-form label {
+  font-size: 16px;
+  color: var(--dark-blue);
+  margin-bottom: 6px;
+  font-weight: 500;
+}
+
+.edit-form input[type="text"],
+.edit-form input[type="email"],
+.edit-form input[type="password"],
+.edit-form textarea {
+  padding: 10px;
+  font-size: 16px;
+  border: var(--border);
+  border-radius: 6px;
+  background-color: #f9f9f9;
+  transition: border-color 0.3s ease;
+}
+
+.edit-form input:focus,
+.edit-form textarea:focus {
+  border-color: var(--light-blue);
+}
+
+.edit-form .checkbox-group {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.edit-form .checkbox-group label {
+  margin: 0;
+  font-size: 15px;
+}
+
+.edit-form .submit-btn {
+  background-color: var(--dark-blue);
+  color: white;
+  border: none;
+  padding: 12px;
+  font-size: 18px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.edit-form .submit-btn:hover {
+  background-color: var(--light-blue);
+}
+
+.edit-form .error-msg {
+  color: red;
+  font-size: 14px;
+  margin-top: -10px;
+}
+
+.edit-form .success-msg {
+  color: green;
+  font-size: 14px;
+  margin-top: -10px;
+}
+
+@media (max-width: 768px) {
+  .edit-wrapper {
+    width: 90%;
+    padding: 20px;
+  }
+}
+

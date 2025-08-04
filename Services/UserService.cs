@@ -387,5 +387,39 @@ public class UserService
         return Results.Ok("User deleted.");
     }
 
+    public IResult GetUserProfileJson(string email)
+    {
+        var dirName = Regex.Replace(email.ToLower(), @"[@\.]", "_");
+        var profilePath = Path.Combine("content", "users", dirName, "Profile.json");
+
+        if (!File.Exists(profilePath))
+            return Results.NotFound("User profile not found.");
+
+        try
+        {
+            var json = File.ReadAllText(profilePath);
+            var user = JsonSerializer.Deserialize<UserProfile>(json);
+
+            if (user is null)
+                return Results.StatusCode(500);
+
+            return Results.Json(new
+            {
+                user.Name,
+                user.Email,
+                user.Role,
+                user.CreatedDate,
+                user.IsEmailVerified,
+                user.IsSubscribedToNewsletter
+            });
+        }
+        catch (Exception ex)
+        {
+            Console.Error.WriteLine($"Error reading profile: {ex.Message}");
+            return Results.StatusCode(500);
+        }
+    }
+
+
 
 }
