@@ -89,7 +89,7 @@
 .subscribe-btn,.login-btn {
   cursor: pointer;
   font-weight: bold;
-  color: var(--light-blue);
+  color: var(--dark-blue);
   background: #fff;
   padding: 0.5rem 1rem;
   border-radius: 0.3rem;
@@ -425,7 +425,7 @@ html {
     padding:1rem;
     font-size: 1.7rem;
     color:#fff;
-    background:var(--light-blue);
+    background:var(--dark-blue);
     text-transform: capitalize;
 }
 
@@ -632,10 +632,7 @@ input[type="checkbox"] {
   transform: scale(1.5); /* Adjust the multiplier (1.5 = 150% bigger) */
   margin: 0.5rem; /* Add space around it */
 }
-/* Subscription Toggle Setup */
-#toggle {
-  display: none;
-}
+
 
 
 
@@ -658,9 +655,25 @@ input[type="checkbox"] {
   transition: all 0.3s ease;
 }
 
-#toggle:checked ~ .subscription-modal {
+/* Show blur overlay when any modal is active */
+#toggle:checked ~ .blur-overlay,
+#login-toggle:checked ~ .blur-overlay,
+#register-toggle:checked ~ .blur-overlay {
+  opacity: 1;
+  pointer-events: all;
+}
+
+/* Show modal when its checkbox is checked */
+#toggle:checked ~ .subscription-modal,
+#login-toggle:checked ~ .subscription-modal,
+#register-toggle:checked ~ .subscription-modal {
   opacity: 1;
   pointer-events: auto;
+}
+
+/* Subscription Toggle Setup */
+#toggle ,#login-toggle,#register-toggle{
+  display: none;
 }
 
 .close-icon {
@@ -708,7 +721,7 @@ input[type="checkbox"] {
 }
 
 .modal-content button {
-  background: var(--light-blue);
+  background: var(--dark-blue);
   color: white;
   border: none;
   padding: 0.6rem;
@@ -719,7 +732,7 @@ input[type="checkbox"] {
 }
 
 .modal-content button:hover {
-  background: var(--dark-blue);
+  background: var(--light-blue);
 }
 
 .modal-note {
@@ -740,10 +753,7 @@ input[type="checkbox"] {
   transition: opacity 0.3s ease;
 }
 
-#toggle:checked ~ .blur-overlay {
-  opacity: 1;
-  pointer-events: all;
-}
+
 
 .toast {
   position: fixed;
@@ -803,8 +813,13 @@ input[type="checkbox"] {
 .toggle-auth {
   color: var(--accent-color);
   cursor: pointer;
-  text-decoration: underline;
+  text-decoration: none; 
+  font-weight: 600; 
+  position: relative;
+  padding: 0.1em 0;
+  transition: all 0.2s ease;
 }
+
 
 /* Add this wrapper */
 .pagination-container {
@@ -859,4 +874,43 @@ input[type="checkbox"] {
   font-size: 14px;
   font-weight: 500;
   margin: 0 8px;
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  border: 0;
+}
+
+.modal-close-btn {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  background: transparent;
+  border: none;
+  color: var(--dark-blue);
+  font-size: 1.5rem;
+  cursor: pointer;
+  padding: 0.5rem;
+  transition: all 0.2s ease;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.modal-close-btn:hover {
+  background: rgba(0, 0, 0, 0.05);
+  transform: scale(1.1);
+}
+
+.modal-close-btn:focus {
+  outline: 2px solid var(--light-blue);
+  outline-offset: 2px;
 }

@@ -147,7 +147,7 @@ function renderPost(post) {
 
   likeEl.addEventListener("click", async () => {
     if (!isLoggedIn) {
-      showToast("Please register to like posts.", "error");
+      showToast("error","Please register to like posts.");
       return;
     }
 
@@ -497,3 +497,16 @@ function clearForms() {
   document.getElementById('show-password').checked = false;
   document.getElementById('show-login-password').checked = false;
 }
+function showToast(type, message = "") {
+  const toast = document.getElementById(`${type}-toast`);
+  if (message) toast.querySelector(".message").textContent = message;
+
+  toast.classList.remove("hidden");
+  toast.classList.add("visible");
+
+  setTimeout(() => {
+    toast.classList.remove("visible");
+    toast.classList.add("hidden");
+  }, 3000);
+}
+

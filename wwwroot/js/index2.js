@@ -77,7 +77,7 @@ function renderPosts(page) {
       <div class="post-card">
         <div class="post-content">
           <div class="post-image">
-            ${post.image ? `<img src="${post.image}" alt="cover image" />` : ""}
+            ${post.image ? `<img src="${post.image}" alt="${post.title}" />` : ""}
           </div>
           <div class="post-info">
             <div class="date">
@@ -410,7 +410,7 @@ document.addEventListener("DOMContentLoaded", () => {
         }, 4000);
 
         form.reset();
-        document.getElementById("toggle").checked = false;
+        document.getElementById("register-toggle").checked = false;
       } else {
         const errorText = await res.text();
         const errorToast = document.getElementById("error-toast");
@@ -448,7 +448,7 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   if (params.get("showLogin") === "true") {
-    const toggle = document.getElementById("toggle");
+    const toggle = document.getElementById("login-toggle");
     const registerSection = document.getElementById("register-section");
     const loginSection = document.getElementById("login-section");
 
@@ -498,7 +498,8 @@ document.getElementById("login-form")?.addEventListener("submit", async (event) 
       // Show avatar + menu
       showUserMenu(user);
       form.reset();
-      document.getElementById("toggle").checked = false;
+      document.getElementById("login-toggle").checked = false;
+      document.getElementById("register-toggle").checked = false;
     } else {
       const errorText = await res.text();
       const errorToast = document.getElementById("error-toast");
@@ -640,4 +641,13 @@ function clearForms() {
   // Uncheck "show password" boxes
   document.getElementById('show-password').checked = false;
   document.getElementById('show-login-password').checked = false;
+}
+
+function closeModals() {
+  // Uncheck both toggle checkboxes
+  document.getElementById('login-toggle').checked = false;
+  document.getElementById('register-toggle').checked = false;
+  
+  // Clear the forms (your existing function)
+  clearForms();
 }

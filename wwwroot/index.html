@@ -20,12 +20,14 @@
             </nav>
 
             <div class="branding">
-              <label for="toggle" class="login-btn" id="login-btn">Login</label>
-              <label for="toggle" class="subscribe-btn" id="register-btn">Register</label>
+              <label for="login-toggle" class="login-btn" id="login-btn">Login</label>
+              <label for="register-toggle" class="subscribe-btn" id="register-btn">Register</label>
+            
 
               <form action="" class="search-form" id="search-form">
-                <input type="search" placeholder="Search here..." class="search-box" />
-                <button type="button" id="search-toggle" class="fas fa-search"></button>
+                <label for="search" class="visually-hidden">Search Bar</label>
+                <input type="search" id="search" placeholder="Search here..." class="search-box" />
+                <button type="button" id="search-toggle" class="fas fa-search" aria-label="Toggle search"></button>
               </form>
 
               <div id="user-menu" class="user-menu hidden">
@@ -40,22 +42,33 @@
             </div>
           </header>
 
-
-         <input type="checkbox" id="toggle" />
+       
+        <input type="checkbox" id="login-toggle" class="modal-toggle" />
+        <input type="checkbox" id="register-toggle" class="modal-toggle" />
          <div class="blur-overlay"></div>
         <div class="subscription-modal">
-          <label for="toggle" class="close-icon"><i class="fas fa-times" onclick="clearForms()"></i></label>
+          <button class="modal-close-btn" aria-label="Close modal" onclick="closeModals()">
+            <i class="fas fa-times"></i>
+          </button>
           <div class="modal-icon"><i class="far fa-envelope"></i></div>
           <div class="modal-content">
            <!-- Registration Form -->
             <div id="register-section" class="auth-section">
               <h2>Become a member of our blog community</h2>
               <form id="subscribe-form">
-                <input type="email" name=email placeholder="Email address" required />
-                <input type="text" name="name" placeholder="Name" required />
-                <input type="password" name="password" placeholder="Password" required />
+          
+                <label for="email" class="visually-hidden">Email Address</label>
+                <input type="email" id="email" name="email" placeholder="Email address" required />
 
-                <input type="password" name="confirmPassword" id="confirm-password" placeholder="Confirm Password" required />
+                <label for="name" class="visually-hidden">Name</label>
+                <input type="text" id="name" name="name" placeholder="Name" required />
+
+                <label for="password" class="visually-hidden">Password</label>
+                <input type="password" id="password" name="password" placeholder="Password" required />
+
+                <label for="confirm-password" class="visually-hidden">Confirm Password</label>
+                <input type="password" id="confirm-password" name="confirmPassword" placeholder="Confirm Password" required />
+             
 
                 <label>
                   <input type="checkbox" id="show-password" /> Show password
@@ -73,7 +86,9 @@
               <div id="login-section" class="auth-section hidden">
                 <h2>Welcome back!</h2>
                 <form id="login-form">
-                  <input type="email" name="loginEmail" placeholder="Email address" required />
+                  <label for="loginEmail" class="visually-hidden">Login Email</label>
+                  <input type="email" id="loginEmail" name="loginEmail" placeholder="Email address" required />
+                  <label for="login-password" class="visually-hidden">Password</label>
                   <input type="password" name="loginPassword" id="login-password" placeholder="Password" required />
                   <label>
                     <input type="checkbox" id="show-login-password" /> Show password
