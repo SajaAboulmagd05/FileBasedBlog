@@ -210,6 +210,11 @@ form label {
   font-size: larger;
   margin-top: 10px;
   display: block;
-  color: var(--light-blue);
+  color: var(--dark-blue);
   text-align: left;
+}
+
+strong {
+  font-weight: 700; 
+  font-size: 1.1em; 
 }

@@ -9,6 +9,7 @@ using System.Text;
 using Microsoft.OpenApi.Models;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
+using Microsoft.AspNetCore.Rewrite;
 
 
 
@@ -83,6 +84,21 @@ app.MapGet("/{slug:regex(^[a-z0-9-]+$)}", async (HttpContext context, string slu
     // Serve post.html with the slug (URL bar stays clean)
     context.Request.QueryString = new QueryString($"?slug={slug}");
     await context.Response.SendFileAsync("wwwroot/post.html");
+});
+
+app.MapGet("/Admin", async context =>
+{
+    await context.Response.SendFileAsync("wwwroot/Admin.html");
+});
+
+app.MapGet("/EditProfile", async context =>
+{
+    await context.Response.SendFileAsync("wwwroot/EditProfile.html");
+});
+
+app.MapGet("/PostManagement", async context =>
+{
+    await context.Response.SendFileAsync("wwwroot/PostManagement.html");
 });
 
 app.UseDefaultFiles(); // Serves index.html by default

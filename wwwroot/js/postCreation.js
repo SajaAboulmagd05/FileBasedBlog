@@ -699,7 +699,8 @@ function openDeleteModal(post) {
   content.innerHTML = `
     <h2>Confirm Deletion</h2>
     <div class="modal-content">
-      <p>Are you sure you want to delete <strong>${post.title}</strong>? This action cannot be undone.</p>
+      <p>Are you sure you want to delete <strong>${post.title}?</strong> </p>
+      <p>This action cannot be undone.</p>
       <form id="delete-form">
         <input type="hidden" name="slug" value="${post.slug}" />
         <button type="submit" style="background:#f44336;">Yes, Delete</button>

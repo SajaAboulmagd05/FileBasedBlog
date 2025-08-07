@@ -11,105 +11,429 @@
   --box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.05);
 }
 
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  font-family: homefont;
-  text-decoration: none;
-  font-weight: lighter;
+
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    outline: none;
+    border:none;
+    font-family: homefont;
+    text-decoration: none;
+    font-weight: lighter;
 }
 
-.edit-wrapper {
-  max-width: 600px;
-  margin: 40px auto;
-  padding: 30px;
-  background-color: white;
+.panel-wrapper {
+  max-width: 1200px;
+  width: 90%;
+  margin: 20px auto;
   border: var(--border);
   box-shadow: var(--box-shadow);
+  background-color: white;
   border-radius: 10px;
 }
 
-.edit-header {
-  font-size: 24px;
-  font-weight: bold;
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 20px;
+  background: var(--dark-blue);
+  color: white;
+  box-shadow: var(--box-shadow);
+  z-index: 1000;
+
+}
+
+.branding {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-left: auto;
+}
+
+.user-menu {
+  position: relative;
+  display: flex;
+  align-items: center;
+  margin-left: auto;
+  padding-right: 1rem;
+}
+
+.avatar-wrapper {
+  position: relative;
+}
+
+.avatar {
+  background-color: #3E8DA8;
+  color: white;
+  font-weight: 600;
+  border-radius: 50%;
+  width: 2.5rem;
+  height: 2.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 1rem;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+  transition: background 0.3s ease;
+}
+
+.avatar:hover {
+  background-color: #357a91;
+}
+
+.dropdown {
+  position: absolute;
+  top: 3rem;
+  right: 0;
+  background-color: white;
+  border: 1px solid #ddd;
+  border-radius: 0.5rem;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  padding: 0.75rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  z-index: 1000;
+  min-width: 160px;
+}
+
+.dropdown a,
+.dropdown button {
+  background: none;
+  border: none;
+  text-align: left;
+  padding: 0.5rem;
+  font-size: 0.9rem;
+  color: #333;
+  cursor: pointer;
+  border-radius: 0.3rem;
+  transition: background 0.2s ease;
+}
+
+.dropdown a:hover,
+.dropdown button:hover {
+  background-color: #f0f0f0;
+}
+
+.main-nav {
+  display: flex;
+  gap: 2rem;
+  margin-left: 2rem;
+}
+
+.main-nav a {
+  color: white;
+  font-weight: 500;
+  font-size: 1.2rem;
+  position: relative;
+  transition: all 0.3s ease;
+}
+
+.main-nav a::after {
+  content: '';
+  position: absolute;
+  bottom: -4px;
+  left: 0;
+  width: 0%;
+  height: 2px;
+  background-color: var(--light-blue);
+  transition: width 0.3s ease, background-color 0.3s ease;
+}
+
+.main-nav a:hover {
+  color: var(--pink);
+  transform: scale(1.05);
+}
+
+.main-nav a:hover::after {
+  width: 100%;
+}
+
+.panel-wrapper {
+  max-width: 800px;
+  width: 90%;
+  margin: 20px auto;
+  border: var(--border);
+  box-shadow: var(--box-shadow);
+  background-color: white;
+  border-radius: 10px;
+}
+
+.main-content {
+  padding: 2rem;
+}
+
+.main-content h2 {
   color: var(--dark-blue);
-  margin-bottom: 20px;
+  font-size: 2rem;
+  margin-bottom: 2rem;
   text-align: center;
+}
+
+/* Profile Header */
+.profile-header {
+  display: flex;
+  gap: 2rem;
+  align-items: center;
+  margin-bottom: 2rem;
+  padding-bottom: 2rem;
+  border-bottom: var(--border);
+}
+
+.avatar.large {
+  width: 120px;
+  height: 120px;
+  font-size: 2.5rem;
+  background-color: #3E8DA8;
+  color: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.user-info {
+  flex-grow: 1;
+}
+
+.user-info p {
+  margin-bottom: 0.75rem;
+  font-size: 1rem;
+  color: #555;
+  display: flex;
+}
+
+.user-info p strong {
+  min-width: 80px;
+  color: var(--dark-blue);
+  font-weight: 500;
+}
+
+/* Tabs Navigation */
+.profile-tabs {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 2rem;
+  border-bottom: var(--border);
+  padding-bottom: 0.5rem;
+  flex-wrap: wrap;
+  width: 100%; 
+}
+
+/* For admin users when role-request tab is hidden */
+.profile-tabs:has(.tab-btn[data-tab="role-request"][style*="display: none"]) .tab-btn {
+  flex: 1 0 calc(33.333% - 0.5rem); /* Distribute in 3 columns accounting for gap */
+}
+
+.hidden {
+  display: none !important;
+}
+
+.tab-btn {
+  padding: 0.75rem 1.5rem;
+  border-radius: 6px;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  color: var(--dark-blue);
+  border: none;
+}
+
+.tab-btn[data-tab="change-name"] {
+  background-color: #ffe1e1; /* Admin pink */
+  color: var(--dark-blue);
+}
+
+.tab-btn[data-tab="reset-password"] {
+  background-color: #dceeff; /* Author blue */
+  color: var(--dark-blue);
+}
+
+.tab-btn[data-tab="delete-account"] {
+  background-color: #fffbd0; /* Member yellow */
+  color: var(--dark-blue);
+}
+
+.tab-btn[data-tab="role-request"] {
+  background-color: #ddffe6; /* Editor green */
+  color: var(--dark-blue);
+}
+
+/* Active tab styling */
+.tab-btn.active {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+  font-weight: 600;
+}
+
+/* Hover effects */
+.tab-btn[data-tab="change-name"]:hover {
+  background-color: #ffd1d1;
+}
+
+.tab-btn[data-tab="reset-password"]:hover {
+  background-color: #cbe2ff;
+}
+
+.tab-btn[data-tab="delete-account"]:hover {
+  background-color: #fff5c0;
+}
+
+.tab-btn[data-tab="role-request"]:hover {
+  background-color: #c8f5d5;
+}
+
+/* Tab Content */
+.tab-content {
+  display: none;
+  padding: 1.5rem;
+  border-radius: 8px;
+  background: #f9f9f9;
+  margin-bottom: 2rem;
+}
+
+.tab-content.active {
+  display: block;
 }
 
 .edit-form {
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 1.5rem;
 }
 
 .edit-form label {
-  font-size: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  font-size: 1rem;
   color: var(--dark-blue);
-  margin-bottom: 6px;
   font-weight: 500;
 }
 
-.edit-form input[type="text"],
-.edit-form input[type="email"],
-.edit-form input[type="password"],
+.edit-form input,
+.edit-form select,
 .edit-form textarea {
-  padding: 10px;
-  font-size: 16px;
+  padding: 0.75rem;
   border: var(--border);
   border-radius: 6px;
-  background-color: #f9f9f9;
-  transition: border-color 0.3s ease;
+  font-size: 1rem;
+  background-color: white;
+  transition: all 0.3s ease;
 }
 
 .edit-form input:focus,
+.edit-form select:focus,
 .edit-form textarea:focus {
   border-color: var(--light-blue);
+  box-shadow: 0 0 0 3px rgba(131, 197, 190, 0.2);
 }
 
-.edit-form .checkbox-group {
-  display: flex;
-  align-items: center;
-  gap: 10px;
+.edit-form textarea {
+  min-height: 120px;
+  resize: vertical;
 }
 
-.edit-form .checkbox-group label {
-  margin: 0;
-  font-size: 15px;
-}
-
-.edit-form .submit-btn {
-  background-color: var(--dark-blue);
+/* Buttons */
+.confirm-btn {
+  padding: 0.75rem;
+  border-radius: 6px;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  background: var(--dark-blue);
   color: white;
   border: none;
-  padding: 12px;
-  font-size: 18px;
+}
+
+.confirm-btn:hover {
+  background: var(--light-blue);
+  transform: translateY(-2px);
+}
+
+
+
+
+/* Warning Message */
+.warning-message {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.warning-message i {
+  font-size: 3rem;
+  color: var(--danger);
+  margin-bottom: 1rem;
+}
+
+.warning-message h3 {
+  color: var(--danger);
+  margin-bottom: 0.5rem;
+}
+
+.warning-message p {
+  color: #666;
+  margin-bottom: 1.5rem;
+}
+.delete-btn {
+  background: #ff6b6b; /* Soft red color */
+  color: white;
+  padding: 0.75rem 1.5rem;
   border-radius: 6px;
+  font-size: 1rem;
+  font-weight: 500;
   cursor: pointer;
-  transition: background-color 0.3s ease;
+  transition: all 0.3s ease;
+  border: none;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
 
-.edit-form .submit-btn:hover {
-  background-color: var(--light-blue);
+
+
+.delete-btn:hover {
+  background: #ff5252; /* Slightly darker red on hover */
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0,0,0,0.15);
 }
 
-.edit-form .error-msg {
-  color: red;
-  font-size: 14px;
-  margin-top: -10px;
+.delete-btn:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
 
-.edit-form .success-msg {
-  color: green;
-  font-size: 14px;
-  margin-top: -10px;
-}
-
+/* Responsive */
 @media (max-width: 768px) {
-  .edit-wrapper {
-    width: 90%;
-    padding: 20px;
+  .profile-header {
+    flex-direction: column;
+    text-align: center;
+  }
+  
+  .user-info p {
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+  
+  .user-info p strong {
+    min-width: auto;
+  }
+  
+  .profile-tabs {
+    flex-direction: column;
+  }
+  
+  .tab-btn {
+    width: 100%;
+  }
+  
+  .confirmation-btns button {
+    width: 100%;
   }
 }
+
 

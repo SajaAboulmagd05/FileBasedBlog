@@ -103,16 +103,16 @@
   font-weight: 500;
 }
 
-.stat-card p {
+.stat-card h2 {
   font-size: 26px;
   margin: 8px 0 0;
 }
 
 /* Unique colors */
-.stat-card.admin  { background-color: #ffe1e1; color: var(--dark-blue); }
-.stat-card.author { background-color: #dceeff; color: var(--dark-blue); }
-.stat-card.editor { background-color: #ddffe6; color: var(--dark-blue); }
-.stat-card.member { background-color: #fffbd0; color: var(--dark-blue); }
+.stat-card.admin  { background-color: #ffe1e1; color: black; }
+.stat-card.author { background-color: #dceeff; color: black; }
+.stat-card.editor { background-color: #ddffe6; color: black; }
+.stat-card.member { background-color: #fffbd0; color: black; }
 
 
 /* colours of the post management panel */
@@ -149,8 +149,8 @@
 }
 
 .user-table th {
-  background-color: var(--light-blue);
-  color: var(--dark-blue);
+  background-color:#d8e2dc;
+  color: black;
 }
 
 .role-btn,
@@ -260,8 +260,8 @@ td.actions {
 }
 
 .avatar {
-  background-color: #3E8DA8;
-  color: white;
+  background-color: white;
+  color: var(--dark-blue);
   font-weight: 600;
   border-radius: 50%;
   width: 2.5rem;
@@ -276,7 +276,7 @@ td.actions {
 }
 
 .avatar:hover {
-  background-color: #357a91;
+  background-color: #eee;
 }
 
 .dropdown {

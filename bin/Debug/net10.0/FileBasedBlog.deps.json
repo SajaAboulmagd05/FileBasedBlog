@@ -12,6 +12,7 @@
           "Markdig": "0.41.2",
           "Microsoft.AspNetCore.Authentication.JwtBearer": "9.0.7",
           "Microsoft.AspNetCore.Mvc.NewtonsoftJson": "9.0.6",
+          "Microsoft.AspNetCore.Rewrite": "2.3.0",
           "Swashbuckle.AspNetCore": "9.0.3",
           "System.IdentityModel.Tokens.Jwt": "8.12.1",
           "System.Text.Json": "9.0.6"
@@ -71,6 +72,7 @@
           }
         }
       },
+      "Microsoft.AspNetCore.Rewrite/2.3.0": {},
       "Microsoft.Extensions.ApiDescription.Server/9.0.0": {},
       "Microsoft.IdentityModel.Abstractions/8.12.1": {
         "runtime": {
@@ -256,6 +258,13 @@
       "sha512": "sha512-WjwM/XJuAv0F+kh0ApeWmoxI+9kkAF9nCa6f3GX9rMkN/G2NRPbo2a9uSQy0u8rmaeFXo07P2FoSKQcPM+5n1Q==",
       "path": "microsoft.aspnetcore.mvc.newtonsoftjson/9.0.6",
       "hashPath": "microsoft.aspnetcore.mvc.newtonsoftjson.9.0.6.nupkg.sha512"
+    },
+    "Microsoft.AspNetCore.Rewrite/2.3.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-SH+DPiw/zeQu541MnJXMTa+4HVdIZw9WxmW+g/obgcE+Dd7/hkM1uTL+H10s75iANm4Tmm58zqRnEd3FFJ/yUA==",
+      "path": "microsoft.aspnetcore.rewrite/2.3.0",
+      "hashPath": "microsoft.aspnetcore.rewrite.2.3.0.nupkg.sha512"
     },
     "Microsoft.Extensions.ApiDescription.Server/9.0.0": {
       "type": "package",

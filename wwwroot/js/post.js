@@ -58,7 +58,7 @@ function renderPost(post) {
 
   const attachmentsSection = `
     <div class="attachments-section">
-      <h4>Attachments (click to download)</h4>
+      <h3>Attachments (click to download)</h3>
       <ul>${attachmentHTML}</ul>
     </div>
   `;
@@ -94,6 +94,7 @@ function renderPost(post) {
 
         <div class="comment-form">
           <h4>Add a Comment</h4>
+          <label for="comment-input" class="visually-hidden">Comment</label>
           <textarea id="comment-input" placeholder="Share your thoughts with us."></textarea>
           <button class="comment-btn">Submit Comment</button>
         </div>
@@ -129,7 +130,7 @@ function renderPost(post) {
       </div>
     </div>
 
-    ${post.image ? `<img src="${post.image}" alt="cover image" class="post-image" />` : ""}
+    ${post.image ? `<img src="${post.image}" alt="${post.title}" class="post-image" />` : ""}
 
     <div class="post-body">${html}</div>
 
@@ -497,6 +498,17 @@ function clearForms() {
   document.getElementById('show-password').checked = false;
   document.getElementById('show-login-password').checked = false;
 }
+
+function closeModals() {
+  // Uncheck both toggle checkboxes
+  document.getElementById('login-toggle').checked = false;
+  document.getElementById('register-toggle').checked = false;
+  
+  // Clear the forms (your existing function)
+  clearForms();
+}
+
+
 function showToast(type, message = "") {
   const toast = document.getElementById(`${type}-toast`);
   if (message) toast.querySelector(".message").textContent = message;

@@ -28,6 +28,10 @@ body, h1, h2, h3, h4, h5, h6, p, ul, ol {
   padding: 0;
 }
 
+h3{
+  color: var(--dark-blue);
+  font-weight: bold;
+}
 body {
   background-color: #f9f9f9;
   color: #333;
@@ -148,7 +152,7 @@ body {
   }
 
   a {
-    color: var(--light-blue);
+    color: #4a5759;
     text-decoration: underline;
   }
 
@@ -334,7 +338,7 @@ body {
 .attachment-link {
   display: inline-block;
   margin-bottom: 0.4rem;
-  color: var(--light-blue);
+  color: #4a5759;
   text-decoration: underline;
 }
 

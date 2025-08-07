@@ -7,24 +7,22 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
   <link rel="icon" href="css/favicon.ico" />
   <link rel="stylesheet" href="css/EditProfile.css" />
-  <link rel="stylesheet" href="css/Dashboard.css" />
   <link rel="stylesheet" href="css/Modal.css" />
 </head>
 <body>
-  <!-- Reuse your header -->
   <header class="header">
     <h1>My Blog</h1>
     <nav class="main-nav" id="main-nav">
       <a href="/">Home</a>
-      <a href="PostManagement.html" id="postManage-link" class="hidden">Posts Management</a>
-      <a href="Admin.html" id="dashboard-link" class="hidden">Dashboard</a>
+      <a href="/PostManagement" id="postManage-link" class="hidden">Posts Management</a>
+      <a href="/Admin" id="dashboard-link" class="hidden">Dashboard</a>
     </nav>
     <div class="branding">
       <div id="user-menu" class="user-menu hidden">
         <div class="avatar-wrapper">
           <div class="avatar" id="user-avatar">SA</div>
           <div class="dropdown hidden" id="user-dropdown">
-            <a href="/edit-profile">Edit Profile</a>
+            <a href="/EditProfile">Edit Profile</a>
             <button id="logout-btn">Logout</button>
           </div>
         </div>
@@ -40,43 +38,84 @@
         <div class="profile-header">
           <div class="avatar large" id="profile-avatar">SA</div>
           <div class="user-info">
-            <p><strong>Email:</strong> <span id="email-display"></span></p>
-            <p><strong>Role:</strong> <span id="role-display"></span></p>
-            <p><strong>Joined:</strong> <span id="joined-display"></span></p>
-            <p><strong>Verified:</strong> <span id="verified-display"></span></p>
+            <p><strong>Name:</strong> <span id="name-display">John Doe</span></p>
+            <p><strong>Email:</strong> <span id="email-display">john@example.com</span></p>
+            <p><strong>Role:</strong> <span id="role-display">Reader</span></p>
+            <p><strong>Joined:</strong> <span id="joined-display">January 15, 2023</span></p>
           </div>
         </div>
 
-        <form id="edit-profile-form">
-          <label>
-            Display Name
-            <input type="text" name="name" required />
-          </label>
+        <div class="profile-tabs">
+          <button class="tab-btn active" data-tab="change-name">Change Name</button>
+          <button class="tab-btn" data-tab="reset-password">Reset Password</button>
+          <button class="tab-btn" data-tab="delete-account">Delete Account</button>
+          <button class="tab-btn" data-tab="role-request">Writer Request</button>
+        </div>
 
-          <label class="checkbox-label">
-            <input type="checkbox" name="newsletter" />
-            Subscribe to Newsletter
-          </label>
+        <div class="tab-content active" id="change-name">
+          <form class="edit-form">
+            <label>
+              New Display Name
+              <input type="text" name="new-name" placeholder="Enter new name" required />
+            </label>
+            <button type="submit" class="confirm-btn">Update Name</button>
+          </form>
+        </div>
 
-          <button type="submit" style="background:#ffe1e1;">Save Changes</button>
-        </form>
+        <div class="tab-content" id="reset-password">
+          <form class="edit-form">
+            <label>
+              Current Password
+              <input type="password" name="current-password" placeholder="Enter current password" required />
+            </label>
+            <label>
+              New Password
+              <input type="password" name="new-password" placeholder="Enter new password" required />
+            </label>
+            <label>
+              Confirm New Password
+              <input type="password" name="confirm-password" placeholder="Confirm new password" required />
+            </label>
+            <button type="submit" class="confirm-btn">Change Password</button>
+          </form>
+        </div>
 
-        <div class="profile-actions">
-          <button id="change-password-btn" style="background:#dceeff;">Change Password</button>
-          <button id="request-role-btn" style="background:#ddffe6;">Request Role Change</button>
+        <div class="tab-content" id="delete-account">
+          <div class="warning-message">
+            <i class="fas fa-exclamation-triangle"></i>
+            <h3>Delete Your Account</h3>
+            <h3>This action cannot be undone. All your data will be permanently deleted.</h3>
+            <form class="edit-form">
+              <label>
+                Enter your password to confirm
+                <input type="password" name="delete-password" placeholder="Enter your password" required />
+              </label>
+           
+                <button type="submit" class="delete-btn">Delete My Account</button>
+     
+            </form>
+          </div>
+        </div>
+
+        <div class="tab-content" id="role-request">
+          <form class="edit-form">
+            <label>
+              Request Role
+              <select name="requested-role" required>
+                <option value="">Select a role</option>
+                <option value="writer">Writer</option>
+                <option value="editor">Editor</option>
+                <option value="admin">Admin</option>
+              </select>
+            </label>
+            <label>
+              Request Message
+              <textarea name="request-message" placeholder="Explain why you're requesting this role" required></textarea>
+            </label>
+            <button type="submit" class="confirm-btn">Submit Request</button>
+          </form>
         </div>
       </main>
-    </div>
-  </div>
-
-  <!-- Password Modal -->
-  <input type="checkbox" id="password-toggle" />
-  <div class="blur-overlay"></div>
-  <div class="subscription-modal" id="password-modal">
-    <label for="password-toggle" class="close-icon"><i class="fas fa-times"></i></label>
-    <div class="modal-icon"><i class="fas fa-lock"></i></div>
-    <div class="modal-content" id="password-form-content">
-      <!-- Injected dynamically -->
     </div>
   </div>
 

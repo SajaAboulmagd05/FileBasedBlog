@@ -62,7 +62,7 @@ function navigate(section) {
               Members: "member"
             };
           box.className = `stat-card ${classMap[role] || "default"}`;
-          box.innerHTML = `<h3>${role}</h3><p>${counts[role]}</p>`;
+          box.innerHTML = `<h3>${role}</h3><h2>${counts[role]}</h2>`;
           box.addEventListener("click", () => fetchUsers(role.slice(0, -1))); // 'Admins' → 'Admin'
           statsContainer.appendChild(box);
         }
@@ -136,10 +136,10 @@ function renderTags() {
 
       document.getElementById('tag-stats').innerHTML = `
         <div class="stat-card" style="background-color:#f0d9ff;">
-          <h3>Total Tags</h3><p>${totalTags}</p>
+          <h3>Total Tags</h3><h2>${totalTags}</h2>
         </div>
         <div class="stat-card" style="background-color:#d0f0ff;">
-          <h3>Total Tag Posts</h3><p>${totalPosts}</p>
+          <h3>Total Tag Posts</h3><h2>${totalPosts}</h2>
         </div>
       `;
       tags.sort((a, b) => a.name.localeCompare(b.name));
@@ -190,10 +190,10 @@ function renderCategories() {
 
       document.getElementById('category-stats').innerHTML = `
         <div class="stat-card" style="background-color:#d7f7d7;">
-          <h3>Total Categories</h3><p>${totalCategories}</p>
+          <h3>Total Categories</h3><h2>${totalCategories}</h2>
         </div>
         <div class="stat-card" style="background-color:#fdf6c5;">
-          <h3>Total Category Posts</h3><p>${totalPosts}</p>
+          <h3>Total Category Posts</h3><h2>${totalPosts}</h2>
         </div>
       `;
       categories.sort((a, b) => a.name.localeCompare(b.name));
@@ -372,7 +372,8 @@ function openRoleModal(email, currentRole) {
     icon.className = "fas fa-sync"; 
   }
   modalContent.innerHTML = `
-    <h2>Change Role for ${email}</h2>
+    <h2>Change Role</h2>
+    <p><strong>${email}</strong></p>
     <form id="change-role-form">
       <select name="role" required>
         <option value="" disabled>Select New Role</option>
