@@ -407,6 +407,28 @@
   box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
 
+.password-wrapper {
+  position: relative;
+}
+
+.password-wrapper input {
+  width: 100%;
+  padding-right: 2.5rem;
+}
+
+.toggle-password {
+  position: absolute;
+  right: 0.75rem;
+  top: 50%;
+  transform: translateY(-50%);
+  cursor: pointer;
+  color: #666;
+}
+
+.toggle-password:hover {
+  color: #333;
+}
+
 /* Responsive */
 @media (max-width: 768px) {
   .profile-header {
@@ -437,3 +459,29 @@
 }
 
 
+.role-request-box {
+  background: #f9f9f9;
+  border-left: 4px solid var(--light-blue);
+  padding: 1rem 1.5rem;
+  margin: 1rem 0;
+  border-radius: 0.5rem;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+}
+
+.role-request-header {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin-bottom: 0.5rem;
+  color: var(--dark-blue);
+}
+
+.role-request-header i {
+  font-size: 1.4rem;
+}
+
+.request-message {
+  margin-top: 0.5rem;
+  font-style: italic;
+  color: #555;
+}

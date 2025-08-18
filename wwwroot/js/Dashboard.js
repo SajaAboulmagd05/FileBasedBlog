@@ -339,6 +339,7 @@ function openModal(type) {
         showToast("error", error);
       }
     } catch {
+      console.error("Fetch error:", err);
       showToast("error", "Network error");
     }
   });

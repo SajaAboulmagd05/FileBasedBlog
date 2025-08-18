@@ -70,6 +70,7 @@ builder.Services.AddSingleton<PostQueryService>();
 builder.Services.AddSingleton<PostSchedulerService>();
 builder.Services.AddSingleton<SubscriberService>();
 builder.Services.AddSingleton<UserService>();
+builder.Services.AddSingleton<ProfileService>();
 builder.Services.AddSingleton<JwtService>();
 builder.Services.AddSingleton<LikeCommentService>();
 builder.Services.AddSingleton<TagService>();
@@ -86,17 +87,17 @@ app.MapGet("/{slug:regex(^[a-z0-9-]+$)}", async (HttpContext context, string slu
     await context.Response.SendFileAsync("wwwroot/post.html");
 });
 
-app.MapGet("/Admin", async context =>
+app.MapGet("/admin-management", async context =>
 {
     await context.Response.SendFileAsync("wwwroot/Admin.html");
 });
 
-app.MapGet("/EditProfile", async context =>
+app.MapGet("/edit-profile", async context =>
 {
     await context.Response.SendFileAsync("wwwroot/EditProfile.html");
 });
 
-app.MapGet("/PostManagement", async context =>
+app.MapGet("/post-management", async context =>
 {
     await context.Response.SendFileAsync("wwwroot/PostManagement.html");
 });
@@ -515,7 +516,8 @@ categoryGroup.MapPost("/delete", async (HttpContext context, CategoryService ser
     return Results.Ok(result);
 });
 
-app.MapGet("/api/users/me", (HttpContext context, UserService userService) =>
+
+userGroup.MapGet("/me", (HttpContext context, UserService userService) =>
 {
     var email = context.User.FindFirst(ClaimTypes.Email)?.Value;
     if (string.IsNullOrWhiteSpace(email))
@@ -523,6 +525,59 @@ app.MapGet("/api/users/me", (HttpContext context, UserService userService) =>
 
     return userService.GetUserProfileJson(email);
 });
+
+userGroup.MapPost("/change-name", async (HttpContext context, ProfileService profileService, JwtService jwt) =>
+{
+    var payload = await JsonSerializer.DeserializeAsync<Dictionary<string, string>>(context.Request.Body);
+
+    if (payload == null || !payload.TryGetValue("newName", out var newName))
+        return Results.BadRequest(new { error = "Name is required" });
+
+    var email = context.User.FindFirst(ClaimTypes.Email)?.Value;
+    if (string.IsNullOrWhiteSpace(email))
+        return Results.Unauthorized();
+
+    return profileService.ChangeUserName(email, newName, jwt);
+});
+
+
+userGroup.MapPost("/change-password", async (HttpContext context, ProfileService profileService, JwtService jwt) =>
+{
+    var email = context.User.FindFirst(ClaimTypes.Email)?.Value;
+    var payload = await JsonSerializer.DeserializeAsync<Dictionary<string, string>>(context.Request.Body);
+
+    if (payload == null ||
+        !payload.TryGetValue("currentPassword", out var current) ||
+        !payload.TryGetValue("newPassword", out var next))
+        return Results.BadRequest(new { error = "Missing fields." });
+
+    return profileService.ChangePassword(email, current, next);
+});
+
+userGroup.MapPost("/delete-account", async (HttpContext context, ProfileService profileService, JwtService jwt) =>
+{
+    var email = context.User.FindFirst(ClaimTypes.Email)?.Value;
+    var payload = await JsonSerializer.DeserializeAsync<Dictionary<string, string>>(context.Request.Body);
+
+    if (payload == null || !payload.TryGetValue("password", out var password))
+        return Results.BadRequest(new { error = "Missing password." });
+
+    return profileService.DeleteAccount(email, password);
+});
+
+userGroup.MapPost("/request-role-change", async (HttpContext context, ProfileService profileService, JwtService jwt) =>
+{
+    var email = context.User.FindFirst(ClaimTypes.Email)?.Value;
+    var payload = await JsonSerializer.DeserializeAsync<Dictionary<string, string>>(context.Request.Body);
+
+    if (payload == null ||
+        !payload.TryGetValue("requestedRole", out var role) ||
+        !payload.TryGetValue("requestMessage", out var msg))
+        return Results.BadRequest(new { error = "Missing fields." });
+
+    return profileService.SaveRoleRequest(email, role, msg);
+});
+
 
 
 app.Run();

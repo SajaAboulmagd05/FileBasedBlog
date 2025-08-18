@@ -5,31 +5,33 @@ document.addEventListener("DOMContentLoaded", () => {
   
   // Load profile data
   loadProfile();
-   // Check user role for admin links
-  const user = getCurrentUser();
-   if (user.role === "Admin") {
-    document.querySelector('.tab-btn[data-tab="role-request"]').style.display = "none";
-  }
   
-  const dashboardLink = document.getElementById("dashboard-link");
-  const PostManagmentLink= document.getElementById("postManage-link");
-  const menu = document.getElementById("user-menu");
- 
-
-  if (["Admin"].includes(user.role)) {
-    dashboardLink.classList.remove("hidden");
+  // Check user role for admin links
+  const user = getCurrentUser();
+  if (user.role === "Admin") {
+    document.querySelector('.tab-btn[data-tab="role-request"]').style.display = "none";
+    document.getElementById("dashboard-link").classList.remove("hidden");
   }
-
   if (["Admin", "Editor", "Author"].includes(user.role)) {
-    PostManagmentLink.classList.remove("hidden");
+    document.getElementById("postManage-link").classList.remove("hidden");
   }
   document.getElementById("user-avatar").textContent = user.initials;
-  menu.classList.remove("hidden");
-   
+  document.getElementById("user-menu").classList.remove("hidden");
+  
   // Initialize tab functionality
   setupTabs();
   
- 
+  // Handle dropdown
+  const avatar = document.getElementById("user-avatar");
+  const dropdown = document.getElementById("user-dropdown");
+  avatar.addEventListener("click", () => {
+    dropdown.classList.toggle("hidden");
+  });
+  document.addEventListener("click", (e) => {
+    if (!avatar.contains(e.target) && !dropdown.contains(e.target)) {
+      dropdown.classList.add("hidden");
+    }
+  });
 });
 
 // Tab functionality
@@ -56,33 +58,54 @@ function setupTabs() {
 
 function setupFormSubmissions() {
   // Change Name Form
-  document.querySelector("#change-name form").addEventListener("submit", async (e) => {
+    document.querySelector("#change-name form").addEventListener("submit", async (e) => {
     e.preventDefault();
-    const newName = e.target.querySelector("input[name='new-name']").value;
-    
+
+    const newName = e.target.querySelector("input[name='new-name']").value.trim();
+
+    if (!newName) {
+      showToast("error", "Name cannot be empty");
+      return;
+    }
+
     try {
+      console.log("Sending to /api/users/change-name:", { newName });
+
       const res = await fetch("/api/users/change-name", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
           "Authorization": `Bearer ${localStorage.getItem("authToken")}`
         },
-        body: JSON.stringify({ name: newName })
+        body: JSON.stringify({ newName })
       });
-      
+
+      const responseText = await res.text();
+      console.log("Response status:", res.status, "Body:", responseText);
+
       if (res.ok) {
         showToast("success", "Name updated successfully!");
         localStorage.setItem('userName', newName);
         document.getElementById("name-display").textContent = newName;
+
+        const initials = newName.split(' ').map(word => word[0]).join('').toUpperCase();
+        localStorage.setItem('userInitials', initials);
+        document.getElementById("profile-avatar").textContent = initials;
+        document.getElementById("user-avatar").textContent = initials;
       } else {
-        const error = await res.text();
-        showToast("error", error);
+        try {
+          const error = JSON.parse(responseText);
+          showToast("error", error.error || responseText || "Failed to update name");
+        } catch {
+          showToast("error", responseText || "Failed to update name");
+        }
       }
     } catch (err) {
-      showToast("error", "Network error");
+      console.error("Fetch error:", err);
+      showToast("error", "Network error: " + err.message);
     }
   });
-  
+
   // Reset Password Form
   document.querySelector("#reset-password form").addEventListener("submit", async (e) => {
     e.preventDefault();
@@ -91,11 +114,21 @@ function setupFormSubmissions() {
     const newPassword = formData.get("new-password");
     const confirmPassword = formData.get("confirm-password");
     
-    if (newPassword !== confirmPassword) {
-      showToast("error", "New passwords don't match");
+    if (!currentPassword || !newPassword || !confirmPassword) {
+      showToast("error", "All fields are required.");
       return;
     }
-    
+
+    if (newPassword.length < 6) {
+      showToast("error", "New password must be at least 6 characters.");
+      return;
+    }
+
+    if (newPassword !== confirmPassword) {
+      showToast("error", "New passwords don't match.");
+      return;
+    }
+
     try {
       const res = await fetch("/api/users/change-password", {
         method: "POST",
@@ -126,9 +159,9 @@ function setupFormSubmissions() {
     e.preventDefault();
     const password = e.target.querySelector("input[name='delete-password']").value;
     
-    if (!confirm("Are you sure you want to delete your account? This cannot be undone.")) {
-      return;
-    }
+    // if (!confirm("Are you sure you want to delete your account? This cannot be undone.")) {
+    //   return;
+    // }
     
     try {
       const res = await fetch("/api/users/delete-account", {
@@ -217,11 +250,11 @@ async function loadProfile() {
 // Get current user from localStorage
 function getCurrentUser() {
   return {
-    token: localStorage.getItem("authToken"),
-    id: localStorage.getItem('userId'), 
-    role: localStorage.getItem('userRole'),
-    name: localStorage.getItem('userName'),
-    initials: localStorage.getItem('userInitials')
+    token: localStorage.getItem("authToken") || "",
+    id: localStorage.getItem('userId') || "",
+    role: localStorage.getItem('userRole') || "Reader",
+    name: localStorage.getItem('userName') || "Unknown",
+    initials: localStorage.getItem('userInitials') || "SA"
   };
 }
 
@@ -245,21 +278,12 @@ function showToast(type, message = "") {
     window.location.href = "/";
   });
 
-
-//handle the branding menu when hovering on avatar 
-document.addEventListener("DOMContentLoaded", () => {
-  const avatar = document.getElementById("user-avatar");
-  const dropdown = document.getElementById("user-dropdown");
-
-  // Toggle dropdown on avatar click
-  avatar.addEventListener("click", () => {
-    dropdown.classList.toggle("hidden");
-  });
-
-  // Close dropdown if clicked elsewhere
-  document.addEventListener("click", (e) => {
-    if (!avatar.contains(e.target) && !dropdown.contains(e.target)) {
-      dropdown.classList.add("hidden");
-    }
+  document.querySelectorAll(".toggle-password").forEach(icon => {
+  icon.addEventListener("click", () => {
+    const input = icon.previousElementSibling;
+    const isPassword = input.type === "password";
+    input.type = isPassword ? "text" : "password";
+    icon.classList.toggle("fa-eye");
+    icon.classList.toggle("fa-eye-slash");
   });
 });

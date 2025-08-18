@@ -636,9 +636,9 @@ function renderPostsTable(posts) {
           <button class="view-btn" data-slug="${post.slug}" title="View Post">
             <i class="fas fa-eye"></i>
           </button>
-          <button class="edit-btn" data-slug="${post.slug}" ${!canEdit ? 'disabled' : ''}>
+          <!-- <button class="edit-btn" data-slug="${post.slug}" ${!canEdit ? 'disabled' : ''}>
             <i class="fas fa-edit"></i>
-          </button>
+          </button>-->
           <button class="delete-btn" data-id="${post.id}"><i class="fas fa-trash"></i></button>
           <!-- <button class="status-btn" data-id="${post.id}">
             <i class="fas fa-sync-alt"></i> -->

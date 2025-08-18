@@ -7,6 +7,7 @@ using System.Text.RegularExpressions;
 
 public class UserService
 {
+    private readonly string roleRequestRoot = Path.Combine("content", "role_requests");
     public async Task<IResult> RegisterUser(HttpRequest request)
     {
         var form = await request.ReadFormAsync();
@@ -296,7 +297,7 @@ public class UserService
 
         SaveUser(user);
 
-        return Results.Ok("User created successfully!");
+        return Results.Ok(new { message = "User created successfully!" });
     }
 
 
@@ -389,19 +390,52 @@ public class UserService
 
     public IResult GetUserProfileJson(string email)
     {
+
+
         var dirName = Regex.Replace(email.ToLower(), @"[@\.]", "_");
         var profilePath = Path.Combine("content", "users", dirName, "Profile.json");
 
         if (!File.Exists(profilePath))
             return Results.NotFound("User profile not found.");
 
+        // Load role request if it exists
+        var requestFile = Path.Combine(roleRequestRoot, dirName + ".json");
+        RoleRequestSummary? roleRequest = null;
+
+        if (File.Exists(requestFile))
+        {
+            try
+            {
+                var requestJson = File.ReadAllText(requestFile);
+                var request = JsonSerializer.Deserialize<RoleRequest>(requestJson);
+
+                if (request != null)
+                {
+                    roleRequest = new RoleRequestSummary
+                    {
+                        RequestedRole = request.RequestedRole,
+                        Status = request.Status.ToString(),
+                        Message = request.Message,
+                        RequestedAt = request.RequestedAt
+                    };
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.Error.WriteLine($"Error reading role request: {ex.Message}");
+            }
+        }
+
+        // Load user profile
         try
         {
-            var json = File.ReadAllText(profilePath);
-            var user = JsonSerializer.Deserialize<UserProfile>(json);
+            var profileJson = File.ReadAllText(profilePath);
+            var user = JsonSerializer.Deserialize<UserProfile>(profileJson);
 
             if (user is null)
                 return Results.StatusCode(500);
+
+            user.RoleRequest = roleRequest;
 
             return Results.Json(new
             {
@@ -410,8 +444,10 @@ public class UserService
                 user.Role,
                 user.CreatedDate,
                 user.IsEmailVerified,
-                user.IsSubscribedToNewsletter
+                user.IsSubscribedToNewsletter,
+                RoleRequest = roleRequest
             });
+
         }
         catch (Exception ex)
         {
@@ -419,6 +455,7 @@ public class UserService
             return Results.StatusCode(500);
         }
     }
+
 
 
 

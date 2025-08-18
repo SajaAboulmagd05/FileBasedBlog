@@ -14,15 +14,15 @@
     <h1>My Blog</h1>
     <nav class="main-nav" id="main-nav">
       <a href="/">Home</a>
-      <a href="/PostManagement" id="postManage-link" class="hidden">Posts Management</a>
-      <a href="/Admin" id="dashboard-link" class="hidden">Dashboard</a>
+      <a href="/post-management" id="postManage-link" class="hidden">Posts Management</a>
+      <a href="/admin-management" id="dashboard-link" class="hidden">Dashboard</a>
     </nav>
     <div class="branding">
       <div id="user-menu" class="user-menu hidden">
         <div class="avatar-wrapper">
           <div class="avatar" id="user-avatar">SA</div>
           <div class="dropdown hidden" id="user-dropdown">
-            <a href="/EditProfile">Edit Profile</a>
+            <a href="/edit-profile">Edit Profile</a>
             <button id="logout-btn">Logout</button>
           </div>
         </div>
@@ -43,6 +43,15 @@
             <p><strong>Role:</strong> <span id="role-display">Reader</span></p>
             <p><strong>Joined:</strong> <span id="joined-display">January 15, 2023</span></p>
           </div>
+        </div>
+        <div id="role-request-status" class="role-request-box hidden">
+          <div class="role-request-header">
+            <i class="fas fa-user-tag"></i>
+            <h3>Role Change Request</h3>
+          </div>
+          <p><strong>Requested Role:</strong> <span id="requested-role"></span></p>
+          <p><strong>Status:</strong> <span id="request-status"></span></p>
+          <p class="request-message" id="request-message"></p>
         </div>
 
         <div class="profile-tabs">
@@ -66,35 +75,45 @@
           <form class="edit-form">
             <label>
               Current Password
-              <input type="password" name="current-password" placeholder="Enter current password" required />
+              <div class="password-wrapper">
+                <input type="password" name="current-password" placeholder="Enter current password" required />
+                <i class="fas fa-eye toggle-password"></i>
+              </div>
             </label>
             <label>
               New Password
-              <input type="password" name="new-password" placeholder="Enter new password" required />
+              <div class="password-wrapper">
+                <input type="password" name="new-password" placeholder="Enter new password" required />
+                <i class="fas fa-eye toggle-password"></i>
+              </div>
             </label>
             <label>
               Confirm New Password
-              <input type="password" name="confirm-password" placeholder="Confirm new password" required />
+              <div class="password-wrapper">
+                <input type="password" name="confirm-password" placeholder="Confirm new password" required />
+                <i class="fas fa-eye toggle-password"></i>
+              </div>
             </label>
             <button type="submit" class="confirm-btn">Change Password</button>
           </form>
         </div>
 
         <div class="tab-content" id="delete-account">
-          <div class="warning-message">
-            <i class="fas fa-exclamation-triangle"></i>
-            <h3>Delete Your Account</h3>
-            <h3>This action cannot be undone. All your data will be permanently deleted.</h3>
+            <div class="warning-message">
+              <i class="fas fa-exclamation-triangle"></i>
+              <h3>Delete Your Account</h3>
+              <h3>This action cannot be undone. All your data will be permanently deleted.</h3>
+            </div>
             <form class="edit-form">
               <label>
                 Enter your password to confirm
-                <input type="password" name="delete-password" placeholder="Enter your password" required />
+                <div class="password-wrapper">
+                  <input type="password" name="delete-password" placeholder="Enter your password" required />
+                  <i class="fas fa-eye toggle-password"></i>
+                </div>
               </label>
-           
-                <button type="submit" class="delete-btn">Delete My Account</button>
-     
+              <button type="submit" class="delete-btn">Delete My Account</button>
             </form>
-          </div>
         </div>
 
         <div class="tab-content" id="role-request">
@@ -118,7 +137,7 @@
       </main>
     </div>
   </div>
-
+   
   <!-- Toasts -->
   <div id="success-toast" class="toast hidden">
     <i class="fas fa-check-circle"></i>
