@@ -1,0 +1,10 @@
+replicaCount: 2
+image:
+  repository: registry.arc-center.run/silverkeytech/filebasedblog/saja
+  pullPolicy: IfNotPresent
+  tag: saja-filebasedblog-dev-latest
+
+resources:
+  requests:
+    cpu: 60m
+    memory: 60M
