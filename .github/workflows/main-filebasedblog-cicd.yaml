@@ -1,0 +1,114 @@
+name: main-filebasedblog-cicd
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:  
+
+jobs:
+  ci:
+    runs-on: ubuntu-latest
+    outputs:
+      commit_id: ${{steps.set_commit_id.outputs.commit_id}}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Shorten commit id
+        id: set_commit_id
+        run: |
+          echo "commit_id=${GITHUB_SHA::6}" >> "$GITHUB_OUTPUT"
+
+      - name: Set up Docker Buildx
+        id: buildx
+        uses: docker/setup-buildx-action@v3  
+
+      - name: Cache Docker layers
+        uses: actions/cache@v4
+        with:
+          path: /tmp/.buildx-cache
+          key: buildx--
+          restore-keys: |
+            buildx--
+
+      - name: Login to Gitea Docker Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ secrets.GITEA_REGISTRY }}
+          username: ${{ secrets.GITEA_USERNAME }}
+          password: ${{ secrets.GITEA_PAT }}
+
+      - name: Build and push to Gitea Registry
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          push: true
+          platforms: linux/arm64
+          tags: ${{ secrets.GITEA_REGISTRY }}/silverkeytech/filebasedblog/main:${{ steps.set_commit_id.outputs.commit_id}}
+          cache-from: type=local,src=/tmp/.buildx-cache
+          cache-to: type=local,dest=/tmp/.buildx-cache,mode=max
+
+  cd:
+    needs: ci
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Install yq
+        run: pip install yq
+
+      - name: Modify values file
+        run: |
+          yq -i -y '
+           .image.repository = "registry.arc-center.run/silverkeytech/filebasedblog/main" |
+           .image.tag = "${{ needs.ci.outputs.commit_id }}"
+           ' charts/filebasedblog/values-dev.yaml
+
+      - name: Commit and push changes manually
+        run: |
+          git config user.name "MariamElkamhawySK"
+          git config user.email "MariamElkamhawySK@users.noreply.github.com"
+          git add charts/filebasedblog/values-dev.yaml
+          git commit -m "Updates values.yaml with commit ${{ needs.ci.outputs.commit_id }}" || echo "No changes to commit"
+          git pull origin main --rebase
+          git push origin HEAD:main
+
+      - name: Install ArgoCD CLI
+        run: |
+          curl -sSL -o argocd https://github.com/argoproj/argo-cd/releases/latest/download/argocd-linux-amd64
+          chmod +x argocd
+          sudo mv argocd /usr/local/bin/
+
+      - name: Login to ArgoCD
+        run: |
+          argocd login argocd.arc-center.run \
+            --insecure \
+            --grpc-web \
+            --username admin \
+            --password "${{ secrets.ARGOCD_PASSWORD }}"
+
+      - name: Ensure argocd repo and app
+        run: |
+          upper_name=$(echo "filebasedblog" | tr '[:lower:]' '[:upper:]')
+          repo="https://github.com/SajaAboulmagd05/${upper_name}.git"
+          repo_url="https://x-access-token:${{ secrets.GIT_TOKEN }}@github.com/SajaAboulmagd05/${upper_name}.git"
+          app_name="main-filebasedblog"
+
+          # Always try to add repo and create app (ignore errors if already exist)
+          argocd repo add "$repo" --type git --name filebasedblog-repo || true
+
+          argocd app create "$app_name" \
+            --repo "$repo" \
+            --path charts/filebasedblog \
+            --dest-namespace dev \
+            --dest-server https://kubernetes.default.svc \
+            --values values-dev.yaml \
+            --revision  main \
+            --sync-policy manual \
+            --sync-option CreateNamespace=true || true
+
+      - name: Argocd app sync
+        run: |
+          app_name="main-filebasedblog"
+          argocd app sync $app_name
