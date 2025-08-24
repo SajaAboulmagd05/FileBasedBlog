@@ -1,0 +1,63 @@
+replicaCount: 1
+
+image:
+  repository: registry.arc-center.run/silverkeytech/filebasedblog/saja
+  pullPolicy: IfNotPresent
+  tag: saja-filebasedblog-dev-latest
+
+imagePullSecrets: 
+   - name: gitea-registry-secret
+
+nameOverride: ""
+fullnameOverride: ""
+
+podAnnotations: {}
+podLabels: {}
+
+serviceAccount:
+  create: false
+  automount: true
+  annotations: {}
+  name: ""
+
+podSecurityContext: {}
+securityContext: {}
+
+service:
+  type: ClusterIP
+  port: 8080
+
+ingress:
+  enabled: true
+  className: "nginx"
+  annotations:
+    cert-manager.io/cluster-issuer: "clusterissuer-arc-center-domain"
+  hosts:
+    - host: filebasedblog-saja-dev.arc-center.run
+      paths:
+        - path: /
+          pathType: Prefix
+  tls:
+    - hosts:
+        - filebasedblog-saja-dev.arc-center.run
+      secretName: filebasedblog-saja-dev-tls
+
+resources:
+  requests:
+    cpu: 50m
+    memory: 50M
+
+livenessProbe: null
+readinessProbe: null
+
+autoscaling:
+  enabled: false
+  minReplicas: 1
+  maxReplicas: 100
+  targetCPUUtilizationPercentage: 80
+
+volumes: []
+volumeMounts: []
+nodeSelector: {}
+tolerations: []
+affinity: {}

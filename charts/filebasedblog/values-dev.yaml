@@ -1,0 +1,5 @@
+replicaCount: 1
+image:
+  repository: registry.arc-center.run/silverkeytech/filebasedblog/saja
+  pullPolicy: IfNotPresent
+  tag: saja-filebasedblog-dev-latest
