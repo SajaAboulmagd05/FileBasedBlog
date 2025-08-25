@@ -390,43 +390,12 @@ public class UserService
 
     public IResult GetUserProfileJson(string email)
     {
-
-
         var dirName = Regex.Replace(email.ToLower(), @"[@\.]", "_");
         var profilePath = Path.Combine("content", "users", dirName, "Profile.json");
 
         if (!File.Exists(profilePath))
             return Results.NotFound("User profile not found.");
 
-        // Load role request if it exists
-        var requestFile = Path.Combine(roleRequestRoot, dirName + ".json");
-        RoleRequestSummary? roleRequest = null;
-
-        if (File.Exists(requestFile))
-        {
-            try
-            {
-                var requestJson = File.ReadAllText(requestFile);
-                var request = JsonSerializer.Deserialize<RoleRequest>(requestJson);
-
-                if (request != null)
-                {
-                    roleRequest = new RoleRequestSummary
-                    {
-                        RequestedRole = request.RequestedRole,
-                        Status = request.Status.ToString(),
-                        Message = request.Message,
-                        RequestedAt = request.RequestedAt
-                    };
-                }
-            }
-            catch (Exception ex)
-            {
-                Console.Error.WriteLine($"Error reading role request: {ex.Message}");
-            }
-        }
-
-        // Load user profile
         try
         {
             var profileJson = File.ReadAllText(profilePath);
@@ -434,8 +403,6 @@ public class UserService
 
             if (user is null)
                 return Results.StatusCode(500);
-
-            user.RoleRequest = roleRequest;
 
             return Results.Json(new
             {
@@ -445,9 +412,8 @@ public class UserService
                 user.CreatedDate,
                 user.IsEmailVerified,
                 user.IsSubscribedToNewsletter,
-                RoleRequest = roleRequest
+                RoleRequest = user.RoleRequest // ← Use the embedded one
             });
-
         }
         catch (Exception ex)
         {
@@ -455,6 +421,7 @@ public class UserService
             return Results.StatusCode(500);
         }
     }
+
 
 
 

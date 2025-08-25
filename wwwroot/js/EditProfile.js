@@ -146,8 +146,8 @@ function setupFormSubmissions() {
         showToast("success", "Password changed successfully!");
         e.target.reset();
       } else {
-        const error = await res.text();
-        showToast("error", error);
+        const data = await res.json();
+        showToast("error", data.error);
       }
     } catch (err) {
       showToast("error", "Network error");
@@ -178,8 +178,8 @@ function setupFormSubmissions() {
         localStorage.clear();
         setTimeout(() => window.location.href = "/", 2000);
       } else {
-        const error = await res.text();
-        showToast("error", error);
+        const data = await res.json();
+        showToast("error", data.error);
       }
     } catch (err) {
       showToast("error", "Network error");
@@ -209,9 +209,10 @@ function setupFormSubmissions() {
       if (res.ok) {
         showToast("success", "Role change request submitted!");
         e.target.reset();
+        loadProfile();
       } else {
-        const error = await res.text();
-        showToast("error", error);
+        const data = await res.json();
+        showToast("error", data.error);
       }
     } catch (err) {
       showToast("error", "Network error");
@@ -241,11 +242,26 @@ async function loadProfile() {
     
     // Set form values
     document.querySelector("#change-name input[name='new-name']").value = user.name;
+
+
+     // Show role request if present
+    if (user.roleRequest) {
+      document.getElementById("requested-role").textContent = user.roleRequest.requestedRole;
+      document.getElementById("request-status").textContent = user.roleRequest.status;
+      document.getElementById("request-status").style.color = statusColors[user.roleRequest.status];
+      document.getElementById("request-message").textContent = user.roleRequest.message;
+      document.getElementById("role-request-status").classList.remove("hidden");
+    }
   } catch (err) {
     showToast("error", "Network error loading profile");
   }
 }
 
+const statusColors = {
+  Pending: "#f1c40f",   // Yellow
+  Accepted: "#2ecc71",  // Green
+  Rejected: "#e74c3c"   // Red
+};
 
 // Get current user from localStorage
 function getCurrentUser() {

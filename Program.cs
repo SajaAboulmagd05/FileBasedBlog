@@ -79,12 +79,12 @@ builder.Services.AddSingleton<CategoryService>();
 var app = builder.Build();
 
 //to change the slug 
-// Rewrite pretty URLs (e.g., "/my-awesome-post") to "/post.html?slug=..."
+// Rewrite URLs (e.g., "/my-awesome-post") to "/post.html?slug=..."
 app.MapGet("/{slug:regex(^[a-z0-9-]+$)}", async (HttpContext context, string slug) =>
 {
     // Serve post.html with the slug (URL bar stays clean)
     context.Request.QueryString = new QueryString($"?slug={slug}");
-    await context.Response.SendFileAsync("wwwroot/post.html");
+    await context.Response.SendFileAsync("wwwroot/Post.html");
 });
 
 app.MapGet("/admin-management", async context =>

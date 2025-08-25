@@ -10,7 +10,7 @@ public class ProfileService
 
     public UserProfile? LoadUser(string email)
     {
-        var dirName = Regex.Replace(email.ToLower(), @"[@\.]", "_");
+        var dirName = Regex.Replace(email.ToLower(), @"[@\\.]", "_");
         var profilePath = Path.Combine(userRoot, dirName, "Profile.json");
 
         if (!File.Exists(profilePath)) return null;
@@ -21,7 +21,7 @@ public class ProfileService
 
     public void SaveUser(UserProfile user)
     {
-        var dirName = Regex.Replace(user.Email.ToLower(), @"[@\.]", "_");
+        var dirName = Regex.Replace(user.Email.ToLower(), @"[@\\.]", "_");
         var userDir = Path.Combine(userRoot, dirName);
         Directory.CreateDirectory(userDir);
 
@@ -35,14 +35,14 @@ public class ProfileService
     {
         var user = LoadUser(email);
         if (user == null)
-            return Results.BadRequest(new { error = "User not found." });
+            return Results.Json(new { error = "User not found." }, statusCode: 400);
 
         user.Name = newName;
         SaveUser(user);
 
         var newToken = jwt.GenerateToken(user.UserID, user.Email, user.Role, user.Name);
 
-        return Results.Ok(new
+        return Results.Json(new
         {
             message = "Name updated successfully.",
             token = newToken,
@@ -54,57 +54,47 @@ public class ProfileService
     {
         var user = LoadUser(email);
         if (user == null)
-            return Results.BadRequest(new { error = "User not found." });
+            return Results.Json(new { error = "User not found." }, statusCode: 400);
 
         if (!BCrypt.Net.BCrypt.Verify(currentPassword, user.PasswordHash))
-            return Results.BadRequest(new { error = "Current password is incorrect." });
+            return Results.Json(new { error = "Current password is incorrect." }, statusCode: 400);
 
         user.PasswordHash = BCrypt.Net.BCrypt.HashPassword(newPassword);
         SaveUser(user);
 
-        return Results.Ok(new { message = "Password changed successfully." });
+        return Results.Json(new { message = "Password changed successfully." });
     }
 
     public IResult DeleteAccount(string email, string password)
     {
         var user = LoadUser(email);
         if (user == null)
-            return Results.BadRequest(new { error = "User not found." });
+            return Results.Json(new { error = "User not found." }, statusCode: 400);
 
         if (!BCrypt.Net.BCrypt.Verify(password, user.PasswordHash))
-            return Results.BadRequest(new { error = "Password is incorrect." });
+            return Results.Json(new { error = "Password is incorrect." }, statusCode: 400);
 
-        var dirName = Regex.Replace(email.ToLower(), @"[@\.]", "_");
+        var dirName = Regex.Replace(email.ToLower(), @"[@\\.]", "_");
         var userDir = Path.Combine(userRoot, dirName);
         if (Directory.Exists(userDir)) Directory.Delete(userDir, true);
 
-        return Results.Ok(new { message = "Account deleted successfully." });
+        return Results.Json(new { message = "Account deleted successfully." });
     }
 
     public IResult SaveRoleRequest(string email, string requestedRole, string message)
     {
-        Directory.CreateDirectory(roleRequestRoot);
+        var dirName = Regex.Replace(email.ToLower(), @"[@\\.]", "_");
+        var profilePath = Path.Combine("content", "users", dirName, "Profile.json");
+        var requestPath = Path.Combine(roleRequestRoot, dirName + ".json");
 
-        var fileName = Regex.Replace(email.ToLower(), @"[@\.]", "_") + ".json";
-        var path = Path.Combine(roleRequestRoot, fileName);
-
-        // Check if a request already exists
-        if (File.Exists(path))
+        // Check for existing request
+        if (File.Exists(requestPath))
         {
-            try
-            {
-                var existingJson = File.ReadAllText(path);
-                var existingRequest = JsonSerializer.Deserialize<RoleRequest>(existingJson);
+            var existingJson = File.ReadAllText(requestPath);
+            var existingRequest = JsonSerializer.Deserialize<RoleRequest>(existingJson);
 
-                if (existingRequest != null && existingRequest.Status == RequestStatus.Pending)
-                {
-                    return Results.BadRequest(new { message = "A pending role request already exists. Please wait for it to be reviewed." });
-                }
-            }
-            catch
-            {
-                return Results.BadRequest(new { message = "Failed to read existing request." });
-            }
+            if (existingRequest != null && existingRequest.Status == RequestStatus.Pending)
+                return Results.Json(new { error = "A pending role request already exists." }, statusCode: 400);
         }
 
         // Create new request
@@ -112,15 +102,43 @@ public class ProfileService
         {
             Email = email,
             RequestedRole = requestedRole,
-            Message = message
+            Message = message,
+            RequestedAt = DateTime.UtcNow,
+            Status = RequestStatus.Pending
         };
 
         var json = JsonSerializer.Serialize(request, new JsonSerializerOptions { WriteIndented = true });
-        File.WriteAllText(path, json);
+        File.WriteAllText(requestPath, json);
 
-        return Results.Ok(new { message = "Role change request submitted." });
+        // Update Profile.json
+        if (File.Exists(profilePath))
+        {
+            try
+            {
+                var profileJson = File.ReadAllText(profilePath);
+                var user = JsonSerializer.Deserialize<UserProfile>(profileJson);
+
+                if (user != null)
+                {
+                    user.RoleRequest = new RoleRequestSummary
+                    {
+                        RequestedRole = requestedRole,
+                        Status = request.Status.ToString(),
+                        Message = message,
+                        RequestedAt = request.RequestedAt
+                    };
+
+                    var updatedProfile = JsonSerializer.Serialize(user, new JsonSerializerOptions { WriteIndented = true });
+                    File.WriteAllText(profilePath, updatedProfile);
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.Error.WriteLine($"Error updating profile: {ex.Message}");
+                // Optionally log but don't fail the request
+            }
+        }
+
+        return Results.Json(new { message = "Role change request submitted." });
     }
-
-
-
 }

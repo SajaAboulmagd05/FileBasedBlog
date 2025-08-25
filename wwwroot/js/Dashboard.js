@@ -107,6 +107,12 @@ function fetchUsers(role) {
           </div><td>
             <button class="role-btn" onclick="openRoleModal('${user.email}', '${user.role}')">Change Role</button>
             <button class="delete-btn" onclick="openDeleteModal('${user.email}')">Delete</button>
+            <button class="action-btn review-btn" 
+              ${user.role === "Admin" ? "style='display:none'" : ""}
+              ${user.roleRequest ? "" : "disabled"}
+              onclick="openReviewModal('${user.email}')">
+        Review Request
+      </button>
           </td>
         </tr>
       `).join('');
