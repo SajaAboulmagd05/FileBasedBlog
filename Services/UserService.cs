@@ -58,7 +58,7 @@ public class UserService
 
     public async Task SendVerificationEmail(string email, string name, string token)
     {
-        var link = $"http://localhost:5000/api/verify?email={Uri.EscapeDataString(email)}&token={token}";
+        var link = $"https://filebasedblog-main-dev.arc-center.run/api/verify?email={Uri.EscapeDataString(email)}&token={token}";
         var body = $"""
         <html>
         <body style="background:#f4f4f4; padding:2rem; font-family:'Segoe UI', sans-serif;">
