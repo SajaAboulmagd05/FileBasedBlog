@@ -9,6 +9,9 @@
       "FileBasedBlog/1.0.0": {
         "dependencies": {
           "BCrypt.Net-Next": "4.0.3",
+          "Lucene.Net": "4.8.0-beta00013",
+          "Lucene.Net.Analysis.Common": "4.8.0-beta00013",
+          "Lucene.Net.QueryParser": "4.8.0-beta00013",
           "Markdig": "0.41.2",
           "Microsoft.AspNetCore.Authentication.JwtBearer": "9.0.7",
           "Microsoft.AspNetCore.Mvc.NewtonsoftJson": "9.0.6",
@@ -26,6 +29,71 @@
           "lib/net6.0/BCrypt.Net-Next.dll": {
             "assemblyVersion": "4.0.3.0",
             "fileVersion": "4.0.3.0"
+          }
+        }
+      },
+      "J2N/2.0.0-beta-0010": {
+        "runtime": {
+          "lib/netcoreapp3.0/J2N.dll": {
+            "assemblyVersion": "2.0.0.0",
+            "fileVersion": "2.0.0.0"
+          }
+        }
+      },
+      "Lucene.Net/4.8.0-beta00013": {
+        "dependencies": {
+          "J2N": "2.0.0-beta-0010"
+        },
+        "runtime": {
+          "lib/netstandard2.1/Lucene.Net.dll": {
+            "assemblyVersion": "4.0.0.0",
+            "fileVersion": "4.8.0.0"
+          }
+        }
+      },
+      "Lucene.Net.Analysis.Common/4.8.0-beta00013": {
+        "dependencies": {
+          "Lucene.Net": "4.8.0-beta00013"
+        },
+        "runtime": {
+          "lib/netstandard2.1/Lucene.Net.Analysis.Common.dll": {
+            "assemblyVersion": "4.0.0.0",
+            "fileVersion": "4.8.0.0"
+          }
+        }
+      },
+      "Lucene.Net.Queries/4.8.0-beta00013": {
+        "dependencies": {
+          "Lucene.Net": "4.8.0-beta00013"
+        },
+        "runtime": {
+          "lib/netstandard2.1/Lucene.Net.Queries.dll": {
+            "assemblyVersion": "4.0.0.0",
+            "fileVersion": "4.8.0.0"
+          }
+        }
+      },
+      "Lucene.Net.QueryParser/4.8.0-beta00013": {
+        "dependencies": {
+          "Lucene.Net.Analysis.Common": "4.8.0-beta00013",
+          "Lucene.Net.Queries": "4.8.0-beta00013",
+          "Lucene.Net.Sandbox": "4.8.0-beta00013"
+        },
+        "runtime": {
+          "lib/netstandard2.1/Lucene.Net.QueryParser.dll": {
+            "assemblyVersion": "4.0.0.0",
+            "fileVersion": "4.8.0.0"
+          }
+        }
+      },
+      "Lucene.Net.Sandbox/4.8.0-beta00013": {
+        "dependencies": {
+          "Lucene.Net": "4.8.0-beta00013"
+        },
+        "runtime": {
+          "lib/netstandard2.1/Lucene.Net.Sandbox.dll": {
+            "assemblyVersion": "4.0.0.0",
+            "fileVersion": "4.8.0.0"
           }
         }
       },
@@ -230,6 +298,48 @@
       "sha512": "sha512-W+U9WvmZQgi5cX6FS5GDtDoPzUCV4LkBLkywq/kRZhuDwcbavOzcDAr3LXJFqHUi952Yj3LEYoWW0jbEUQChsA==",
       "path": "bcrypt.net-next/4.0.3",
       "hashPath": "bcrypt.net-next.4.0.3.nupkg.sha512"
+    },
+    "J2N/2.0.0-beta-0010": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-qjohqt+5Hx4ILGbyN4Eo21YQBlOtOifFJn4SBxNqvFf1miQ7wMXxJgQeBDfrDA5ya6Z0T1JYeDTbJVanJLJAYw==",
+      "path": "j2n/2.0.0-beta-0010",
+      "hashPath": "j2n.2.0.0-beta-0010.nupkg.sha512"
+    },
+    "Lucene.Net/4.8.0-beta00013": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-M6M548blFLZUPfxFELwUKz8d68JWFgTKh4W9jlWxVg2xXQWSwOf0r7a++UTKsVFngp1OvGHMNd1Z72vFzq9I9w==",
+      "path": "lucene.net/4.8.0-beta00013",
+      "hashPath": "lucene.net.4.8.0-beta00013.nupkg.sha512"
+    },
+    "Lucene.Net.Analysis.Common/4.8.0-beta00013": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-iAdcOj9UKl/bCvZF+Nm0T3ELjq4i1bWf5xNIeayFkIEVt7+M91i9ozoDx4eVmppKM0SjZwILNkYY5R21XN+Mug==",
+      "path": "lucene.net.analysis.common/4.8.0-beta00013",
+      "hashPath": "lucene.net.analysis.common.4.8.0-beta00013.nupkg.sha512"
+    },
+    "Lucene.Net.Queries/4.8.0-beta00013": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-NPbPMNyd8rwq2Y+CCz8G7QQpRY30yk1Qs32Zal3W61eEyagJxPiwUIvqF+RHn/+EOyS9/5bZ7fLLTy2eWjFglg==",
+      "path": "lucene.net.queries/4.8.0-beta00013",
+      "hashPath": "lucene.net.queries.4.8.0-beta00013.nupkg.sha512"
+    },
+    "Lucene.Net.QueryParser/4.8.0-beta00013": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-O6steV0aWOJ+pdwdEySZyi+pKYymXEiZ0kTMAt//1kB6YbBZJEEy/mZpTj78lN5lz4sEBZANDP6eBj2GVxAOKw==",
+      "path": "lucene.net.queryparser/4.8.0-beta00013",
+      "hashPath": "lucene.net.queryparser.4.8.0-beta00013.nupkg.sha512"
+    },
+    "Lucene.Net.Sandbox/4.8.0-beta00013": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-VdL2DpA0lZtXPkSOSr7eLUqd1SM24pVoOm9cAxBxs6Yv8ct88H8R0iR3EcO3ZGqo0NpbHC9429is2BoxaEOhPw==",
+      "path": "lucene.net.sandbox/4.8.0-beta00013",
+      "hashPath": "lucene.net.sandbox.4.8.0-beta00013.nupkg.sha512"
     },
     "Markdig/0.41.2": {
       "type": "package",

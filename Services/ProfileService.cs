@@ -141,4 +141,67 @@ public class ProfileService
 
         return Results.Json(new { message = "Role change request submitted." });
     }
+
+
+    public async Task<IResult> ReviewRoleRequest(HttpRequest request)
+    {
+        var form = await request.ReadFormAsync();
+        var email = form["email"].ToString().Trim();
+        var action = form["action"].ToString().Trim().ToLower();
+        var requestedRole = form["role"].ToString().Trim();
+
+        if (string.IsNullOrWhiteSpace(email) || string.IsNullOrWhiteSpace(action))
+            return Results.BadRequest("Missing data.");
+
+        var dirName = Regex.Replace(email.ToLower(), @"[@\\.]", "_");
+        var profilePath = Path.Combine("content", "users", dirName, "Profile.json");
+        var requestPath = Path.Combine(roleRequestRoot, dirName + ".json");
+
+        if (!File.Exists(profilePath))
+            return Results.BadRequest("User not found.");
+
+        var profileJson = await File.ReadAllTextAsync(profilePath);
+        var user = JsonSerializer.Deserialize<UserProfile>(profileJson);
+        if (user == null)
+            return Results.BadRequest("Corrupted profile.");
+
+        // Update profile based on action
+        if (action == "accept")
+        {
+            user.Role = requestedRole;
+            if (user.RoleRequest != null)
+                user.RoleRequest.Status = RequestStatus.Accepted.ToString();
+        }
+        else if (action == "reject")
+        {
+            if (user.RoleRequest != null)
+                user.RoleRequest.Status = RequestStatus.Rejected.ToString();
+        }
+        else
+        {
+            return Results.BadRequest("Invalid action.");
+        }
+
+        var updatedProfile = JsonSerializer.Serialize(user, new JsonSerializerOptions { WriteIndented = true });
+        await File.WriteAllTextAsync(profilePath, updatedProfile);
+
+        // Update request file status using enum
+        if (File.Exists(requestPath))
+        {
+            var requestJson = await File.ReadAllTextAsync(requestPath);
+            var roleRequest = JsonSerializer.Deserialize<RoleRequest>(requestJson);
+            if (roleRequest != null)
+            {
+                roleRequest.Status = action == "accept" ? RequestStatus.Accepted : RequestStatus.Rejected;
+                var updatedRequest = JsonSerializer.Serialize(roleRequest, new JsonSerializerOptions { WriteIndented = true });
+                await File.WriteAllTextAsync(requestPath, updatedRequest);
+            }
+        }
+
+        return Results.Ok($"Request {action}ed.");
+    }
+
+
+
 }
+

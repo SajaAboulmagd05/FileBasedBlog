@@ -75,8 +75,14 @@ builder.Services.AddSingleton<JwtService>();
 builder.Services.AddSingleton<LikeCommentService>();
 builder.Services.AddSingleton<TagService>();
 builder.Services.AddSingleton<CategoryService>();
+
+
 // builder.Services.AddSingleton<PostFileManager>();
 var app = builder.Build();
+
+var luceneService = app.Services.GetRequiredService<PostQueryService>();
+luceneService.RebuildLuceneIndex();
+
 
 //to change the slug 
 // Rewrite URLs (e.g., "/my-awesome-post") to "/post.html?slug=..."
@@ -113,7 +119,6 @@ app.UseSwaggerUI();
 EnsureDirectoriesExist();
 
 
-
 // Function to create necessary directories for file-based storage
 static void EnsureDirectoriesExist()
 {
@@ -122,6 +127,7 @@ static void EnsureDirectoriesExist()
         "content/users",
         "content/categories",
         "content/tags",
+        "content/lucene-index",
         "config"
     };
 
@@ -576,6 +582,11 @@ userGroup.MapPost("/request-role-change", async (HttpContext context, ProfileSer
         return Results.BadRequest(new { error = "Missing fields." });
 
     return profileService.SaveRoleRequest(email, role, msg);
+});
+
+userGroup.MapPost("/role-request/review", async (HttpRequest request, ProfileService service) =>
+{
+    return await service.ReviewRoleRequest(request);
 });
 
 

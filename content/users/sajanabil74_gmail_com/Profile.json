@@ -2,14 +2,14 @@
   "UserID": "931a48f5-dc28-4b98-92c2-b3312c655ebb",
   "Email": "sajanabil74@gmail.com",
   "Name": "saja Aboulmagd",
-  "Role": "Member",
+  "Role": "Admin",
   "CreatedDate": "2025-07-31T15:12:54.2529242+03:00",
   "PasswordHash": "$2a$11$qKFJ6TmA1tHU3a3uW9bbbegR4CespSccM6sIQibN7NctiQmLp48cu",
   "IsSubscribedToNewsletter": false,
   "IsEmailVerified": true,
   "RoleRequest": {
-    "RequestedRole": "writer",
-    "Status": "Pending",
+    "RequestedRole": "Author",
+    "Status": "Accepted",
     "Message": "I have experience writing engaging content about technology. I am confident that my skills and passion align well with your audience.",
     "RequestedAt": "2025-08-25T06:28:17.9323333Z"
   }

@@ -1,10 +1,16 @@
 {
   "version": 2,
-  "dgSpecHash": "v596cC6nJEo=",
+  "dgSpecHash": "DOkUGnZwSe4=",
   "success": true,
   "projectFilePath": "D:\\internship\\FileBasedBlog\\FileBasedBlog.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\hp\\.nuget\\packages\\bcrypt.net-next\\4.0.3\\bcrypt.net-next.4.0.3.nupkg.sha512",
+    "C:\\Users\\hp\\.nuget\\packages\\j2n\\2.0.0-beta-0010\\j2n.2.0.0-beta-0010.nupkg.sha512",
+    "C:\\Users\\hp\\.nuget\\packages\\lucene.net\\4.8.0-beta00013\\lucene.net.4.8.0-beta00013.nupkg.sha512",
+    "C:\\Users\\hp\\.nuget\\packages\\lucene.net.analysis.common\\4.8.0-beta00013\\lucene.net.analysis.common.4.8.0-beta00013.nupkg.sha512",
+    "C:\\Users\\hp\\.nuget\\packages\\lucene.net.queries\\4.8.0-beta00013\\lucene.net.queries.4.8.0-beta00013.nupkg.sha512",
+    "C:\\Users\\hp\\.nuget\\packages\\lucene.net.queryparser\\4.8.0-beta00013\\lucene.net.queryparser.4.8.0-beta00013.nupkg.sha512",
+    "C:\\Users\\hp\\.nuget\\packages\\lucene.net.sandbox\\4.8.0-beta00013\\lucene.net.sandbox.4.8.0-beta00013.nupkg.sha512",
     "C:\\Users\\hp\\.nuget\\packages\\markdig\\0.41.2\\markdig.0.41.2.nupkg.sha512",
     "C:\\Users\\hp\\.nuget\\packages\\microsoft.aspnetcore.authentication.jwtbearer\\9.0.7\\microsoft.aspnetcore.authentication.jwtbearer.9.0.7.nupkg.sha512",
     "C:\\Users\\hp\\.nuget\\packages\\microsoft.aspnetcore.jsonpatch\\9.0.6\\microsoft.aspnetcore.jsonpatch.9.0.6.nupkg.sha512",

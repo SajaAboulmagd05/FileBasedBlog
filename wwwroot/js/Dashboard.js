@@ -107,12 +107,13 @@ function fetchUsers(role) {
           </div><td>
             <button class="role-btn" onclick="openRoleModal('${user.email}', '${user.role}')">Change Role</button>
             <button class="delete-btn" onclick="openDeleteModal('${user.email}')">Delete</button>
-            <button class="action-btn review-btn" 
+            <button class="action-btn review-btn"
               ${user.role === "Admin" ? "style='display:none'" : ""}
-              ${user.roleRequest ? "" : "disabled"}
-              onclick="openReviewModal('${user.email}')">
-        Review Request
-      </button>
+              ${user.roleRequest?.status === "Pending" ? "" : "disabled"}
+              onclick='openReviewModal(${JSON.stringify(user)})'>
+              Review Request
+            </button>
+
           </td>
         </tr>
       `).join('');
@@ -428,6 +429,9 @@ function openRoleModal(email, currentRole) {
 
 function openDeleteModal(email) {
   const content = document.getElementById("delete-form-content");
+  const icon = document.getElementById("delete-modal-icon-icon");
+  icon.className = "fas fa-trash"; // for delete
+
   content.innerHTML = `
     <h2>Confirm Deletion</h2>
     <p>Are you sure you want to delete the account of: <strong>${email}</strong>?</p>
@@ -646,6 +650,68 @@ function openTagCategoryDeleteModal(type, item) {
     }
   });
 }
+
+function openReviewModal(user) {
+  const content = document.getElementById("delete-form-content");
+  const icon = document.getElementById("delete-modal-icon-icon");
+  icon.className = "fas fa-user-check"; // for review
+
+
+  if (!user.roleRequest) {
+    showToast("error", "No role request found.");
+    return;
+  }
+
+  const { email, roleRequest } = user;
+
+  content.innerHTML = `
+    <h2>Review Role Request</h2>
+    <p><strong>Email:</strong> ${email}</p>
+    <p><strong>Requested Role:</strong> ${roleRequest.requestedRole}</p>
+    <p><strong>Message:</strong> ${roleRequest.message}</p>
+    <form id="review-form">
+      <input type="hidden" name="email" value="${email}" />
+      <input type="hidden" name="role" value="${roleRequest.requestedRole}" />
+      <button type="submit" name="action" value="accept" style="background:#4CAF50;">Accept</button>
+      <button type="submit" name="action" value="reject" style="background:#f44336;">Reject</button>
+    </form>
+  `;
+
+  document.getElementById("delete-toggle").checked = true;
+  let clickedAction = "";
+
+ 
+  const form = document.getElementById("review-form");
+   form.querySelectorAll("button[type='submit']").forEach((btn) => {
+    btn.addEventListener("click", (e) => {
+      clickedAction = e.target.value; // "accept" or "reject"
+    });
+  });
+  form.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const formData = new FormData(form);
+    formData.append("action", clickedAction);
+    const token = localStorage.getItem("authToken");
+
+    const res = await fetch(`/api/users/role-request/review`, {
+      method: "POST",
+      body: formData,
+      headers: { Authorization: `Bearer ${token}` }
+    });
+
+    if (res.ok) {
+      showToast("success", `Request ${formData.get("action")}ed.`);
+      document.getElementById("review-toggle").checked = false;
+      navigate("users");
+    } else {
+      const error = await res.text();
+      showToast("error", error);
+    }
+  });
+}
+
+
+
 
 //logout handler 
 document.getElementById("logout-btn").addEventListener("click", () => {
