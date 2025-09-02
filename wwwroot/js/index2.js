@@ -4,6 +4,62 @@ let allPosts = [];
 let currentCategory = null;
 let selectedTags = [];
 
+function parseSlugURL() {
+  const path = window.location.pathname;
+  const segments = path.split("/").filter(Boolean); // removes empty segments
+
+  let page = 1;
+  let category = null;
+  let tags = [];
+  let search = null;
+
+  segments.forEach((seg, i) => {
+    if (seg === "page") page = parseInt(segments[i + 1]) || 1;
+    if (seg === "category") category = decodeURIComponent(segments[i + 1]);
+    if (seg === "tags") tags = decodeURIComponent(segments[i + 1]).split(",");
+    if (seg === "search") search = decodeURIComponent(segments[i + 1]);
+  });
+
+  return { page, category, tags, search };
+}
+
+// Initialize filters from URL
+const { page, category, tags, search } = parseSlugURL();
+currentPage = page;
+currentCategory = category;
+selectedTags = tags;
+
+if (search) {
+  document.querySelector(".search-box").value = search;
+  handleSearch(new Event("submit")); // simulate search
+} else {
+  loadPosts(); // load normally
+}
+
+function toKebabCase(str) {
+  return str
+    .trim()
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-') // replace non-alphanumeric with hyphen
+    .replace(/^-+|-+$/g, '');    // remove leading/trailing hyphens
+}
+
+
+function updateSlugURL({ page = 1, category = null, tags = [], search = null }) {
+  let path = "/posts";
+
+  if (category) path += `/category/${toKebabCase(category)}`;
+  if (tags.length > 0) path += `/tags/${toKebabCase(tags.join(","))}`;
+  // if (search) path += `/search/${toKebabCase(search)}`;
+  // path += `/page/${page}`;
+
+  window.history.pushState({}, "", path);
+}
+
+
+
+
+
 async function loadPosts() {
   const message = localStorage.getItem("toastMessage");
 
@@ -47,6 +103,13 @@ function renderPosts(page) {
 
   const totalPages = Math.ceil(allPosts.length / postsPerPage);
   currentPage = Math.max(1, Math.min(page, totalPages));
+
+  // Update URL with current filters
+  updateSlugURL({
+    page: currentPage,
+    category: currentCategory,
+    tags: selectedTags
+  });
 
   const start = (currentPage - 1) * postsPerPage;
   const end = start + postsPerPage;
@@ -185,6 +248,8 @@ async function loadCategories() {
         document.querySelectorAll(".tag input[type='checkbox']").forEach(cb => cb.checked = false);
 
         currentPage = 1;
+        //newly added to update url when category is changed
+        updateSlugURL({ category: currentCategory, page: currentPage });
         loadPosts();
       }
     });
@@ -224,6 +289,9 @@ async function loadTags() {
       currentCategory = null; // Clear category filter when applying tag filter
       document.querySelectorAll(".category-btn").forEach(btn => btn.classList.remove("active"));
       currentPage = 1;
+
+      //newly added to update url when tags are changed
+      updateSlugURL({ tags: selectedTags, page: currentPage });
       loadPosts();
     });
   } catch (err) {
@@ -239,6 +307,9 @@ function handleSearch(event) {
   const input = document.querySelector(".search-box");
   const query = input.value.trim();
   if (!query) return;
+
+
+  //updateSlugURL({ search: query, page: 1 });
 
   const loading = document.getElementById("loading-indicator");
   const results = document.getElementById("posts-container");
@@ -256,7 +327,7 @@ function handleSearch(event) {
       currentCategory = null;
       selectedTags = [];
       currentPage = 1;
-
+      
       renderPosts(currentPage);
 
       // Scroll to results
@@ -651,3 +722,18 @@ function closeModals() {
   // Clear the forms (your existing function)
   clearForms();
 }
+
+
+window.addEventListener("popstate", () => {
+  const { page, category, tags, search } = parseSlugURL();
+  currentPage = page;
+  currentCategory = category;
+  selectedTags = tags;
+
+  if (search) {
+    document.querySelector(".search-box").value = search;
+    handleSearch(new Event("submit"));
+  } else {
+    loadPosts();
+  }
+});

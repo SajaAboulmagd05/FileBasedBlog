@@ -68,10 +68,8 @@ D:\internship\FileBasedBlog\obj\Debug\net10.0\FileBasedBlog.sourcelink.json
 D:\internship\FileBasedBlog\obj\Debug\net10.0\scopedcss\bundle\FileBasedBlog.styles.css
 D:\internship\FileBasedBlog\obj\Debug\net10.0\compressed\eiygvdigow-{0}-2e5odcgyjb-2e5odcgyjb.gz
 D:\internship\FileBasedBlog\obj\Debug\net10.0\compressed\6ogthmmq6i-{0}-5lwsmzbswt-5lwsmzbswt.gz
-D:\internship\FileBasedBlog\obj\Debug\net10.0\compressed\kr9gg4cexx-{0}-oppxv6f2mi-oppxv6f2mi.gz
 D:\internship\FileBasedBlog\obj\Debug\net10.0\compressed\mllc8dgnli-{0}-29n3xdsxft-29n3xdsxft.gz
 D:\internship\FileBasedBlog\obj\Debug\net10.0\compressed\tr1hhjabnf-{0}-td6n047rgk-td6n047rgk.gz
-D:\internship\FileBasedBlog\obj\Debug\net10.0\compressed\1ll6seo6me-{0}-sm03t0cxjc-sm03t0cxjc.gz
 D:\internship\FileBasedBlog\obj\Debug\net10.0\compressed\wflujha465-{0}-n88z30lsqd-n88z30lsqd.gz
 D:\internship\FileBasedBlog\obj\Debug\net10.0\compressed\xcze8nutuf-{0}-krtexzfgnb-krtexzfgnb.gz
 D:\internship\FileBasedBlog\obj\Debug\net10.0\compressed\k0z96n6t0r-{0}-p8ppjbsld8-p8ppjbsld8.gz
@@ -79,11 +77,7 @@ D:\internship\FileBasedBlog\obj\Debug\net10.0\compressed\r6tdb52w9e-{0}-4oy8m2jz
 D:\internship\FileBasedBlog\obj\Debug\net10.0\compressed\1atryjlj34-{0}-nd9u5ds2oj-nd9u5ds2oj.gz
 D:\internship\FileBasedBlog\obj\Debug\net10.0\compressed\u1px9nsevi-{0}-x5wkeanxb0-x5wkeanxb0.gz
 D:\internship\FileBasedBlog\obj\Debug\net10.0\compressed\ppb7qmn678-{0}-nuo5of8tqt-nuo5of8tqt.gz
-D:\internship\FileBasedBlog\obj\Debug\net10.0\compressed\6l9f72rvpl-{0}-mv7o5h7051-mv7o5h7051.gz
-D:\internship\FileBasedBlog\obj\Debug\net10.0\compressed\w8y0kio0nk-{0}-r7ztxlj75e-r7ztxlj75e.gz
-D:\internship\FileBasedBlog\obj\Debug\net10.0\compressed\9ujy18ld8r-{0}-6emhb1w71m-6emhb1w71m.gz
 D:\internship\FileBasedBlog\obj\Debug\net10.0\compressed\pkrx0c6jpk-{0}-hqgiwwsdh2-hqgiwwsdh2.gz
-D:\internship\FileBasedBlog\obj\Debug\net10.0\compressed\w1pe7z9smp-{0}-x5v7bm5eht-x5v7bm5eht.gz
 D:\internship\FileBasedBlog\obj\Debug\net10.0\compressed\k22diq12v8-{0}-kknb6jt142-kknb6jt142.gz
 D:\internship\FileBasedBlog\obj\Debug\net10.0\staticwebassets.build.json
 D:\internship\FileBasedBlog\obj\Debug\net10.0\staticwebassets.build.json.cache
@@ -103,3 +97,9 @@ D:\internship\FileBasedBlog\bin\Debug\net10.0\OpenTelemetry.Exporter.OpenTelemet
 D:\internship\FileBasedBlog\bin\Debug\net10.0\OpenTelemetry.Extensions.Hosting.dll
 D:\internship\FileBasedBlog\bin\Debug\net10.0\OpenTelemetry.Instrumentation.AspNetCore.dll
 D:\internship\FileBasedBlog\bin\Debug\net10.0\Sprache.dll
+D:\internship\FileBasedBlog\obj\Debug\net10.0\compressed\kr9gg4cexx-{0}-hcjuq6s8ux-hcjuq6s8ux.gz
+D:\internship\FileBasedBlog\obj\Debug\net10.0\compressed\1ll6seo6me-{0}-nd1gat2nhr-nd1gat2nhr.gz
+D:\internship\FileBasedBlog\obj\Debug\net10.0\compressed\6l9f72rvpl-{0}-iltb4f1fbh-iltb4f1fbh.gz
+D:\internship\FileBasedBlog\obj\Debug\net10.0\compressed\9ujy18ld8r-{0}-36o17bb99c-36o17bb99c.gz
+D:\internship\FileBasedBlog\obj\Debug\net10.0\compressed\w1pe7z9smp-{0}-u3t9v1we5s-u3t9v1we5s.gz
+D:\internship\FileBasedBlog\obj\Debug\net10.0\compressed\w8y0kio0nk-{0}-t6a9l5copp-t6a9l5copp.gz
