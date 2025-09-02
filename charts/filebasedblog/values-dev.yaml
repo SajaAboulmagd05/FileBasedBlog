@@ -2,4 +2,4 @@ replicaCount: 1
 image:
   repository: registry.arc-center.run/silverkeytech/filebasedblog/main
   pullPolicy: IfNotPresent
-  tag: a49bb2
+  tag: 5bdbbf
