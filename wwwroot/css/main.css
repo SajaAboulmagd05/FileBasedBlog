@@ -658,7 +658,8 @@ input[type="checkbox"] {
 /* Show blur overlay when any modal is active */
 #toggle:checked ~ .blur-overlay,
 #login-toggle:checked ~ .blur-overlay,
-#register-toggle:checked ~ .blur-overlay {
+#register-toggle:checked ~ .blur-overlay,
+#register-now-toggle:checked ~ .blur-overlay {
   opacity: 1;
   pointer-events: all;
 }
@@ -666,13 +667,14 @@ input[type="checkbox"] {
 /* Show modal when its checkbox is checked */
 #toggle:checked ~ .subscription-modal,
 #login-toggle:checked ~ .subscription-modal,
-#register-toggle:checked ~ .subscription-modal {
+#register-toggle:checked ~ .subscription-modal,
+#register-now-toggle:checked ~ .subscription-modal {
   opacity: 1;
   pointer-events: auto;
 }
 
 /* Subscription Toggle Setup */
-#toggle ,#login-toggle,#register-toggle{
+#toggle ,#login-toggle,#register-toggle,#register-now-toggle {
   display: none;
 }
 

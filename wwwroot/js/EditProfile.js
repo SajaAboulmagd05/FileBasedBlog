@@ -258,8 +258,8 @@ async function loadProfile() {
 }
 
 const statusColors = {
-  Pending: "#f1c40f",   // Yellow
-  Accepted: "#2ecc71",  // Green
+  Pending: "#ffd60a",   // Yellow
+  Accepted: "#008000",  // Green
   Rejected: "#e74c3c"   // Red
 };
 

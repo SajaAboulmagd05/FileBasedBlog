@@ -73,7 +73,7 @@ function renderPost(post) {
         <p class="comment-gate-message">
           Commenting is reserved for registered members.
         </p>
-        <label for="toggle" class="subscribe-btn">Register Now</label>
+        <label for="register-now-toggle" class="subscribe-btn" id="register-now-btn">Register Now</label>
       </div>
     `;
   } else {
@@ -503,7 +503,7 @@ function closeModals() {
   // Uncheck both toggle checkboxes
   document.getElementById('login-toggle').checked = false;
   document.getElementById('register-toggle').checked = false;
-  
+  document.getElementById('register-now-toggle').checked = false;
   // Clear the forms (your existing function)
   clearForms();
 }

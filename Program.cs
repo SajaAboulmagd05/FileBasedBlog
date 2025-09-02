@@ -10,7 +10,10 @@ using Microsoft.OpenApi.Models;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Rewrite;
+using OpenTelemetry.Trace;
 
+using DotNetEnv;
+Env.Load(); // Loads .env from root
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -63,6 +66,16 @@ builder.Services.AddSwaggerGen(options =>
     });
 });
 
+
+// Setup OpenTelemetry Tracing
+builder.Services.AddOpenTelemetry().WithTracing(builder =>
+{
+    builder
+        // Configure ASP.NET Core Instrumentation
+        .AddAspNetCoreInstrumentation()
+        // Configure OpenTelemetry Protocol (OTLP) Exporter
+        .AddOtlpExporter();
+});
 
 builder.Services.AddSingleton<CategoryTagService>();
 builder.Services.AddSingleton<PostService>();
