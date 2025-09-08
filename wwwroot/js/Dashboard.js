@@ -701,7 +701,7 @@ function openReviewModal(user) {
 
     if (res.ok) {
       showToast("success", `Request ${formData.get("action")}ed.`);
-      document.getElementById("review-toggle").checked = false;
+      document.getElementById("delete-toggle").checked = false;
       navigate("users");
     } else {
       const error = await res.text();

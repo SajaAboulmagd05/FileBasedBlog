@@ -218,3 +218,7 @@ strong {
   font-weight: 700; 
   font-size: 1.1em; 
 }
+
+#delete-form-content p {
+  text-align: left;
+}

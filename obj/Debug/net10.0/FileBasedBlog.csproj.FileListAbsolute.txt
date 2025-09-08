@@ -69,7 +69,6 @@ D:\internship\FileBasedBlog\obj\Debug\net10.0\compressed\eiygvdigow-{0}-2e5odcgy
 D:\internship\FileBasedBlog\obj\Debug\net10.0\compressed\6ogthmmq6i-{0}-5lwsmzbswt-5lwsmzbswt.gz
 D:\internship\FileBasedBlog\obj\Debug\net10.0\compressed\mllc8dgnli-{0}-29n3xdsxft-29n3xdsxft.gz
 D:\internship\FileBasedBlog\obj\Debug\net10.0\compressed\tr1hhjabnf-{0}-td6n047rgk-td6n047rgk.gz
-D:\internship\FileBasedBlog\obj\Debug\net10.0\compressed\wflujha465-{0}-n88z30lsqd-n88z30lsqd.gz
 D:\internship\FileBasedBlog\obj\Debug\net10.0\compressed\xcze8nutuf-{0}-krtexzfgnb-krtexzfgnb.gz
 D:\internship\FileBasedBlog\obj\Debug\net10.0\compressed\k0z96n6t0r-{0}-p8ppjbsld8-p8ppjbsld8.gz
 D:\internship\FileBasedBlog\obj\Debug\net10.0\compressed\r6tdb52w9e-{0}-4oy8m2jzoz-4oy8m2jzoz.gz
@@ -102,4 +101,6 @@ D:\internship\FileBasedBlog\obj\Debug\net10.0\compressed\9ujy18ld8r-{0}-36o17bb9
 D:\internship\FileBasedBlog\obj\Debug\net10.0\compressed\w1pe7z9smp-{0}-u3t9v1we5s-u3t9v1we5s.gz
 D:\internship\FileBasedBlog\bin\Debug\net10.0\content\role-requests\janeuser1_gmail_com.json
 D:\internship\FileBasedBlog\obj\Debug\net10.0\compressed\1atryjlj34-{0}-a6zv6n4mxa-a6zv6n4mxa.gz
-D:\internship\FileBasedBlog\obj\Debug\net10.0\compressed\w8y0kio0nk-{0}-oyy9dywemp-oyy9dywemp.gz
+D:\internship\FileBasedBlog\bin\Debug\net10.0\content\role-requests\jerryking_gmail_com.json
+D:\internship\FileBasedBlog\obj\Debug\net10.0\compressed\wflujha465-{0}-owo8te2jjt-owo8te2jjt.gz
+D:\internship\FileBasedBlog\obj\Debug\net10.0\compressed\w8y0kio0nk-{0}-31zx2lc6bd-31zx2lc6bd.gz
