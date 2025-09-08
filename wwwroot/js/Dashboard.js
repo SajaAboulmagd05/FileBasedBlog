@@ -246,8 +246,10 @@ function openModal(type) {
     formHTML = `
       <h2>Create New User</h2>
       <form id="create-user">
-        <input type="email" name="email" placeholder="Email address" required />
-        <input type="text" name="name" placeholder="Name" required />
+        <label for="email" class="visually-hidden">Email Address</label>
+        <input type="email" id="email" "name="email" placeholder="Email address" required />
+        <label for="name" class="visually-hidden">Name</label>
+        <input type="text" id="name" name="name" placeholder="Name" required />
         <select name="role" required>
           <option value="" disabled selected>Select Role</option>
           <option value="Admin">Admin</option>
@@ -255,7 +257,8 @@ function openModal(type) {
           <option value="Editor">Editor</option>
           <option value="Member">Member</option>
         </select>
-        <input type="password" name="password" placeholder="Password" required />
+        <label for="password" class="visually-hidden">Password</label>
+        <input type="password" id="password" name="password" placeholder="Password" required />
         <label><input type="checkbox" name="newsletter" /> Subscribe to newsletter</label>
         <button type="submit">Create User</button>
       </form>
@@ -264,8 +267,10 @@ function openModal(type) {
     formHTML = `
       <h2>Create New Category</h2>
       <form id="create-category">
-        <input type="text" name="name" placeholder="Category Name" required />
-        <textarea type="text" name="description" placeholder="Short Description" class="multi-line-input" required></textarea>
+        <label for="category-name" class="visually-hidden">Category Name</label>
+        <input type="text" id="category-name" name="name" placeholder="Category Name" required />
+        <label for="category-description" class="visually-hidden">Category Description</label>
+        <textarea type="text" id="category-description" name="description" placeholder="Short Description" class="multi-line-input" required></textarea>
         <!--<input type="text" name="description" placeholder="Short Description" required />-->
         <button type="submit">Create Category</button>
       </form>
@@ -274,7 +279,8 @@ function openModal(type) {
     formHTML = `
       <h2>Create New Tag</h2>
       <form id="create-tag">
-        <input type="text" name="name" placeholder="Tag Name" required />
+      <label for="tag-name" class="visually-hidden">Tag Name</label>
+        <input type="text" id="tag-name" name="name" placeholder="Tag Name" required />
         <button type="submit">Create Tag</button>
       </form>
     `;
