@@ -25,7 +25,7 @@ public class UserService
             return Results.BadRequest("Passwords must match and be at least 6 characters.");
 
         if (UserExists(email))
-            return Results.BadRequest("This email is already registered.");
+            return Results.BadRequest("Please verify your email");
 
         // Hash password
         var hashed = BCrypt.Net.BCrypt.HashPassword(password);
@@ -231,12 +231,12 @@ public class UserService
         var profilePath = Path.Combine("content", "users", dirName, "Profile.json");
 
         if (!File.Exists(profilePath))
-            return Results.BadRequest("This email is not registered ");
+            return Results.BadRequest("Wrong email or password");
 
         var json = File.ReadAllText(profilePath);
         var user = JsonSerializer.Deserialize<UserProfile>(json);
         if (user == null || !BCrypt.Net.BCrypt.Verify(password, user.PasswordHash))
-            return Results.BadRequest("Invalid password.");
+            return Results.BadRequest("Wrong email or password");
 
         if (!user.IsEmailVerified)
             return Results.BadRequest("Please verify your email before logging in.");
@@ -276,11 +276,11 @@ public class UserService
         if (string.IsNullOrWhiteSpace(role))
             return Results.BadRequest("Invalid role selected.");
 
-        if (password.Length < 6)
-            return Results.BadRequest("Password must be at least 6 characters long.");
+        if (password.Length < 8)
+            return Results.BadRequest("Password must be at least 8 characters long.");
 
         if (UserExists(email))
-            return Results.BadRequest("This email is already registered.");
+            return Results.BadRequest("Please verify your email");
 
         // Hash password securely
         var hashed = BCrypt.Net.BCrypt.HashPassword(password);

@@ -6,11 +6,5 @@
   "CreatedDate": "2025-07-22T12:40:20.3330567+03:00",
   "PasswordHash": "$2a$11$pcp7cv4LoaW2zvx4.2NAzOLKWTkQ3LTNbdLAcGqgGQN6LBdXJyW0G",
   "IsSubscribedToNewsletter": true,
-  "IsEmailVerified": true,
-  "RoleRequest": {
-    "RequestedRole": "Admin",
-    "Status": "Accepted",
-    "Message": "i am requesting   \nthis is a trial ",
-    "RequestedAt": "2025-09-02T11:26:48.6410931Z"
-  }
+  "IsEmailVerified": true
 }
