@@ -317,8 +317,13 @@ public class PostQueryService
         using var reader = DirectoryReader.Open(dir);
         var searcher = new IndexSearcher(reader);
 
-        var parser = new MultiFieldQueryParser(LuceneVersion.LUCENE_48, new[] { "title", "description", "content" }, analyzer);
+        var parser = new MultiFieldQueryParser(LuceneVersion.LUCENE_48, new[] { "title", "description", "content" }, analyzer)
+        {
+            DefaultOperator = Operator.AND
+        };
+
         var luceneQuery = parser.Parse(query);
+
 
         var hits = searcher.Search(luceneQuery, 20).ScoreDocs;
         var results = new List<PostSummary>();

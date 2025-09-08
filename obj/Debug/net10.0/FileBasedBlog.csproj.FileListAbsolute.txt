@@ -20,7 +20,6 @@ D:\internship\FileBasedBlog\bin\Debug\net10.0\content\role-requests\sajanabil74_
 D:\internship\FileBasedBlog\bin\Debug\net10.0\content\subscribers\subscribers.json
 D:\internship\FileBasedBlog\bin\Debug\net10.0\content\tags\tag-name.json
 D:\internship\FileBasedBlog\bin\Debug\net10.0\content\users\admin1_gmail_com\Profile.json
-D:\internship\FileBasedBlog\bin\Debug\net10.0\content\users\badreldeen240_gmail_com\Profile.json
 D:\internship\FileBasedBlog\bin\Debug\net10.0\content\users\janeuser1_gmail_com\Profile.json
 D:\internship\FileBasedBlog\bin\Debug\net10.0\content\users\jerryking_gmail_com\Profile.json
 D:\internship\FileBasedBlog\bin\Debug\net10.0\content\users\lilo_gmail_com\Profile.json
@@ -74,7 +73,6 @@ D:\internship\FileBasedBlog\obj\Debug\net10.0\compressed\wflujha465-{0}-n88z30ls
 D:\internship\FileBasedBlog\obj\Debug\net10.0\compressed\xcze8nutuf-{0}-krtexzfgnb-krtexzfgnb.gz
 D:\internship\FileBasedBlog\obj\Debug\net10.0\compressed\k0z96n6t0r-{0}-p8ppjbsld8-p8ppjbsld8.gz
 D:\internship\FileBasedBlog\obj\Debug\net10.0\compressed\r6tdb52w9e-{0}-4oy8m2jzoz-4oy8m2jzoz.gz
-D:\internship\FileBasedBlog\obj\Debug\net10.0\compressed\1atryjlj34-{0}-nd9u5ds2oj-nd9u5ds2oj.gz
 D:\internship\FileBasedBlog\obj\Debug\net10.0\compressed\u1px9nsevi-{0}-x5wkeanxb0-x5wkeanxb0.gz
 D:\internship\FileBasedBlog\obj\Debug\net10.0\compressed\ppb7qmn678-{0}-nuo5of8tqt-nuo5of8tqt.gz
 D:\internship\FileBasedBlog\obj\Debug\net10.0\compressed\pkrx0c6jpk-{0}-hqgiwwsdh2-hqgiwwsdh2.gz
@@ -102,4 +100,6 @@ D:\internship\FileBasedBlog\obj\Debug\net10.0\compressed\1ll6seo6me-{0}-nd1gat2n
 D:\internship\FileBasedBlog\obj\Debug\net10.0\compressed\6l9f72rvpl-{0}-iltb4f1fbh-iltb4f1fbh.gz
 D:\internship\FileBasedBlog\obj\Debug\net10.0\compressed\9ujy18ld8r-{0}-36o17bb99c-36o17bb99c.gz
 D:\internship\FileBasedBlog\obj\Debug\net10.0\compressed\w1pe7z9smp-{0}-u3t9v1we5s-u3t9v1we5s.gz
-D:\internship\FileBasedBlog\obj\Debug\net10.0\compressed\w8y0kio0nk-{0}-t6a9l5copp-t6a9l5copp.gz
+D:\internship\FileBasedBlog\bin\Debug\net10.0\content\role-requests\janeuser1_gmail_com.json
+D:\internship\FileBasedBlog\obj\Debug\net10.0\compressed\1atryjlj34-{0}-a6zv6n4mxa-a6zv6n4mxa.gz
+D:\internship\FileBasedBlog\obj\Debug\net10.0\compressed\w8y0kio0nk-{0}-oyy9dywemp-oyy9dywemp.gz

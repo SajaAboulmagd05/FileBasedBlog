@@ -46,7 +46,7 @@ function toKebabCase(str) {
 
 
 function updateSlugURL({ page = 1, category = null, tags = [], search = null }) {
-  let path = "/posts";
+  let path = "";
 
   if (category) path += `/category/${toKebabCase(category)}`;
   if (tags.length > 0) path += `/tags/${toKebabCase(tags.join(","))}`;
