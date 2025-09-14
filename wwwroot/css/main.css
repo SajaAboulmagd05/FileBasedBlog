@@ -31,6 +31,7 @@
 
 .header {
   display: flex;
+  flex-wrap: wrap;
   justify-content: space-between;
   align-items: center;
   padding: 15px 20px;
@@ -171,14 +172,15 @@
 
 .main-nav {
   display: flex;
-  gap: 2rem;
-  margin-left: 2rem;
+  gap: 1rem;
+  margin-left: 1rem;
+  flex-wrap: wrap;
 }
 
 .main-nav a {
   color: white;
   font-weight: 500;
-  font-size: 1.2rem;
+  font-size: 1.1rem;
   position: relative;
   transition: all 0.3s ease;
 }
@@ -561,71 +563,189 @@ html {
   justify-content: flex-end
 }
 
+/* Media Queries for Responsiveness */
+@media (max-width: 1024px) {
+    .container {
+        grid-template-columns: 1fr;
+        padding: 1.5rem;
+    }
+
+    .container .sidebar {
+        order: -1;
+    }
+
+    .post-content {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .post-image img {
+        max-width: 100%;
+        height: auto;
+    }
+
+    .banner {
+        min-height: 50vh;
+        padding-top: 4rem;
+    }
+
+    .banner .content {
+        max-width: 95%;
+        padding: 1.5rem;
+    }
+}
 
 @media (max-width: 768px) {
-  .container {
-    grid-template-columns: 1fr;
-    padding: 1rem;
-  }
+    .header {
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 1rem;
+        gap: 0.5rem;
+    }
 
-  .post-preview .post {
-    padding: 1rem;
-  }
+    .main-nav {
+        flex-direction: column;
+        gap: 0.5rem;
+        margin-left: 0;
+        width: 100%;
+    }
 
-  .container .sidebar {
-    order: -1; /* Show sidebar first on mobile if desired */
-  }
+    .main-nav a {
+        font-size: 1rem;
+        padding: 0.5rem 0;
+    }
+
+    .search-form {
+        width: 100%;
+        margin-top: 0.5rem;
+    }
+
+    .search-form.active .search-box {
+        width: 100%;
+    }
+
+    .post-card {
+        padding: 1rem;
+    }
+
+    .post-info .text {
+        font-size: 0.85rem;
+    }
+
+    .details {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.5rem;
+    }
+
+    .meta-section {
+        min-width: 100%;
+    }
+
+    .meta-section.tags {
+        justify-content: flex-start;
+    }
+
+    .subscription-modal {
+        width: 95%;
+        padding: 1.5rem;
+    }
+
+    .modal-content h2 {
+        font-size: 1.3rem;
+    }
+
+    .modal-content input {
+        font-size: 0.85rem;
+    }
+
+    .modal-content button {
+        font-size: 0.85rem;
+        padding: 0.4rem;
+    }
+
+    .category-btn, .apply-tag-filter {
+        font-size: 0.9rem;
+        padding: 0.4rem 0.8rem;
+    }
 }
-
-@media (max-width: 600px) {
-  .header {
-    flex-direction: column;
-    align-items: flex-start;
-    padding: 1rem;
-  }
-
-  .search-form {
-    width: 100%;
-    margin-top: 0.5rem;
-  }
-
-  .search-box {
-    font-size: 1rem;
-  }
-}
-@media (max-width: 600px) {
-  .tag {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.6rem;
-    justify-content: flex-start;
-  }
-
-  .category-btn,
-  .apply-tag-filter {
-    flex: 1 1 auto; /* allows wrapping and resizing */
-    text-align: center;
-  }
-}
-
 
 @media (max-width: 480px) {
-  .banner .content h3 {
-    font-size: 1.4rem;
-  }
+    .banner .content h3 {
+        font-size: 1.2rem;
+    }
 
-  .post-title {
-    font-size: 1.6rem;
-  }
+    .banner .content p {
+        font-size: 0.95rem;
+    }
 
-  .btn {
-    font-size: 1.4rem;
-    padding: 0.7rem 1.4rem;
-  }
+    .btn {
+        font-size: 0.9rem;
+        padding: 0.4rem 1.2rem;
+    }
 
-  .post-preview .post .image {
-    height: 15rem;
-  }
+    .post-info .custom-link {
+        font-size: 1.1rem;
+    }
+
+    .post-info .text {
+        font-size: 0.8rem;
+    }
+
+    .date {
+        font-size: 0.75rem;
+    }
+
+    .details {
+        font-size: 0.75rem;
+    }
+
+    .meta-section strong {
+        font-size: 0.85rem;
+    }
+
+    .category-list .category,
+    .tag-list .tag {
+        font-size: 0.75rem;
+        padding: 0.2rem 0.5rem;
+    }
+
+    .pagination-bar {
+        padding: 5px 10px;
+    }
+
+    .pagination-btn {
+        width: 28px;
+        height: 28px;
+        font-size: 12px;
+    }
+
+    .page-info {
+        font-size: 12px;
+    }
+
+    .toast {
+        bottom: 1rem;
+        right: 1rem;
+        padding: 0.6rem 1rem;
+        font-size: 0.8rem;
+    }
+
+    .modal-content input {
+        padding: 0.4rem;
+        font-size: 0.8rem;
+    }
+
+    .modal-content button {
+        padding: 0.4rem;
+        font-size: 0.8rem;
+    }
+
+    .modal-close-btn {
+        font-size: 1rem;
+        width: 28px;
+        height: 28px;
+    }
 }
 
 input[type="checkbox"] {
