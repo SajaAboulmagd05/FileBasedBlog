@@ -4,7 +4,8 @@
   "Name": "maleeka badr",
   "Role": "Admin",
   "CreatedDate": "2025-08-18T10:33:36.0199626+03:00",
-  "PasswordHash": "$2a$11$.69n5pjKbGKIfU4pNeq/7uljq3Ly92RURCDxNtRYpGjEErmGS2cRK",
+  "PasswordHash": "$2a$11$4i64LJjsFyk9ey8bauVPAeEos4iPNKcmgRVPRNme57ph2HTMppNlK",
   "IsSubscribedToNewsletter": false,
-  "IsEmailVerified": true
+  "IsEmailVerified": true,
+  "RoleRequest": null
 }

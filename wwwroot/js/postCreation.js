@@ -620,7 +620,20 @@ function renderPostsTable(posts) {
   const sortedPosts = [...posts].sort((a, b) => {
   return new Date(b.createdAt) - new Date(a.createdAt);
   });
+  console.log("Sorted posts count:", sortedPosts.length);
   tableBody.innerHTML = sortedPosts.map(post => {
+    const parsedDate = new Date(post.createdAt);
+    if (isNaN(parsedDate)) {
+      console.warn(`Invalid date for post ${post.id}: ${post.createdAt}`);
+      return ''; // Skip invalid dates or handle them differently
+    }
+
+    const formattedDate = parsedDate.toLocaleDateString("en-GB", {
+      day: "2-digit",
+      month: "2-digit",
+      year: "numeric"
+    });
+    console.log(`Formatted date for post ${post.id}:`, formattedDate);
   const statusText = getStatusText(post.status);
   const displayText = statusText.charAt(0).toUpperCase() + statusText.slice(1);
   const canEdit = post.authorId === user.id;
@@ -629,7 +642,7 @@ function renderPostsTable(posts) {
     <tr class="${isAdmin || post.authorId === user.id ? '' : 'read-only'}">
       <td>${post.title}</td>
       <td>${post.author || 'Unknown'}</td>
-      <td>${new Date(post.createdAt).toLocaleDateString()}</td>
+      <td>${formattedDate}</td>
       <td>${post.likeCount}</td>
       <td>${post.comments.length}</td>
       <td class="actions">
@@ -639,7 +652,7 @@ function renderPostsTable(posts) {
           <!-- <button class="edit-btn" data-slug="${post.slug}" ${!canEdit ? 'disabled' : ''}>
             <i class="fas fa-edit"></i>
           </button>-->
-          <button class="delete-btn" data-id="${post.id}"><i class="fas fa-trash"></i></button>
+          <button class="delete-btn" data-id="${post.id}" aria-label="Delete post"><i class="fas fa-trash"></i></button>
           <!-- <button class="status-btn" data-id="${post.id}">
             <i class="fas fa-sync-alt"></i> -->
           </button>

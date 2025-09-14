@@ -238,7 +238,8 @@ async function loadProfile() {
     document.getElementById("name-display").textContent = user.name;
     document.getElementById("email-display").textContent = user.email;
     document.getElementById("role-display").textContent = user.role;
-    document.getElementById("joined-display").textContent = new Date(user.createdDate).toLocaleDateString();
+    document.getElementById("joined-display").textContent = new Date(user.createdDate).toLocaleDateString("en-GB");
+
     
     // Set form values
     document.querySelector("#change-name input[name='new-name']").value = user.name;

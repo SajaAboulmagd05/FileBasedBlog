@@ -101,9 +101,10 @@
 
                     <!-- Media Upload and resize-->
                     <div class="upload-box" id="upload-box">
+                      <label for="cover-image" class="visually-hidden">Cover Image</label>
                       <input type="file" id="cover-image" accept="image/*" name="coverImage" hidden >
                       <img id="placeholder-icon" src="css/icons/download.png" alt="Upload Icon">
-                      <img id="preview-img" style="display: none;" />
+                      <img id="preview-img" style="display: none;" alt="Image preview" />
                       <p id="upload-message">This image will appear as the post's cover.</p>
                     </div>
 
@@ -116,35 +117,37 @@
 
                     <!-- Publishing Options -->
                     <div class="form-group">
-                        <div class="publish-options-container">
-                            <span class="publish-options-label">Publishing Options</span>
-                            <div class="publish-options">
-                                <label class="radio-option">
-                                    <input type="radio" name="publish-option" value="immediate" checked>
-                                    Publish Immediately
-                                </label>
-                                <label class="radio-option">
-                                    <input type="radio" name="publish-option" value="schedule">
-                                    Schedule Publication
-                                </label>
-                            </div>
-                        </div>
+                        <fieldset class="publish-options-container">
+                          <legend class="publish-options-label">Publishing Options</legend>
+                          <div class="publish-options">
+                              <label  for="publish-now" class="radio-option">
+                                  <input type="radio" id="publish-now" name="publish-option" value="immediate" checked>
+                                  Publish Immediately
+                              </label>
+                              <label for="publish-later" class="radio-option">
+                                  <input type="radio" id="publish-later" name="publish-option" value="schedule">
+                                  Schedule Publication
+                              </label>
+                          </div>
+                        </fieldset>
                 
                         <div id="schedule-container" style="display: none;">
                             <div class="datetime-fields">
+                                <label for="publish-date" class="visually-hidden">Select Date and Time:</label>
                                 <input type="date" id="publish-date" name="publish-date" class="datetime-input">
+                                <label for="publish-time" class="visually-hidden">Select Time:</label>
                                 <input type="time" id="publish-time" name="publish-time" value="12:00" class="datetime-input">
                             </div>
                         </div>
                     </div>
                     <div class="form-diff tags-categories">
                         <div>
-                            <label>Tags</label>
+                            <label for="post-tags">Tags</label>
                             <select id="post-tags" name="tags" multiple size="4"></select>
                             <small>Hold Ctrl/Cmd to select multiple</small>
                         </div>
                         <div>
-                            <label>Categories</label>
+                            <label for="post-categories">Categories</label>
                             <select id="post-categories" name="categories" multiple size="4"></select>
                             <small>Hold Ctrl/Cmd to select multiple</small>
                         </div>
@@ -173,7 +176,7 @@
     <input type="checkbox" id="modal-toggle" />
     <div class="blur-overlay"></div>
     <div class="subscription-modal" id="post-modal">
-      <label for="modal-toggle" class="close-icon"><i class="fas fa-times"></i></label>
+      <label for="modal-toggle" class="close-icon" aria-label="Close modal"><i class="fas fa-times"></i></label>
       <div class="modal-icon"><i class="fas fa-pen"></i></div>
       <div class="modal-content" id="modal-form-content">
         <!-- Injected dynamically via JS -->
@@ -185,7 +188,7 @@
   <input type="checkbox" id="delete-toggle" />
   <div class="blur-overlay"></div>
   <div class="subscription-modal" id="delete-modal">
-    <label for="delete-toggle" class="close-icon"><i class="fas fa-times"></i></label>
+    <label for="delete-toggle" class="close-icon" aria-label="Close delete modal"><i class="fas fa-times"></i></label>
     <div class="modal-icon"><i class="fas fa-trash"></i></div>
     <div class="modal-content" id="delete-form-content">
       <!-- Confirm delete post -->

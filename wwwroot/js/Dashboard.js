@@ -95,7 +95,7 @@ function fetchUsers(role) {
         <tr>
           <td>${user.name}</td>
           <td>${user.email}</td>
-          <td>${new Date(user.createdDate).toLocaleDateString()}</td>
+          <td>${new Date(user.createdDate).toLocaleDateString("en-GB")}</td>
           <td><div class="centered">${user.isEmailVerified 
             ? '<i class="fas fa-check-circle" style="font-size: 1.2rem; color:green;"></i>' 
             : '<i class="fas fa-times-circle" style="font-size: 1.2rem; color:red;"></i>'}
@@ -326,7 +326,7 @@ function openModal(type) {
             const list = document.getElementById("user-list");
             const email = formData.get("email");
             const name = formData.get("name");
-            const joined = new Date().toLocaleDateString();
+            const joined = new Date().toLocaleDateString("en-GB");
 
             const newRow = document.createElement("tr");
             newRow.innerHTML = `
@@ -389,7 +389,8 @@ function openRoleModal(email, currentRole) {
     <h2>Change Role</h2>
     <p><strong>${email}</strong></p>
     <form id="change-role-form">
-      <select name="role" required>
+    <label for="select-role" class="visually-hidden">Select Role</label>
+      <select name="role" required id="select-role">
         <option value="" disabled>Select New Role</option>
         <option value="Admin">Admin</option>
         <option value="Author">Author</option>
