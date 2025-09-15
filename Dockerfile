@@ -16,4 +16,5 @@ FROM base AS final
 WORKDIR /app
 COPY --from=build /app/publish .
 COPY content /app/content
+VOLUME [ "/app/content/posts", "/app/content/users", "/app/content/categories", "/app/content/tags", "/app/content/role-requests" ]
 ENTRYPOINT ["dotnet", "FileBasedBlog.dll"]
